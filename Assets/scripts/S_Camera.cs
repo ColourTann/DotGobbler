@@ -3,7 +3,7 @@ using System.Collections;
 
 public class S_Camera : MonoBehaviour {
     Camera myCam;
-    static int scale = Screen.height / 100;
+    public static int scale = Screen.height / 100;
 	// Use this for initialization
 	void Start () {
         myCam = GetComponent<Camera>();
@@ -13,8 +13,8 @@ public class S_Camera : MonoBehaviour {
 
     private static S_Camera self;
 
-    public static void setupScale(Transform obj) {
-        obj.localScale = new Vector3(scale, scale, 0);
+    public static void SetupScale(Transform obj) {
+        obj.localScale = new Vector3(scale, scale, 1);
     }
 	
 	// Update is called once per frame
