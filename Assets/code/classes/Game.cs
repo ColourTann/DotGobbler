@@ -10,10 +10,24 @@ public class Game {
         return self;
     }
 
+    public Level previousLevel;
     public Level level;
 
     public Game() {
         GameObject background = Primitives.CreateRectangle(Screen.width, Screen.height, Colours.DARK);
-        level = new Level();
+    }
+
+    public void Init() {
+        NextLevel();
+    }
+
+    public void NextLevel() {
+        previousLevel = level;
+        if (previousLevel != null) {
+            previousLevel.SlideAway();
+        }
+        level = new Level(1);
+        level.Init();
+        level.SlideIn();
     }
 }
