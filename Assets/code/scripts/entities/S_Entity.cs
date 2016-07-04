@@ -8,15 +8,16 @@ public class S_Entity : MonoBehaviour {
     protected bool moving;
     protected float moveTicker = 0;
     public GameObject PositionSetter;
-
+    bool active = true;
     public virtual void Init() {
-        PositionSetter = new GameObject("pos set");
+        PositionSetter = new GameObject("Entity_Parent");
         transform.parent = PositionSetter.transform;
         S_Camera.SetupScale(transform);
         transform.position = new Vector3(7.5f * S_Camera.scale, 7.5f * S_Camera.scale, 0);
     }
 
     protected virtual void Update () {
+        if (!active) return;
         CheckInput();
         Move();
         
@@ -35,7 +36,7 @@ public class S_Entity : MonoBehaviour {
             moveTicker += Time.deltaTime / MOVE_SPEED;
             if (moveTicker >= 1) {
                 moveTicker = 1;
-                currentTile.Enter();
+                currentTile.Enter(this);
                 moving = false;
                 FinishedMoving();
             }
@@ -49,7 +50,7 @@ public class S_Entity : MonoBehaviour {
         SetTile(tile);
         if (instant) {
             PositionSetter.transform.position = currentTile.transform.position;
-            tile.Enter();
+            tile.Enter(this);
         }
         else {
             StartMoving();
@@ -66,5 +67,9 @@ public class S_Entity : MonoBehaviour {
     }
 
     protected virtual void FinishedMoving() { }
+
+    public void Deactivate() {
+        active = false;
+    }
 
 }

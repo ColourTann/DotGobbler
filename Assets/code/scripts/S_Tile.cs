@@ -39,8 +39,8 @@ public class S_Tile : MonoBehaviour {
         pickup.transform.parent =transform;
     }
 
-    public void Enter() {
-        if (content != null) {
+    public void Enter(S_Entity enterer) {
+        if (enterer is S_Player && content != null) {
             content.Pickup();
             Destroy(content.gameObject);
             content = null;

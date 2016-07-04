@@ -15,19 +15,14 @@ public class Level {
     int tilesAcross;
     int tilesDown;
     int pickups = 0;
-    string[] levelData;
+    Texture2D level;
     public Level(int levelNumber) {
-        levelData = System.IO.File.ReadAllText("Assets/Resources/data/1.level").Split('\n');
-        tilesAcross = levelData[0].Length-1;
-        tilesDown = levelData.Length;
+        level = Resources.Load("levels/"+levelNumber) as Texture2D;
+        tilesAcross = level.width;
+        tilesDown = level.height;
         parent = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/slider")));
         slider = parent.GetComponent<S_Slider>();
         grid = new S_Tile[tilesAcross, tilesDown];
-
-        
-        Debug.Log(tilesAcross + ":" + S_Tile.width);
-
-       
     }
 
     public S_Tile MakeTile(int x, int y) {
@@ -53,25 +48,44 @@ public class Level {
     }
 
     public void SlideAway() {
+        foreach(S_Entity e in entities) {
+            e.Deactivate();
+        }
         slider.SlideTo(-Screen.width, (int)slider.transform.position.y, .3f, DeleteSelf);
     }
 
+    public enum LevelContent {
+        blank, player, wall, enemy, food
+    }
+
+    LevelContent FromColour(Color c) {
+        if (c.a == 0) return LevelContent.blank;
+        if (c == Colours.RED) return LevelContent.wall;
+        if (c == Colours.LIGHT) return LevelContent.player;
+        if (c == Colours.DARK) return LevelContent.wall;
+        if (c == Colours.GREEN) return LevelContent.enemy;
+        if (c == Colours.zWHITE) return LevelContent.food;
+        Debug.Log(c);
+        return LevelContent.blank;
+    }
+
     public void Init() {
+
         for (int x = 0; x < tilesAcross; x++) {
             for (int y = 0; y < tilesDown; y++) {
                 S_Tile tile;
-                switch (levelData[tilesDown-y-1][x]) {
-                    case '0':
+                switch (FromColour(level.GetPixel(x,y))) {
+                    case LevelContent.wall:
                         break;
-                    case '1':
+                    case LevelContent.blank:
                         tile = MakeTile(x, y);
                         break;
-                    case '2':
+                    case LevelContent.food:
                         tile = MakeTile(x, y);
                         tile.AddPickup();
                         pickups++;
                         break;
-                    case '3':
+                    case LevelContent.player:
                         tile = MakeTile(x, y);
                         GameObject playerObject = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/player")));
                         player = playerObject.GetComponent<S_Player>();
@@ -80,7 +94,7 @@ public class Level {
                         entities.Add(player);
                         player.MoveToTile(tile, true);
                         break;
-                    case '4':
+                    case LevelContent.enemy:
                         tile = MakeTile(x, y);
                         GameObject pincerObject = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/pincer")));
                         S_Entity enemy = pincerObject.GetComponent<S_Pincer>();

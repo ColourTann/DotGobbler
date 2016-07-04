@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Game {
     private static Game self;
+    int levelNumber = 0;
     public static Game Get() {
         if(self == null) {
             self = new Game();
@@ -26,7 +27,7 @@ public class Game {
         if (previousLevel != null) {
             previousLevel.SlideAway();
         }
-        level = new Level(1);
+        level = new Level(levelNumber++);
         level.Init();
         level.SlideIn();
     }

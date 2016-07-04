@@ -13,6 +13,7 @@ public class S_Pincer : S_Entity {
             else if (dy == -1) rotation = 270;
             transform.rotation = Quaternion.AngleAxis(rotation, Vector3.forward);
             MoveToTile(newTarget, false);
+            
         }
     }
 }
