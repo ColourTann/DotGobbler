@@ -16,6 +16,10 @@ public class S_Player : S_Entity {
         base.Update();
     }
 
+    public override bool Blocks() {
+        return false;
+    }
+
     override protected void CheckInput() {
         int dx = 0;
         int dy = 0;
@@ -24,6 +28,10 @@ public class S_Player : S_Entity {
         else if (Input.GetKeyDown("right")) dx = 1;
         else if (Input.GetKeyDown("down")) dy = -1;
         else if (Input.GetKeyDown("up")) dy = 1;
+
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            dx *= 2; dy*=2;
+        }
 
         if (Input.touchCount == 1) {
             Touch touch = Input.GetTouch(0);

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Game {
     private static Game self;
-    int levelNumber = 0;
+    int levelNumber = 5;
     public static Game Get() {
         if(self == null) {
             self = new Game();
@@ -19,15 +19,27 @@ public class Game {
     }
 
     public void Init() {
-        NextLevel();
+        LoadLevel();
     }
 
     public void NextLevel() {
+        levelNumber++;
+        LoadLevel();
+    }
+
+
+
+    public void LoadLevel() {
         previousLevel = level;
         if (previousLevel != null) {
             previousLevel.SlideAway();
         }
-        level = new Level(levelNumber++);
+        Texture2D levelData = Resources.Load("levels/" + levelNumber) as Texture2D;
+        if (levelData == null) {
+           levelNumber--;
+           levelData = Resources.Load("levels/" + levelNumber) as Texture2D;
+        }
+        level = new Level(levelData);
         level.Init();
         level.SlideIn();
     }

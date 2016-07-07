@@ -15,11 +15,11 @@ public class Level {
     int tilesAcross;
     int tilesDown;
     int pickups = 0;
-    Texture2D level;
-    public Level(int levelNumber) {
-        level = Resources.Load("levels/"+levelNumber) as Texture2D;
-        tilesAcross = level.width;
-        tilesDown = level.height;
+    Texture2D levelData;
+    public Level(Texture2D levelData) {
+        this.levelData = levelData;
+        tilesAcross = levelData.width;
+        tilesDown = levelData.height;
         parent = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/slider")));
         slider = parent.GetComponent<S_Slider>();
         grid = new S_Tile[tilesAcross, tilesDown];
@@ -74,7 +74,7 @@ public class Level {
         for (int x = 0; x < tilesAcross; x++) {
             for (int y = 0; y < tilesDown; y++) {
                 S_Tile tile;
-                switch (FromColour(level.GetPixel(x,y))) {
+                switch (FromColour(levelData.GetPixel(x,y))) {
                     case LevelContent.wall:
                         break;
                     case LevelContent.blank:
@@ -110,6 +110,10 @@ public class Level {
         rect.transform.SetParent(parent.transform);
         rect.GetComponent<SpriteRenderer>().sortingLayerName = "Tiles";
         rect.GetComponent<SpriteRenderer>().sortingOrder = 0;
+
+        foreach(S_Entity entity in entities) {
+            entity.ChooseMove();
+        }
 
     }
 

@@ -9,6 +9,7 @@ public class S_Entity : MonoBehaviour {
     protected float moveTicker = 0;
     public GameObject PositionSetter;
     bool active = true;
+    protected S_Tile targetTile;
     public virtual void Init() {
         PositionSetter = new GameObject("Entity_Parent");
         transform.parent = PositionSetter.transform;
@@ -45,7 +46,7 @@ public class S_Entity : MonoBehaviour {
     }
 
     public void MoveToTile(S_Tile tile, bool instant) {
-        if (tile == null) return;
+        if (tile == null || tile==currentTile) return;
         previousTile = currentTile;
         SetTile(tile);
         if (instant) {
@@ -63,13 +64,22 @@ public class S_Entity : MonoBehaviour {
     }
 
     public void SetTile(S_Tile tile) {
+        if (previousTile != null && previousTile.occupier==this) {
+            previousTile.occupier = null;
+        }
         currentTile = tile;
+        currentTile.occupier = this;
     }
 
     protected virtual void FinishedMoving() { }
+
+    public virtual bool Blocks() { return false; }
 
     public void Deactivate() {
         active = false;
     }
 
+    public virtual void ChooseMove() {
+
+    }
 }

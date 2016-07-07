@@ -10,14 +10,16 @@ public class S_Tile : MonoBehaviour {
     public static int width, height;
     public static int b_width, b_height;
     S_Pickup content;
+    public S_Entity occupier;
     public void SetPosition(int x, int y) {
-       
         this.x = x;
         this.y = y;
         transform.position = new Vector3(width * x + S_Camera.scale, height * y + S_Camera.scale, 0);
     }
 
-    
+    bool IsBlocked() {
+        return blocked || occupier != null;
+    }
 
     void Awake() {
         S_Camera.SetupScale(transform);
@@ -69,7 +71,8 @@ public class S_Tile : MonoBehaviour {
        return Game.Get().level.GetTile(x+dx, y+dy);
     }
 
-    public S_Tile PathTo(S_Tile target) {
+
+    public S_Tile PathTo(List<S_Tile> targets) {
         List<S_Tile> open = new List<S_Tile>();
         List<S_Tile> closed = new List<S_Tile>();
         open.Add(this);
@@ -77,18 +80,42 @@ public class S_Tile : MonoBehaviour {
             S_Tile current = open[0];
             open.RemoveAt(0);
             closed.Add(current);
-            if (current == target) {
-                while (current.previous != this) {
-                    current = current.previous;
-                }
-                return current;
-            }
             foreach(S_Tile potential in current.GetTilesWithin(1, false)) {
                 if (closed.Contains(potential)) continue;
                 potential.previous = current;
+                if (targets.Contains(potential)) {
+                    S_Tile result = potential;
+                    while (result.previous != this) {
+                        result = result.previous;
+                    }
+                    return result;
+                }
+                if (potential.IsBlocked()) continue;
                 open.Add(potential);
             }
         }
+
+        if (targets.Count == 1) {
+            //if the path is blocked, also check nearby tiles
+            return PathTo(targets[0].GetTilesWithin(1, false));
+        }
         return null;
+    }
+
+    public S_Tile PathTo(S_Tile target) {
+        if (target == this) return null;
+        return PathTo(new List<S_Tile>() { target });
+    }
+
+    bool blocked;
+
+    public void Block() {
+        blocked = true;
+        spr_renderer.color = Colours.RED;
+    }
+
+    public void UnBlock() {
+        blocked = false;
+        spr_renderer.color = Colours.zWHITE;
     }
 }
