@@ -22,9 +22,12 @@ public class S_Pincer : S_Entity {
             targetTile.UnBlock();
             if (targetTile.occupier != null && targetTile.occupier != this && targetTile.occupier.Blocks()) {
             }
-            else { 
-            MoveToTile(targetTile, false);
-         }
+            else {
+                if(targetTile.occupier is S_Player) {
+                    Game.Get().Lose();
+                }
+                MoveToTile(targetTile, false);
+            }
         }
         ChooseMove();
     }

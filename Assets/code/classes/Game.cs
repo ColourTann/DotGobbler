@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Game {
     private static Game self;
-    int levelNumber = 5;
+    int levelNumber = 3;
     public static Game Get() {
         if(self == null) {
             self = new Game();
@@ -22,14 +22,20 @@ public class Game {
         LoadLevel();
     }
 
+    public void Lose() {
+        Restart();
+    }
+
     public void NextLevel() {
         levelNumber++;
         LoadLevel();
     }
 
+    public void Restart() {
+        LoadLevel();
+    }
 
-
-    public void LoadLevel() {
+    private void LoadLevel() {
         previousLevel = level;
         if (previousLevel != null) {
             previousLevel.SlideAway();

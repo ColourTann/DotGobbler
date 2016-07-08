@@ -23,14 +23,14 @@ public class S_Player : S_Entity {
     override protected void CheckInput() {
         int dx = 0;
         int dy = 0;
-        
+
         if (Input.GetKeyDown("left")) dx = -1;
         else if (Input.GetKeyDown("right")) dx = 1;
         else if (Input.GetKeyDown("down")) dy = -1;
         else if (Input.GetKeyDown("up")) dy = 1;
 
         if (Input.GetKey(KeyCode.LeftShift)) {
-            dx *= 2; dy*=2;
+            dx *= 2; dy *= 2;
         }
 
         if (Input.touchCount == 1) {
@@ -41,7 +41,7 @@ public class S_Player : S_Entity {
             }
 
 
-            else if (touching){
+            else if (touching) {
                 if (touch.phase == TouchPhase.Ended) {
                     touching = false;
                 }
@@ -50,7 +50,7 @@ public class S_Player : S_Entity {
                 float yDiff = newTouch.y - touchStart.y;
                 float absX = Mathf.Abs(xDiff);
                 float absY = Mathf.Abs(yDiff);
-                if(Mathf.Max(absX, absY) > minSwipe) {
+                if (Mathf.Max(absX, absY) > minSwipe) {
                     if (Mathf.Abs(xDiff) > Mathf.Abs(yDiff)) {
                         dx = (int)Mathf.Sign(xDiff);
                     }
@@ -80,13 +80,15 @@ public class S_Player : S_Entity {
                 nextDy = -5;
                 S_Tile newTile = currentTile.GetTile(dx, dy);
                 if (newTile != null) {
+                    bool lost = newTile.occupier != null;
                     MoveToTile(newTile, false);
+                    if(lost) Game.Get().Lose();
                 }
             }
         }
     }
 
-    
+
 
     protected override void FinishedMoving() {
         Game.Get().level.Turn();
