@@ -10,6 +10,8 @@ public class S_Entity : MonoBehaviour {
     public GameObject PositionSetter;
     bool active = true;
     protected S_Tile targetTile;
+    protected float targetRotation;
+    protected float startRotation;
     public virtual void Init() {
         PositionSetter = new GameObject("Entity_Parent");
         transform.parent = PositionSetter.transform;
@@ -42,6 +44,7 @@ public class S_Entity : MonoBehaviour {
                 FinishedMoving();
             }
             PositionSetter.transform.position = Vector3.Lerp(previousTile.transform.position, currentTile.transform.position, Interpolation.Pow2Out(0, 1, moveTicker));
+            transform.rotation = Quaternion.AngleAxis(startRotation + (targetRotation-startRotation)* Interpolation.Pow2Out(0,1,moveTicker), Vector3.forward);
         }
     }
 

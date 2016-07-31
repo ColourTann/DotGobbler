@@ -12,12 +12,19 @@ public class S_Pincer : S_Entity {
             if (dx == -1) rotation = 180;
             else if (dy == 1) rotation = 90;
             else if (dy == -1) rotation = 270;
-            transform.rotation = Quaternion.AngleAxis(rotation, Vector3.forward);
+            if (rotation - startRotation > 180) {
+                rotation -= 360;
+            }
+            if (rotation - startRotation < -180) {
+                rotation += 360;
+            }
+            targetRotation = rotation;
             targetTile.Block();
         }
     }
 
     override public void TakeTurn() {
+        startRotation = targetRotation;
         if (targetTile != null) {
             targetTile.UnBlock();
             if (targetTile.occupier != null && targetTile.occupier != this && targetTile.occupier.Blocks()) {
