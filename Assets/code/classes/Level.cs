@@ -18,42 +18,54 @@ public class Level {
         this.levelData = levelData;
     }
 
-    public void Init()
-    {
+    public void Init() {
+        InitLayoutStuff();
+        InitTiles();
+        foreach (S_Entity entity in entities) {
+            entity.ChooseMove();
+        }
+    }
+
+    void InitLayoutStuff() {
+        //initialise slider
         GameObject parent = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/slider")));
         slider = parent.GetComponent<S_Slider>();
         slider.name = "level";
+
+        //initialise map and parent it to slider
         map = new GameObject();
         map.name = "map";
+        map.transform.SetParent(slider.transform, false);
+
+        //initialise grid and parent it to map
+        grid = new GameObject();
+        grid.name = "grid";
+        grid.transform.SetParent(map.transform);
+    }
+
+    void InitTiles() {
+        //init tiles array
         tilesAcross = levelData.width;
         tilesDown = levelData.height - 1;
-
-        grid = new GameObject();
-        grid.transform.SetParent(map.transform);
-        grid.name = "grid";
-
         tiles = new S_Tile[tilesAcross, tilesDown];
-        map.transform.parent = slider.transform;
+
+        //put map in the center based on tiles
         int gridWidth = (int)(tiles.GetLength(0) * S_Tile.width) + S_Camera.scale;
         int gridHeight = (int)(tiles.GetLength(1) * S_Tile.height) + S_Camera.scale;
         int goodX = (int)(Screen.width / 2 - gridWidth / 2);
         int goodY = (int)(Screen.height / 2 - gridHeight / 2);
         map.transform.position = new Vector2(goodX, goodY);
 
-
-
-        Color header = (levelData.GetPixel(0, gridHeight+1));
+        //header stuff for extra data
+        Color header = (levelData.GetPixel(0, gridHeight + 1));
         int headerData = (int)(header.r * 255);
         Debug.Log(headerData);
 
-        for (int x = 0; x < tilesAcross; x++)
-        {
-            for (int y = 0; y < tilesDown; y++)
-            {
+        //use colours in leveldata to setup entities
+        for (int x = 0; x < tilesAcross; x++) {
+            for (int y = 0; y < tilesDown; y++) {
                 S_Tile tile;
-
-                switch (FromColour(levelData.GetPixel(x, y)))
-                {
+                switch (FromColour(levelData.GetPixel(x, y))) {
                     case LevelContent.wall:
                         break;
                     case LevelContent.blank:
@@ -83,27 +95,26 @@ public class Level {
                 }
             }
         }
+
+        //hierarchy object for entities
         GameObject entityParent = new GameObject("entities");
         entityParent.transform.SetParent(map.transform, false);
-        foreach(S_Entity e in entities){
+        foreach (S_Entity e in entities) {
             e.PositionSetter.transform.SetParent(entityParent.transform, false);
         }
 
+        //setup map border
         GameObject rect = Primitives.CreateRectangle(tilesAcross * S_Tile.width + S_Camera.scale, tilesDown * S_Tile.height + S_Camera.scale, Colours.RED);
         rect.transform.SetParent(map.transform, false);
         rect.GetComponent<SpriteRenderer>().sortingLayerName = "Tiles";
         rect.GetComponent<SpriteRenderer>().sortingOrder = 0;
         rect.name = "level_background";
 
+        //maybe setup ability panel based off header data
         GameObject abilityPanel = Primitives.CreateRectangle(50, 50, Colours.GREEN);
         abilityPanel.transform.SetParent(slider.transform);
         abilityPanel.name = "ability_panel";
         abilityPanel.GetComponent<SpriteRenderer>().sortingLayerName = "UI";
-        foreach (S_Entity entity in entities)
-        {
-            entity.ChooseMove();
-        }
-
     }
 
     public S_Tile MakeTile(int x, int y) {
@@ -117,7 +128,7 @@ public class Level {
     }
 
     public void SlideIn() {
-      
+
         slider.transform.position = new Vector3(Screen.width, 0, 0);
         slider.SlideTo(0, 0, .3f);
     }
@@ -127,7 +138,7 @@ public class Level {
     }
 
     public void SlideAway() {
-        foreach(S_Entity e in entities) {
+        foreach (S_Entity e in entities) {
             e.Deactivate();
         }
         slider.SlideTo(-Screen.width, (int)slider.transform.position.y, .3f, DeleteSelf);
@@ -148,7 +159,7 @@ public class Level {
         return LevelContent.blank;
     }
 
-   
+
 
     internal void Pickup(S_Pickup pickup) {
         pickups--;
