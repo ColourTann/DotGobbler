@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Game {
     private static Game self;
-    int levelNumber = 3;
+    int levelNumber = 5;
     public static Game Get() {
         if(self == null) {
             self = new Game();
@@ -16,6 +16,7 @@ public class Game {
 
     public Game() {
         GameObject background = Primitives.CreateRectangle(Screen.width, Screen.height, Colours.DARK);
+        background.name = "backdrop";
     }
 
     public void Init() {

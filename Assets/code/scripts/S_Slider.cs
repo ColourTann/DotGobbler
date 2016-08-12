@@ -29,5 +29,5 @@ public class S_Slider : MonoBehaviour {
             }
         }
         transform.position = Vector3.Lerp(startPosition, targetPosition, Interpolation.Pow2Out(0, 1, counter));
-	}
+    }
 }

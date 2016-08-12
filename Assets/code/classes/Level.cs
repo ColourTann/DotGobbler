@@ -4,47 +4,126 @@ using System.Collections.Generic;
 
 
 public class Level {
-
     List<S_Entity> entities = new List<S_Entity>();
-
-    GameObject parent;
-
+    GameObject map;
     S_Slider slider;
-    public S_Tile[,] grid;
+    public S_Tile[,] tiles;
     public S_Player player;
     int tilesAcross;
     int tilesDown;
     int pickups = 0;
     Texture2D levelData;
+    GameObject grid;
     public Level(Texture2D levelData) {
         this.levelData = levelData;
-        tilesAcross = levelData.width;
-        tilesDown = levelData.height;
-        parent = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/slider")));
+    }
+
+    public void Init()
+    {
+        GameObject parent = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/slider")));
         slider = parent.GetComponent<S_Slider>();
-        grid = new S_Tile[tilesAcross, tilesDown];
+        slider.name = "level";
+        map = new GameObject();
+        map.name = "map";
+        tilesAcross = levelData.width;
+        tilesDown = levelData.height - 1;
+
+        grid = new GameObject();
+        grid.transform.SetParent(map.transform);
+        grid.name = "grid";
+
+        tiles = new S_Tile[tilesAcross, tilesDown];
+        map.transform.parent = slider.transform;
+        int gridWidth = (int)(tiles.GetLength(0) * S_Tile.width) + S_Camera.scale;
+        int gridHeight = (int)(tiles.GetLength(1) * S_Tile.height) + S_Camera.scale;
+        int goodX = (int)(Screen.width / 2 - gridWidth / 2);
+        int goodY = (int)(Screen.height / 2 - gridHeight / 2);
+        map.transform.position = new Vector2(goodX, goodY);
+
+
+
+        Color header = (levelData.GetPixel(0, gridHeight+1));
+        int headerData = (int)(header.r * 255);
+        Debug.Log(headerData);
+
+        for (int x = 0; x < tilesAcross; x++)
+        {
+            for (int y = 0; y < tilesDown; y++)
+            {
+                S_Tile tile;
+
+                switch (FromColour(levelData.GetPixel(x, y)))
+                {
+                    case LevelContent.wall:
+                        break;
+                    case LevelContent.blank:
+                        tile = MakeTile(x, y);
+                        break;
+                    case LevelContent.food:
+                        tile = MakeTile(x, y);
+                        tile.AddPickup();
+                        pickups++;
+                        break;
+                    case LevelContent.player:
+                        tile = MakeTile(x, y);
+                        GameObject playerObject = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/player")));
+                        player = playerObject.GetComponent<S_Player>();
+                        player.Init();
+                        entities.Add(player);
+                        player.MoveToTile(tile, true);
+                        break;
+                    case LevelContent.enemy:
+                        tile = MakeTile(x, y);
+                        GameObject pincerObject = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/pincer")));
+                        S_Entity enemy = pincerObject.GetComponent<S_Pincer>();
+                        enemy.Init();
+                        entities.Add(enemy);
+                        enemy.MoveToTile(tile, true);
+                        break;
+                }
+            }
+        }
+        GameObject entityParent = new GameObject("entities");
+        entityParent.transform.SetParent(map.transform, false);
+        foreach(S_Entity e in entities){
+            e.PositionSetter.transform.SetParent(entityParent.transform, false);
+        }
+
+        GameObject rect = Primitives.CreateRectangle(tilesAcross * S_Tile.width + S_Camera.scale, tilesDown * S_Tile.height + S_Camera.scale, Colours.RED);
+        rect.transform.SetParent(map.transform, false);
+        rect.GetComponent<SpriteRenderer>().sortingLayerName = "Tiles";
+        rect.GetComponent<SpriteRenderer>().sortingOrder = 0;
+        rect.name = "level_background";
+
+        GameObject abilityPanel = Primitives.CreateRectangle(50, 50, Colours.GREEN);
+        abilityPanel.transform.SetParent(slider.transform);
+        abilityPanel.name = "ability_panel";
+        abilityPanel.GetComponent<SpriteRenderer>().sortingLayerName = "UI";
+        foreach (S_Entity entity in entities)
+        {
+            entity.ChooseMove();
+        }
+
     }
 
     public S_Tile MakeTile(int x, int y) {
         GameObject tile = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/tile")));
         S_Tile tileScript = tile.GetComponent<S_Tile>();
-        grid[x, y] = tileScript;
+        tiles[x, y] = tileScript;
         tileScript.SetPosition(x, y);
-        tileScript.transform.SetParent(parent.transform);
+        tileScript.transform.SetParent(grid.transform, false);
+        tile.name = "tile " + x + ":" + y;
         return tileScript;
     }
 
     public void SlideIn() {
-        int gridWidth = (int)(grid.GetLength(0) * S_Tile.width) + S_Camera.scale;
-        int gridHeight = (int)(grid.GetLength(1) * S_Tile.height) + S_Camera.scale;
-        int goodX = (int)(Screen.width / 2 - gridWidth / 2);
-        int goodY = (int)(Screen.height / 2 - gridHeight / 2);
-        slider.transform.position = new Vector3(Screen.width, goodY, 0);
-        slider.SlideTo(goodX, goodY, .3f);
+      
+        slider.transform.position = new Vector3(Screen.width, 0, 0);
+        slider.SlideTo(0, 0, .3f);
     }
 
     public void DeleteSelf() {
-        GameObject.Destroy(parent);
+        GameObject.Destroy(slider.gameObject);
     }
 
     public void SlideAway() {
@@ -69,53 +148,7 @@ public class Level {
         return LevelContent.blank;
     }
 
-    public void Init() {
-
-        for (int x = 0; x < tilesAcross; x++) {
-            for (int y = 0; y < tilesDown; y++) {
-                S_Tile tile;
-                switch (FromColour(levelData.GetPixel(x,y))) {
-                    case LevelContent.wall:
-                        break;
-                    case LevelContent.blank:
-                        tile = MakeTile(x, y);
-                        break;
-                    case LevelContent.food:
-                        tile = MakeTile(x, y);
-                        tile.AddPickup();
-                        pickups++;
-                        break;
-                    case LevelContent.player:
-                        tile = MakeTile(x, y);
-                        GameObject playerObject = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/player")));
-                        player = playerObject.GetComponent<S_Player>();
-                        player.Init();
-                        player.PositionSetter.transform.SetParent(parent.transform);
-                        entities.Add(player);
-                        player.MoveToTile(tile, true);
-                        break;
-                    case LevelContent.enemy:
-                        tile = MakeTile(x, y);
-                        GameObject pincerObject = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/pincer")));
-                        S_Entity enemy = pincerObject.GetComponent<S_Pincer>();
-                        enemy.Init();
-                        enemy.PositionSetter.transform.SetParent(parent.transform);
-                        entities.Add(enemy);
-                        enemy.MoveToTile(tile, true);
-                        break;
-                }
-            }
-        }
-        GameObject rect = Primitives.CreateRectangle(tilesAcross * S_Tile.width + S_Camera.scale, tilesDown * S_Tile.height + S_Camera.scale, Colours.RED);
-        rect.transform.SetParent(parent.transform);
-        rect.GetComponent<SpriteRenderer>().sortingLayerName = "Tiles";
-        rect.GetComponent<SpriteRenderer>().sortingOrder = 0;
-
-        foreach(S_Entity entity in entities) {
-            entity.ChooseMove();
-        }
-
-    }
+   
 
     internal void Pickup(S_Pickup pickup) {
         pickups--;
@@ -131,9 +164,9 @@ public class Level {
     }
 
     public S_Tile GetTile(int x, int y) {
-        if (x < 0 || x >= grid.GetLength(0) || y < 0 || y >= grid.GetLength(1)) {
+        if (x < 0 || x >= tiles.GetLength(0) || y < 0 || y >= tiles.GetLength(1)) {
             return null;
         }
-        return grid[x, y];
+        return tiles[x, y];
     }
 }

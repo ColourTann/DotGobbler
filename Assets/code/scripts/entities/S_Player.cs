@@ -94,5 +94,12 @@ public class S_Player : S_Entity {
         Game.Get().level.Turn();
     }
 
+
+
+    public override void Init()
+    {
+        base.Setup("player");
+    }
+
 }
 

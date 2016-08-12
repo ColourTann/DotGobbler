@@ -7,8 +7,9 @@ public class S_Tile : MonoBehaviour {
     private S_Tile previous; //for pathfinding
     public int x, y;
     SpriteRenderer spr_renderer;
-    public static int width, height;
-    public static int b_width, b_height;
+    public static int BASE_TILE_SIZE = 15;
+    public static int width = S_Camera.scale*(BASE_TILE_SIZE+1), height = S_Camera.scale * (BASE_TILE_SIZE + 1);
+    public static int width_including_full_border = width+ S_Camera.scale, height_including_full_border = height + S_Camera.scale;
     S_Pickup content;
     public S_Entity occupier;
     public void SetPosition(int x, int y) {
@@ -25,17 +26,12 @@ public class S_Tile : MonoBehaviour {
         S_Camera.SetupScale(transform);
         spr_renderer = GetComponent<SpriteRenderer>();
         spr_renderer.sprite = Sprites.tile;
-        if (width == 0) {
-            width = (int)spr_renderer.bounds.size.x + S_Camera.scale;
-            height = (int)spr_renderer.bounds.size.y + S_Camera.scale;
-            b_width = width + S_Camera.scale;
-            b_height = height + S_Camera.scale;
-        }
     }
 
     internal void AddPickup() {
         GameObject pickup = (GameObject)(Instantiate(Resources.Load("prefabs/pickup")));
         content = pickup.GetComponent<S_Pickup>();
+        pickup.name = "pickup"; 
         S_Camera.SetupScale(pickup.transform);
         pickup.transform.position = transform.position;
         pickup.transform.parent =transform;

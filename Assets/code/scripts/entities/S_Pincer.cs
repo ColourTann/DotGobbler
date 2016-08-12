@@ -42,4 +42,9 @@ public class S_Pincer : S_Entity {
     public override bool Blocks() {
         return true;
     }
+
+    public override void Init()
+    {
+        base.Setup("pincer");
+    }
 }

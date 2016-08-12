@@ -12,11 +12,16 @@ public class S_Entity : MonoBehaviour {
     protected S_Tile targetTile;
     protected float targetRotation;
     protected float startRotation;
-    public virtual void Init() {
-        PositionSetter = new GameObject("Entity_Parent");
+    protected void Setup(string name) {
+        PositionSetter = new GameObject(name);
         transform.parent = PositionSetter.transform;
         S_Camera.SetupScale(transform);
         transform.position = new Vector3(7.5f * S_Camera.scale, 7.5f * S_Camera.scale, 0);
+    }
+
+    public virtual void Init()
+    {
+
     }
 
     protected virtual void Update () {
@@ -53,7 +58,7 @@ public class S_Entity : MonoBehaviour {
         previousTile = currentTile;
         SetTile(tile);
         if (instant) {
-            PositionSetter.transform.position = currentTile.transform.position;
+            PositionSetter.transform.position = currentTile.transform.localPosition;
             tile.Enter(this);
         }
         else {
