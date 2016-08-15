@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Game {
     private static Game self;
-    int levelNumber = 5;
+    int levelNumber = 0;
     public static Game Get() {
         if(self == null) {
             self = new Game();

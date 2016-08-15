@@ -49,17 +49,37 @@ public class Level {
         tilesDown = levelData.height - 1;
         tiles = new S_Tile[tilesAcross, tilesDown];
 
-        //put map in the center based on tiles
         int gridWidth = (int)(tiles.GetLength(0) * S_Tile.width) + S_Camera.scale;
         int gridHeight = (int)(tiles.GetLength(1) * S_Tile.height) + S_Camera.scale;
-        int goodX = (int)(Screen.width / 2 - gridWidth / 2);
-        int goodY = (int)(Screen.height / 2 - gridHeight / 2);
-        map.transform.position = new Vector2(goodX, goodY);
 
         //header stuff for extra data
-        Color header = (levelData.GetPixel(0, gridHeight + 1));
+        Color header = (levelData.GetPixel(0, levelData.height));
         int headerData = (int)(header.r * 255);
-        Debug.Log(headerData);
+        bool hasAbility = (headerData & 1) > 0;
+        int currentX = 0;
+        int gap = 0;
+        if (hasAbility) {
+            GameObject abilityObject = new GameObject();
+            S_AbilityPanel abilityPanel = abilityObject.AddComponent<S_AbilityPanel>();
+            abilityPanel.Setup();
+            abilityPanel.transform.SetParent(slider.transform);
+            gap = (Screen.width - (gridWidth + S_AbilityPanel.WIDTH)) / 3;
+            currentX += gap;
+            abilityPanel.transform.position = new Vector2(currentX, (int)(Screen.height / 2 - S_AbilityPanel.HEIGHT / 2));
+            currentX += S_AbilityPanel.WIDTH;
+            currentX += gap;
+        }
+        else {
+            gap = (Screen.width - gridWidth) / 2;
+            currentX += gap;
+        }
+
+        //put map in the center based on tiles
+      
+        
+        map.transform.position = new Vector2(currentX, (int)(Screen.height / 2 - gridHeight / 2));
+
+       
 
         //use colours in leveldata to setup entities
         for (int x = 0; x < tilesAcross; x++) {
@@ -110,11 +130,6 @@ public class Level {
         rect.GetComponent<SpriteRenderer>().sortingOrder = 0;
         rect.name = "level_background";
 
-        //maybe setup ability panel based off header data
-        GameObject abilityPanel = Primitives.CreateRectangle(50, 50, Colours.GREEN);
-        abilityPanel.transform.SetParent(slider.transform);
-        abilityPanel.name = "ability_panel";
-        abilityPanel.GetComponent<SpriteRenderer>().sortingLayerName = "UI";
     }
 
     public S_Tile MakeTile(int x, int y) {
