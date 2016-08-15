@@ -107,11 +107,9 @@ public class S_Tile : MonoBehaviour {
 
     public void Block() {
         blocked = true;
-        spr_renderer.color = Colours.RED;
     }
 
     public void UnBlock() {
         blocked = false;
-        spr_renderer.color = Colours.zWHITE;
     }
 }

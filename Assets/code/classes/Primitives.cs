@@ -10,4 +10,12 @@ public class Primitives  {
         return result;
     }
 
+    public static GameObject CreateActor(Sprite sprite, int x=0, int y=0) {
+        GameObject result = new GameObject();
+        SpriteRenderer sr = result.AddComponent<SpriteRenderer>();
+        sr.sprite = sprite;
+        result.transform.position = new Vector2(x, y);
+        return result;
+    }
+  
 }

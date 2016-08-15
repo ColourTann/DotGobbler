@@ -90,4 +90,8 @@ public class S_Entity : MonoBehaviour {
     public virtual void ChooseMove() {
 
     }
+
+    public virtual void InstantFace() {
+        transform.rotation = Quaternion.AngleAxis(targetRotation, Vector3.forward);
+    }
 }

@@ -28,6 +28,7 @@ public class S_Pincer : S_Entity {
         if (targetTile != null) {
             targetTile.UnBlock();
             if (targetTile.occupier != null && targetTile.occupier != this && targetTile.occupier.Blocks()) {
+                //can't move there!
             }
             else {
                 if(targetTile.occupier is S_Player) {
@@ -36,7 +37,6 @@ public class S_Pincer : S_Entity {
                 MoveToTile(targetTile, false);
             }
         }
-        ChooseMove();
     }
 
     public override bool Blocks() {

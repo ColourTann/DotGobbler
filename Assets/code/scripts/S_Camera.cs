@@ -3,7 +3,7 @@ using System.Collections;
 
 public class S_Camera : MonoBehaviour {
     Camera myCam;
-    public static int scale = Screen.height / 200;
+    public static int scale = Screen.height / 200   ;
 	// Use this for initialization
 	void Start () {
         myCam = GetComponent<Camera>();

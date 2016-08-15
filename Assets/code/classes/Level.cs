@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-
-
+using System;
 
 public class Level {
     List<S_Entity> entities = new List<S_Entity>();
@@ -18,11 +17,16 @@ public class Level {
         this.levelData = levelData;
     }
 
+    internal void ActivateAbility() {
+        Debug.Log("act");
+    }
+
     public void Init() {
         InitLayoutStuff();
         InitTiles();
         foreach (S_Entity entity in entities) {
             entity.ChooseMove();
+            entity.InstantFace();
         }
     }
 
@@ -61,12 +65,12 @@ public class Level {
         if (hasAbility) {
             GameObject abilityObject = new GameObject();
             S_AbilityPanel abilityPanel = abilityObject.AddComponent<S_AbilityPanel>();
-            abilityPanel.Setup();
+            abilityPanel.Setup(headerData);
             abilityPanel.transform.SetParent(slider.transform);
-            gap = (Screen.width - (gridWidth + S_AbilityPanel.WIDTH)) / 3;
+            gap = (Screen.width - (gridWidth + abilityPanel.width)) / 3;
             currentX += gap;
-            abilityPanel.transform.position = new Vector2(currentX, (int)(Screen.height / 2 - S_AbilityPanel.HEIGHT / 2));
-            currentX += S_AbilityPanel.WIDTH;
+            abilityPanel.transform.position = new Vector2(currentX, (int)(Screen.height / 2 - abilityPanel.height/ 2));
+            currentX += abilityPanel.width;
             currentX += gap;
         }
         else {
@@ -187,6 +191,10 @@ public class Level {
         foreach (S_Entity ent in entities) {
             ent.TakeTurn();
         }
+        foreach (S_Entity ent in entities) {
+            ent.ChooseMove();
+        }
+        Game.Get().EndOfTurn();
     }
 
     public S_Tile GetTile(int x, int y) {
