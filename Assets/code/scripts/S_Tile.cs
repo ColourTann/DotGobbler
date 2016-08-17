@@ -31,7 +31,7 @@ public class S_Tile : MonoBehaviour {
         highlight_renderer.enabled = lit;
     }
 
-    bool IsBlocked() {
+    public bool IsBlocked() {
         return blocked || occupier != null;
     }
 

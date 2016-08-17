@@ -56,8 +56,10 @@ public class Level {
         int gridHeight = (int)(tiles.GetLength(1) * S_Tile.height) + S_Camera.scale;
 
         //header stuff for extra data
-        Color header = (levelData.GetPixel(0, levelData.height));
+        Color header = (levelData.GetPixel(0, levelData.height-1));
         int headerData = (int)(header.r * 255);
+        Debug.Log(header);
+        Debug.Log("header: " + headerData);
         bool hasAbility = (headerData & 1) > 0;
         int currentX = 0;
         int gap = 0;
