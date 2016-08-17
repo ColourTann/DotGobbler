@@ -7,24 +7,23 @@ public class Level {
     GameObject map;
     S_Slider slider;
     public S_Tile[,] tiles;
+    List<S_Tile> allTiles = new List<S_Tile>();
     public S_Player player;
     int tilesAcross;
     int tilesDown;
     int pickups = 0;
     Texture2D levelData;
     GameObject grid;
+    public S_Ability activeAbility;
     public Level(Texture2D levelData) {
         this.levelData = levelData;
-    }
-
-    internal void ActivateAbility() {
-        Debug.Log("act");
     }
 
     public void Init() {
         InitLayoutStuff();
         InitTiles();
         foreach (S_Entity entity in entities) {
+            Debug.Log(entity.currentTile.x);
             entity.ChooseMove();
             entity.InstantFace();
         }
@@ -89,6 +88,8 @@ public class Level {
         for (int x = 0; x < tilesAcross; x++) {
             for (int y = 0; y < tilesDown; y++) {
                 S_Tile tile;
+                //Color32[] data = levelData.GetPixels32();
+                
                 switch (FromColour(levelData.GetPixel(x, y))) {
                     case LevelContent.wall:
                         break;
@@ -143,6 +144,7 @@ public class Level {
         tileScript.SetPosition(x, y);
         tileScript.transform.SetParent(grid.transform, false);
         tile.name = "tile " + x + ":" + y;
+        allTiles.Add(tileScript);
         return tileScript;
     }
 
@@ -202,5 +204,28 @@ public class Level {
             return null;
         }
         return tiles[x, y];
+    }
+
+    internal void ActivateAbility(S_Ability ability, bool active) {
+        if (active) {
+            activeAbility = ability;
+        }
+        else {
+            activeAbility = null;
+        }
+        UpdateGridHighlightedness();
+    }
+
+    internal void UpdateGridHighlightedness() {
+        foreach (S_Tile tile in allTiles) {
+            tile.SetHighlight(false);
+        }
+        if (activeAbility != null) {
+            List<S_Tile> goodTile = activeAbility.GetValidTiles(player.currentTile);
+            foreach (S_Tile tile in goodTile) {
+                tile.SetHighlight(true);
+            }
+        }
+
     }
 }

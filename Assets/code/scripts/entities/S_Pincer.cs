@@ -5,6 +5,7 @@ public class S_Pincer : S_Entity {
 
     override public void ChooseMove() {
         targetTile = currentTile.PathTo(Game.Get().level.player.currentTile);
+        
         if (targetTile != null) {
             int dx = targetTile.x - currentTile.x;
             int dy = targetTile.y - currentTile.y;
@@ -21,9 +22,12 @@ public class S_Pincer : S_Entity {
             targetRotation = rotation;
             targetTile.Block();
         }
+        else {
+            Debug.Log("no path!!"); 
+        }
     }
 
-    override public void TakeTurn() {
+    override public void TakeTurn() { 
         startRotation = targetRotation;
         if (targetTile != null) {
             targetTile.UnBlock();

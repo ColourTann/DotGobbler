@@ -12,10 +12,23 @@ public class S_Tile : MonoBehaviour {
     public static int width_including_full_border = width+ S_Camera.scale, height_including_full_border = height + S_Camera.scale;
     S_Pickup content;
     public S_Entity occupier;
+    SpriteRenderer highlight_renderer;
     public void SetPosition(int x, int y) {
         this.x = x;
         this.y = y;
         transform.position = new Vector3(width * x + S_Camera.scale, height * y + S_Camera.scale, 0);
+        GameObject highlight = Primitives.CreateActor(Sprites.tile_highlight, 0, 0);
+        highlight.name = "highlight";
+        highlight.transform.SetParent(transform, false);
+        highlight_renderer = highlight.GetComponent<SpriteRenderer>();
+        Util.SetLayer(highlight, Util.LayerName.Tiles, 5);
+        highlight_renderer.color = Colours.LIGHT;
+        highlight_renderer.enabled = false;
+        gameObject.AddComponent<BoxCollider2D>();
+    }
+
+    public void SetHighlight(bool lit) {
+        highlight_renderer.enabled = lit;
     }
 
     bool IsBlocked() {
@@ -53,7 +66,7 @@ public class S_Tile : MonoBehaviour {
         List<S_Tile> result = new List<S_Tile>();
         for(int dx = -dist; dx <= dist; dx++) {
             for(int dy = -dist; dy <= dist; dy++) {
-                if (dy == x && dx == 0 && !includeSelf) continue;
+                if (dy == 0 && dx == 0 && !includeSelf) continue;
                 S_Tile at = GetTile(dx, dy);
                 if (at != null && at.TileDistance(this) <= dist) {
                     result.Add(at);
@@ -90,7 +103,6 @@ public class S_Tile : MonoBehaviour {
                 open.Add(potential);
             }
         }
-
         if (targets.Count == 1) {
             //if the path is blocked, also check nearby tiles
             return PathTo(targets[0].GetTilesWithin(1, false));
@@ -111,5 +123,13 @@ public class S_Tile : MonoBehaviour {
 
     public void UnBlock() {
         blocked = false;
+    }
+
+    void OnMouseUpAsButton() {
+        Game.Get().level.player.ActivateTile(this);
+    }
+
+    public int GetDistance(S_Tile other) {
+        return Math.Abs(other.x - x) + Mathf.Abs(other.y - y);
     }
 }

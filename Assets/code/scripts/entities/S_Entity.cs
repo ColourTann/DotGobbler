@@ -53,7 +53,7 @@ public class S_Entity : MonoBehaviour {
         }
     }
 
-    public void MoveToTile(S_Tile tile, bool instant) {
+    public virtual void MoveToTile(S_Tile tile, bool instant) {
         if (tile == null || tile==currentTile) return;
         previousTile = currentTile;
         SetTile(tile);

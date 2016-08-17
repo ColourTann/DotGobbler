@@ -4,23 +4,25 @@ using System;
 
 public class S_Button : MonoBehaviour {
 
-      public static GameObject CreateButton(Sprite sprite, Action onClick) {
+      public static S_Button CreateButton(Sprite sprite) {
         
         GameObject result = new GameObject();
         SpriteRenderer sr = result.AddComponent<SpriteRenderer>();
         sr.sortingLayerName = "UI";
         sr.sprite = sprite;
         S_Button buttonScript = result.AddComponent<S_Button>();
-        buttonScript.action = onClick;
-        BoxCollider2D collider = result.AddComponent<BoxCollider2D>();
-        return result;
+        result.AddComponent<BoxCollider2D>();
+        return buttonScript;
+    }
+
+    public void SetAction(Action onClick) {
+        action = onClick;
     }
 
     Action action;
 
     void OnMouseDown() {
         action.Invoke();
-        Debug.Log("iudgfiudhgui");
     }
     
 	// Use this for initialization

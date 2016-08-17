@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Sprites {
     public static Sprite tile = Resources.Load<Sprite>("images/tile_0");
+    public static Sprite tile_highlight = Resources.Load<Sprite>("images/tile_highlight");
     public static Sprite pixel = Resources.Load<Sprite>("images/pixel");
 
 

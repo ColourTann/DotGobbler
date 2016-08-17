@@ -29,18 +29,12 @@ public class S_Player : S_Entity {
         else if (Input.GetKeyDown("down")) dy = -1;
         else if (Input.GetKeyDown("up")) dy = 1;
 
-        if (Input.GetKey(KeyCode.LeftShift)) {
-            dx *= 2; dy *= 2;
-        }
-
         if (Input.touchCount == 1) {
             Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began) {
                 touching = true;
                 touchStart = touch.position;
             }
-
-
             else if (touching) {
                 if (touch.phase == TouchPhase.Ended) {
                     touching = false;
@@ -62,10 +56,6 @@ public class S_Player : S_Entity {
             }
         }
 
-
-
-
-
         if (moving && dx != 0 || dy != 0) {
             nextDx = dx;
             nextDy = dy;
@@ -75,29 +65,52 @@ public class S_Player : S_Entity {
                 dx = nextDx;
                 dy = nextDy;
             }
-            if (dx != 0 || dy != 0) {
-                nextDx = -5;
-                nextDy = -5;
-                S_Tile newTile = currentTile.GetTile(dx, dy);
-                if (newTile != null) {
-                    bool lost = newTile.occupier != null;
-                    MoveToTile(newTile, false);
-                    if(lost) Game.Get().Lose();
-                }
+            ActivateDirection(dx, dy);
+        }
+    }
+
+    void ActivateDirection(int dx, int dy) {
+        if (!(dx != 0 || dy != 0)) return;
+        nextDx = -5;
+        nextDy = -5;
+
+        if (Game.Get().level.activeAbility != null) {
+            Game.Get().level.activeAbility.Use(this, dx, dy);
+        }
+
+        else {
+            S_Tile newTile = currentTile.GetTile(dx, dy);
+            if (newTile != null) {
+                ActivateTile(newTile);
             }
         }
     }
 
-
+    public void ActivateTile(S_Tile tile) {
+        //check for validity
+        if (moving || tile==null) return;
+        if (Game.Get().level.activeAbility != null) {
+            Game.Get().level.activeAbility.Use(this, tile);
+        }
+        else {
+            if (tile.GetDistance(currentTile) != 1) return;
+            MoveToTile(tile, false);
+        }
+    }
 
     protected override void FinishedMoving() {
+
         Game.Get().level.Turn();
     }
 
+    public override void MoveToTile(S_Tile tile, bool instant) {
+        bool lost = tile.occupier != null;
+        if (lost) Game.Get().Lose();
+        base.MoveToTile(tile, instant);
+    }
 
 
-    public override void Init()
-    {
+    public override void Init() {
         base.Setup("player");
     }
 
