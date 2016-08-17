@@ -27,7 +27,7 @@ public class S_Pincer : S_Entity {
             }
 
         }
-
+        eyes.GetComponent<SpriteRenderer>().enabled = true;
         if (targetTile != null) {
             int dx = targetTile.x - currentTile.x;
             int dy = targetTile.y - currentTile.y;
@@ -41,13 +41,20 @@ public class S_Pincer : S_Entity {
             if (rotation - startRotation < -180) {
                 rotation += 360;
             }
-            targetRotation = rotation;
+            //targetRotation = rotation;
+            eyes.transform.rotation = Quaternion.AngleAxis(rotation+180, Vector3.forward);
+            eyes.GetComponent<SpriteRenderer>().enabled = false;
             targetTile.Block();
         }
         else {
 
             Debug.Log("no path!!");
         }
+    }
+
+    protected override void Update() {
+        eyes.GetComponent<SpriteRenderer>().enabled = !moving;
+        base.Update();
     }
 
     override public void TakeTurn() {
@@ -61,6 +68,7 @@ public class S_Pincer : S_Entity {
                 if (targetTile.occupier is S_Player) {
                     Game.Get().Lose();
                 }
+                
                 MoveToTile(targetTile, false);
             }
         }
@@ -70,7 +78,14 @@ public class S_Pincer : S_Entity {
         return true;
     }
 
+    GameObject eyes;
+
+
     public override void Init() {
         base.Setup("pincer");
+        eyes =  Primitives.CreateActor(Sprites.eye);
+        Util.SetLayer(eyes, Util.LayerName.Entities, 5);
+        eyes.transform.SetParent(transform, false);
+
     }
 }

@@ -19,7 +19,7 @@ public class S_AbilityPanel : MonoBehaviour{
         GameObject button = buttonScrip.gameObject;
 
         button.name = "Button";
-        Util.SetColour(button, Colours.GREEN);
+        Util.SetColour(button, Colours.RED);
         buttons.Add(button.GetComponent<S_Button>());
 
         int currentY = 0;

@@ -75,12 +75,14 @@ public class S_Player : S_Entity {
         nextDy = -5;
 
         if (Game.Get().level.activeAbility != null) {
+            Sounds.PlaySound(Sounds.move, .15f, Random.Range(1.2f, 1.4f));
             Game.Get().level.activeAbility.Use(this, dx, dy);
         }
 
         else {
             S_Tile newTile = currentTile.GetTile(dx, dy);
             if (newTile != null) {
+                Sounds.PlaySound(Sounds.move, .15f, Random.Range(.7f, .9f));
                 ActivateTile(newTile);
             }
         }
@@ -104,6 +106,9 @@ public class S_Player : S_Entity {
     }
 
     public override void MoveToTile(S_Tile tile, bool instant) {
+        if (!instant) {
+            
+        }
         bool lost = tile.occupier != null;
         if (lost) Game.Get().Lose();
         base.MoveToTile(tile, instant);

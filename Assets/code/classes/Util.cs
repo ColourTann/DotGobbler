@@ -2,7 +2,9 @@
 using System.Collections;
 
 public class Util  {
-    public enum LayerName { UI,Tiles}
+    public enum LayerName { UI,Tiles,
+        Entities
+    }
 	public static void SetLayer(GameObject go, LayerName layer, int position) {
         SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
         sr.sortingLayerName = layer.ToString();

@@ -28,7 +28,6 @@ public class S_Entity : MonoBehaviour {
         if (!active) return;
         CheckInput();
         Move();
-        
     }
 
     protected virtual void CheckInput() {

@@ -11,6 +11,8 @@ public class Sprites {
     public static Sprite ability_dash = Resources.Load<Sprite>("images/abilities/dash");
     public static Sprite ability_pip = Resources.Load<Sprite>("images/abilities/pip");
 
+    public static Sprite eye = Resources.Load<Sprite>("images/enemy_eye");
+
     public static Vector2 GetBounds(Sprite s) {
         return new Vector2(s.bounds.size.x , s.bounds.size.y);
     }
