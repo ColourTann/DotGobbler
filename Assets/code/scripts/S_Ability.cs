@@ -9,9 +9,14 @@ public class S_Ability : MonoBehaviour {
     public enum AbilityType {
         Move3
     }
-    public void Toggle() {
-        if (!active && !IsAvailable()) return;
+    public void Toggle(bool sound) {
+        if (!active && !IsAvailable()) {
+            if(sound) Sounds.PlaySound(Sounds.deselect, .3f, Random.Range(.7f, .8f));
+            return;
+        }
+        
         active = !active;
+        if (sound) Sounds.PlaySound(active ?Sounds.select: Sounds.deselect, .3f, Random.Range(.7f, .8f));
         GetComponent<SpriteRenderer>().color = active ? Colours.LIGHT : Colours.RED;
         Game.Get().level.ActivateAbility(this, active);
     }
@@ -32,7 +37,7 @@ public class S_Ability : MonoBehaviour {
     internal void SuccessfulUse() {
         pips--;
         UpdatePips();
-        Toggle();
+        Toggle(false);
     }
 
 

@@ -14,7 +14,7 @@ public class S_AbilityPanel : MonoBehaviour{
         S_Ability ability = buttonScrip.gameObject.AddComponent<S_Ability>();
         ability.init(2, S_Ability.AbilityType.Move3);   
         buttonScrip.SetAction(() => {
-            ability.Toggle();
+            ability.Toggle(true);
         });
         GameObject button = buttonScrip.gameObject;
 

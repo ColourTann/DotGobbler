@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Game {
     private static Game self;
-    int levelNumber = 10    ;
+    int levelNumber = 0;
     public static Game Get() {
         if(self == null) {
             self = new Game();
@@ -24,6 +24,7 @@ public class Game {
     }
 
     public void Lose() {
+        Sounds.PlaySound(Sounds.dead, 1, 1);
         Restart();
     }
 

@@ -55,8 +55,7 @@ public class S_Tile : MonoBehaviour {
             content.Pickup();
             Destroy(content.gameObject);
             content = null;
-            Sounds.PlaySound(Sounds.pip, .7f, UnityEngine.Random.Range(1.2f,1.8f));
-            Debug.Log("flobablog");
+            Sounds.PlaySound(Sounds.pip, .9f, UnityEngine.Random.Range(1.2f,1.8f));
         }
     }
 
