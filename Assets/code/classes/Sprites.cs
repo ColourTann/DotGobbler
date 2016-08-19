@@ -9,6 +9,7 @@ public class Sprites {
 
     public static Sprite ability_border = Resources.Load<Sprite>("images/abilities/border");
     public static Sprite ability_dash = Resources.Load<Sprite>("images/abilities/dash");
+    public static Sprite ability_eye = Resources.Load<Sprite>("images/abilities/eye");
     public static Sprite ability_pip = Resources.Load<Sprite>("images/abilities/pip");
 
     public static Sprite eye = Resources.Load<Sprite>("images/enemy_eye");

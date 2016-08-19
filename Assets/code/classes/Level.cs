@@ -57,8 +57,6 @@ public class Level {
         //header stuff for extra data
         Color header = (levelData.GetPixel(0, levelData.height-1));
         int headerData = (int)(header.r * 255);
-        //Debug.Log(header);
-        //Debug.Log("header: " + headerData);
         bool hasAbility = (headerData & 1) > 0;
         int currentX = 0;
         int gap = 0;
@@ -69,7 +67,7 @@ public class Level {
             abilityPanel.transform.SetParent(slider.transform);
             gap = (Screen.width - (gridWidth + abilityPanel.width)) / 3;
             currentX += gap;
-            abilityPanel.transform.position = new Vector2(currentX, (int)(Screen.height / 2 - abilityPanel.height/ 2));
+            abilityPanel.transform.position = new Vector2(currentX, (int)(Screen.height / 2 - abilityPanel.height / 2));
             currentX += abilityPanel.width;
             currentX += gap;
         }
