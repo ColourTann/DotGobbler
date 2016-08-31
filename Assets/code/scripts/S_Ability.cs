@@ -2,13 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class S_Ability : MonoBehaviour {
+public abstract class S_Ability : MonoBehaviour {
     int pips;
     bool active;
-    AbilityType type;
-    public enum AbilityType {
-        Move3
-    }
+
+    public abstract Sprite GetSprite();
+
     public void Toggle(bool sound) {
         if (!active && !IsAvailable()) {
             if(sound) Sounds.PlaySound(Sounds.deselect, .3f, Random.Range(.7f, .8f));
@@ -21,18 +20,13 @@ public class S_Ability : MonoBehaviour {
         Game.Get().level.ActivateAbility(this, active);
     }
 
-    public void Use(S_Player player, int dx, int dy) {
-        S_Tile target = Game.Get().level.GetTile(player.currentTile.x + dx * 3, player.currentTile.y + dy * 3);
-        if (target == null) return;
-        player.MoveToTile(target, false);
-        SuccessfulUse();
-    }
+    public enum TargetingType { SingleTile, Line}
 
-    public void Use(S_Player player, S_Tile tile) {
-        if (!GetValidTiles(player.currentTile).Contains(tile)) return;
-        player.MoveToTile(tile, false);
-        SuccessfulUse();
-    }
+    public abstract TargetingType GetTargetingType();
+
+    public abstract void Use(S_Player player, int dx, int dy);
+
+    public abstract void Use(S_Player player, S_Tile tile);
 
     internal void SuccessfulUse() {
         pips--;
@@ -40,29 +34,11 @@ public class S_Ability : MonoBehaviour {
         Toggle(false);
     }
 
-
-    public List<S_Tile> GetValidTiles(S_Tile origin) {
-        List<S_Tile> result = new List<S_Tile>();
-        for (int dx = -1; dx <= 1; dx ++) {
-            for (int dy = -1; dy <= 1; dy ++) {
-                if (dx != 0 && dy != 0) continue;
-                if (dx == 0 && dy == 0) continue;
-                bool good = true;
-                for(int dist = 1; dist <= 3; dist++) {
-                    S_Tile t = Game.Get().level.GetTile(origin.x + dx * dist, origin.y + dy * dist);
-                    if (t == null) {
-                        good = false;
-                        break;
-                    }
-                }
-                if (good) {
-                    result.Add(Game.Get().level.GetTile(origin.x + 3 * dx, origin.y + 3 * dy));
-                }
-            }
-        }
-
-        return result;
+    internal void UnsuccessfulUse() {
+        Toggle(true);
     }
+
+    public abstract List<S_Tile> GetValidTiles(S_Tile origin);
 
     public void Deplete() {
         pips--;
@@ -73,8 +49,7 @@ public class S_Ability : MonoBehaviour {
         return pips > 0;
     }
 
-    public void init(int pips, AbilityType type) {
-        this.type = type;
+    public void init(int pips) {
         this.pips = pips;
         UpdatePips();
     }
@@ -87,9 +62,9 @@ public class S_Ability : MonoBehaviour {
         }
         pipObjects.Clear();
         int pipGap = (int)((Sprites.GetBounds(Sprites.ability_border).x - 2 - Sprites.GetBounds(Sprites.ability_pip).x * pips) / (pips + 1));
-        int currentX = S_Camera.scale + pipGap;
+        int currentX = 2 + pipGap;
         for (int i = 0; i < pips; i++) {
-            GameObject pip = Primitives.CreateActor(Sprites.ability_pip, currentX, S_Camera.scale);
+            GameObject pip = Primitives.CreateActor(Sprites.ability_pip, currentX, 2);
             pipObjects.Add(pip);
             Util.SetLayer(pip, Util.LayerName.UI, 5);
             currentX += (int)(Sprites.GetBounds(Sprites.ability_pip).x);

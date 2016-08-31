@@ -51,11 +51,11 @@ public class Level {
         tilesDown = levelData.height - 1;
         tiles = new S_Tile[tilesAcross, tilesDown];
 
-        int gridWidth = (int)(tiles.GetLength(0) * S_Tile.width) + S_Camera.scale;
-        int gridHeight = (int)(tiles.GetLength(1) * S_Tile.height) + S_Camera.scale;
+        int gridWidth = (int)(tiles.GetLength(0) * (S_Tile.BASE_TILE_SIZE + 1) * S_Camera.scale + S_Camera.scale);
+        int gridHeight = (int)(tiles.GetLength(1) * (S_Tile.BASE_TILE_SIZE + 1) * S_Camera.scale + S_Camera.scale);
 
         //header stuff for extra data
-        Color header = (levelData.GetPixel(0, levelData.height-1));
+        Color header = (levelData.GetPixel(0, levelData.height - 1));
         int headerData = (int)(header.r * 255);
         bool hasAbility = (headerData & 1) > 0;
         int currentX = 0;
@@ -77,18 +77,18 @@ public class Level {
         }
 
         //put map in the center based on tiles
-      
-        
+
+
         map.transform.position = new Vector2(currentX, (int)(Screen.height / 2 - gridHeight / 2));
 
-       
+
 
         //use colours in leveldata to setup entities
         for (int x = 0; x < tilesAcross; x++) {
             for (int y = 0; y < tilesDown; y++) {
                 S_Tile tile;
                 //Color32[] data = levelData.GetPixels32();
-                
+
                 switch (FromColour(levelData.GetPixel(x, y))) {
                     case LevelContent.wall:
                         break;
@@ -133,8 +133,8 @@ public class Level {
         rect.GetComponent<SpriteRenderer>().sortingLayerName = "Tiles";
         rect.GetComponent<SpriteRenderer>().sortingOrder = 0;
         rect.name = "level_background";
-
     }
+
 
     public S_Tile MakeTile(int x, int y) {
         GameObject tile = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/tile")));
@@ -215,16 +215,50 @@ public class Level {
         UpdateGridHighlightedness();
     }
 
+    List<GameObject> highlightRectangles = new List<GameObject>();
+
     internal void UpdateGridHighlightedness() {
+        foreach (GameObject go in highlightRectangles) {
+            GameObject.Destroy(go);
+        }
+        highlightRectangles.Clear();
         foreach (S_Tile tile in allTiles) {
             tile.SetHighlight(false);
         }
         if (activeAbility != null) {
-            List<S_Tile> goodTile = activeAbility.GetValidTiles(player.currentTile);
-            foreach (S_Tile tile in goodTile) {
-                tile.SetHighlight(true);
+            switch (activeAbility.GetTargetingType()) {
+                case S_Ability.TargetingType.Line:
+                    foreach (S_Tile tile in activeAbility.GetValidTiles(player.currentTile)) {
+                        int baseWidth = tile.x - player.currentTile.x;
+                        int baseHeight = tile.y - player.currentTile.y;
+                        int rWidth = baseWidth == 0 ? 1 : baseWidth;
+                        int rHeight = baseHeight == 0 ? 1 : baseHeight;
+                        rWidth *= S_Tile.height;
+                        rHeight *= S_Tile.width;
+                        rWidth += -S_Camera.scale * Util.ProperSign(rWidth);
+                        rHeight += -S_Camera.scale * Util.ProperSign(rHeight);
+                        GameObject go = Primitives.CreateRectangle(rWidth, rHeight, S_Camera.scale, Colours.LIGHT);
+                        Util.SetLayerContainer(go, Util.LayerName.Entities, 5);
+                        S_Tile origin = player.currentTile;
+                        if (baseWidth > 0) {
+                            origin = origin.GetTile(1, 0);
+                        }
+                        else if (baseHeight > 0) {
+                            origin = origin.GetTile(0, 1);
+                        }
+                        go.transform.position = new Vector2(origin.transform.position.x + (baseWidth < 0 ? -S_Camera.scale : 0), origin.transform.position.y + (baseHeight < 0 ? -S_Camera.scale : 0));
+                        highlightRectangles.Add(go);
+						go.transform.SetParent(Game.GetMisc("effects").transform);
+
+                    }
+                    break;
+
+                case S_Ability.TargetingType.SingleTile:
+                    foreach (S_Tile tile in activeAbility.GetValidTiles(player.currentTile)) {
+                        tile.SetHighlight(true);
+                    }
+                    break;
             }
         }
-
     }
 }

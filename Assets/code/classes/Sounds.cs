@@ -10,7 +10,9 @@ public class Sounds  {
     public static AudioClip deselect = Resources.Load<AudioClip>("sfx/deselect");
     
 
-    private static AudioSource source= new GameObject().AddComponent<AudioSource>();
+    private static AudioSource source= Game.GetMisc("sound").AddComponent<AudioSource>();
+
+	
 
     public static void PlaySound(AudioClip clip, float volume=1, float pitch=1) {
         source.pitch = pitch;

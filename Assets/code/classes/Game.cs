@@ -1,16 +1,34 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Game {
     private static Game self;
     int levelNumber = 6;
-    public static Game Get() {
+
+	private static GameObject misc;
+	public static GameObject GetMisc() {
+		if (misc == null) misc = new GameObject("misc");
+		return misc;
+	}
+
+	public static Dictionary<string, GameObject> objectTable = new Dictionary<string, GameObject>();
+	public static GameObject GetMisc(string name) {
+		if (objectTable.ContainsKey(name)) {
+			return objectTable[name];
+		}
+		GameObject go = new GameObject(name);
+		go.transform.SetParent(GetMisc().transform);
+		objectTable.Add(name, go);
+		return go;
+	}
+
+	public static Game Get() {
         if(self == null) {
             self = new Game();
         }
         return self;
     }
-
+    
     public Level previousLevel;
     public Level level;
 
