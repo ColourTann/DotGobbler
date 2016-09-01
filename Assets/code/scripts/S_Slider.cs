@@ -2,7 +2,6 @@
 using System.Collections;
 using System;
 public class S_Slider : MonoBehaviour {
-
     Vector3 startPosition;
     Vector3 targetPosition;
     float time;

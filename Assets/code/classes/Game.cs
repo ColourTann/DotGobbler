@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Game {
     private static Game self;
-    int levelNumber = 6;
+    int levelNumber = 0;
 
 	private static GameObject misc;
 	public static GameObject GetMisc() {
@@ -98,4 +98,17 @@ public class Game {
         path += level;
         return Resources.Load(path) as Texture2D; 
     }
+
+	private static int locks;
+	public static void Lock() {
+		locks++;
+	}
+
+	public static void Unlock() {
+		locks--;
+	}
+
+	public static bool isLocked() {
+		return locks != 0;
+	}
 }

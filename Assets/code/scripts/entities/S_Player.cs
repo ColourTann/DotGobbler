@@ -21,6 +21,7 @@ public class S_Player : S_Entity {
     }
 
     override protected void CheckInput() {
+		if (Game.isLocked()) return;
         int dx = 0;
         int dy = 0;
 

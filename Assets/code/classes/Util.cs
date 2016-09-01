@@ -12,7 +12,8 @@ public class Util  {
         SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
         sr.sortingLayerName = layer.ToString();
         sr.sortingOrder = position;
-    }
+
+	}
 
     public static void SetLayerContainer(GameObject go, LayerName layer, int position) {
         foreach(SpriteRenderer sr in go.GetComponentsInChildren<SpriteRenderer>()) {
@@ -28,4 +29,8 @@ public class Util  {
     public static int ProperSign(int num) {
         return num == 0 ? 0 : num > 0 ? 1 : -1;
     }
+
+	
+
 }
+

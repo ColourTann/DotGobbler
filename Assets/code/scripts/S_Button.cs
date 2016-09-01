@@ -22,7 +22,8 @@ public class S_Button : MonoBehaviour {
     Action action;
 
     void OnMouseDown() {
-        action.Invoke();
+		if (Game.isLocked()) return;
+		action.Invoke();
     }
     
 	// Use this for initialization

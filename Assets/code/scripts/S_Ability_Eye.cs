@@ -51,7 +51,11 @@ public class S_Ability_Eye : S_Ability {
         }
         S_Tile currentTile = player.currentTile;
         while (currentTile != null) {
-            currentTile.Enter(player);
+			S_Pickup pickup = currentTile.content;
+			if (pickup != null) {
+				Game.Lock();
+				currentTile.Enter(player, false);
+			}
             currentTile = currentTile.GetTile(dx, dy);
         }
 

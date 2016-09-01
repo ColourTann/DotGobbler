@@ -43,7 +43,7 @@ public class S_Entity : MonoBehaviour {
             moveTicker += Time.deltaTime / MOVE_SPEED;
             if (moveTicker >= 1) {
                 moveTicker = 1;
-                currentTile.Enter(this);
+                currentTile.Enter(this, true);
                 moving = false;
                 FinishedMoving();
             }
@@ -58,7 +58,7 @@ public class S_Entity : MonoBehaviour {
         SetTile(tile);
         if (instant) {
             PositionSetter.transform.position = currentTile.transform.localPosition;
-            tile.Enter(this);
+            tile.Enter(this, true);
         }
         else {
             StartMoving();
