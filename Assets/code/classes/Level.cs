@@ -46,6 +46,11 @@ public class Level {
 		}
 	}
 
+	internal void DeselectAbility(S_Ability s_Ability) {
+		if (activeAbility == null || activeAbility == s_Ability) return;
+		activeAbility.Toggle(false);
+	}
+
 	void InitLayoutStuff() {
 		//initialise slider
 		GameObject parent = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/slider")));
@@ -203,6 +208,7 @@ public class Level {
 	internal void Pickup(S_Pickup pickup) {
 		pickups--;
 		if (pickups == 0) {
+			Debug.Log("next");
 			Game.Get().NextLevel();
 		}
 	}

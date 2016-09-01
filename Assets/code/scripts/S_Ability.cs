@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+
 using System.Collections;
 using System.Collections.Generic;
 
@@ -34,7 +35,12 @@ public abstract class S_Ability : MonoBehaviour {
         Toggle(false);
     }
 
-    internal void UnsuccessfulUse() {
+	internal void Click() {
+		Game.Get().level.DeselectAbility(this);
+		Toggle(true);
+	}
+
+	internal void UnsuccessfulUse() {
         Toggle(true);
     }
 

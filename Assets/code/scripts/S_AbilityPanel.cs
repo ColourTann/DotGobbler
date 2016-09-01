@@ -21,7 +21,7 @@ public class S_AbilityPanel : MonoBehaviour{
             }
             ability.init(2);
             buttonScrip.SetAction(() => {
-                ability.Toggle(true);
+                ability.Click();
             });
             GameObject button = buttonScrip.gameObject;
             button.name = "Button";

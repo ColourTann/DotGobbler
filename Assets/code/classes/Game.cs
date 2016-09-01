@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class Game {
     private static Game self;
-    int levelNumber = 0;
+    int levelNumber = 6;
 
 	private static GameObject misc;
 	public static GameObject GetMisc() {
@@ -46,7 +47,8 @@ public class Game {
         Restart();
     }
 
-    enum GameState {
+
+	enum GameState {
         Normal, Restarting, NextLevel
     }
 
@@ -106,6 +108,7 @@ public class Game {
 
 	public static void Unlock() {
 		locks--;
+		if (!isLocked()) Game.Get().EndOfTurn();
 	}
 
 	public static bool isLocked() {
