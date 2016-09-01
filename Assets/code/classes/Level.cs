@@ -208,17 +208,21 @@ public class Level {
 	internal void Pickup(S_Pickup pickup) {
 		pickups--;
 		if (pickups == 0) {
-			Debug.Log("next");
 			Game.Get().NextLevel();
 		}
 	}
 
 	public void Turn() {
-		foreach (S_Entity ent in entities) {
-			ent.TakeTurn();
+		while (Game.isLocked()) {
+
 		}
-		foreach (S_Entity ent in entities) {
-			ent.ChooseMove();
+		if (Game.Get().state != Game.GameState.NextLevel) {
+			foreach (S_Entity ent in entities) {
+				ent.TakeTurn();
+			}
+			foreach (S_Entity ent in entities) {
+				ent.ChooseMove();
+			}
 		}
 		Game.Get().EndOfTurn();
 	}

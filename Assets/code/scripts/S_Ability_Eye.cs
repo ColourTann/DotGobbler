@@ -59,6 +59,5 @@ public class S_Ability_Eye : S_Ability {
             currentTile = currentTile.GetTile(dx, dy);
         }
         SuccessfulUse();
-		Game.Get().level.Turn();
     }
 }

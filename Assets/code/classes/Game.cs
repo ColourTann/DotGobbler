@@ -4,7 +4,7 @@ using System;
 
 public class Game {
     private static Game self;
-    int levelNumber = 6;
+    int levelNumber = 8;
 
 	private static GameObject misc;
 	public static GameObject GetMisc() {
@@ -48,14 +48,16 @@ public class Game {
     }
 
 
-	enum GameState {
+	public enum GameState {
         Normal, Restarting, NextLevel
     }
 
-    GameState state = GameState.Normal;
+	public GameState state = GameState.Normal;
 
     public void NextLevel() {
-        state = GameState.NextLevel;
+		if (state == GameState.Normal) {
+			state = GameState.NextLevel;
+		}
     }
 
     public void Restart() {
@@ -108,7 +110,9 @@ public class Game {
 
 	public static void Unlock() {
 		locks--;
-		if (!isLocked()) Game.Get().EndOfTurn();
+		if (!isLocked()) {
+			Game.Get().level.Turn();
+		}
 	}
 
 	public static bool isLocked() {

@@ -63,7 +63,7 @@ public class S_Tile : MonoBehaviour {
 				int dx = (int)(enterer.transform.position.x - content.transform.position.x);
 				int dy = (int)(enterer.transform.position.y - content.transform.position.y);
 				int dist = dx * dx + dy * dy;
-				slider.SlideTo((int)enterer.transform.position.x - S_Tile.width / 2, (int)enterer.transform.position.y - S_Tile.height / 2, dist / 70000f,  () => {Enter(enterer, true); Game.Unlock();});
+				slider.SlideTo((int)enterer.transform.position.x - S_Tile.width / 2, (int)enterer.transform.position.y - S_Tile.height / 2, dist / 60000f,  () => {Enter(enterer, true); Game.Unlock();});
 			}
 		}
 
