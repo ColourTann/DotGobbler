@@ -22,13 +22,20 @@ public class S_Player : S_Entity {
 
     override protected void CheckInput() {
 		if (Game.isLocked()) return;
-        int dx = 0;
+
+		//abilities
+		if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) AbilityKeyboardPress(1);
+		if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) AbilityKeyboardPress(2);
+		if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) AbilityKeyboardPress(3);
+
+		//directions
+		int dx = 0;
         int dy = 0;
 
-        if (Input.GetKeyDown("left")) dx = -1;
-        else if (Input.GetKeyDown("right")) dx = 1;
-        else if (Input.GetKeyDown("down")) dy = -1;
-        else if (Input.GetKeyDown("up")) dy = 1;
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) dx = -1;
+        else if (Input.GetKeyDown(KeyCode.RightArrow)) dx = 1;
+        else if (Input.GetKeyDown(KeyCode.DownArrow)) dy = -1;
+        else if (Input.GetKeyDown(KeyCode.UpArrow)) dy = 1;
 
         if (Input.touchCount == 1) {
             Touch touch = Input.GetTouch(0);
@@ -69,6 +76,10 @@ public class S_Player : S_Entity {
             ActivateDirection(dx, dy);
         }
     }
+
+	void AbilityKeyboardPress(int index) {
+		Game.Get().level.ActivateAbilityFromKeypress(index-1);
+	}
 
     void ActivateDirection(int dx, int dy) {
         if (!(dx != 0 || dy != 0)) return;

@@ -80,4 +80,13 @@ public abstract class S_Ability : MonoBehaviour {
         }
     }
 
+	GameObject text;
+
+	internal void SetText(GameObject text) {
+		this.text = text;
+	}
+
+	internal void ClearText() {
+		GameObject.Destroy(text);
+	}
 }

@@ -15,6 +15,7 @@ public class Level {
 	public int totalPickups = 0;
 	Texture2D levelData;
 	GameObject grid;
+	public List<S_Ability> availableAbilities = new List<S_Ability>();
 	public S_Ability activeAbility;
 	public static int[][] pitches =
 		{
@@ -38,6 +39,7 @@ public class Level {
 	}
 
 	public void Init() {
+		availableAbilities.Clear();
 		InitLayoutStuff();
 		InitTiles();
 		foreach (S_Entity entity in entities) {
@@ -86,7 +88,7 @@ public class Level {
 		if (hasAbility) {
 			GameObject abilityObject = new GameObject();
 			S_AbilityPanel abilityPanel = abilityObject.AddComponent<S_AbilityPanel>();
-			abilityPanel.Setup(headerData);
+			availableAbilities = abilityPanel.Setup(headerData);
 			abilityPanel.transform.SetParent(slider.transform);
 			gap = (Screen.width - (gridWidth + abilityPanel.width)) / 3;
 			currentX += gap;
@@ -178,6 +180,9 @@ public class Level {
 	}
 
 	public void DeleteSelf() {
+		foreach(S_Ability ability in availableAbilities) {
+			ability.ClearText();
+		}
 		GameObject.Destroy(slider.gameObject);
 	}
 
@@ -232,6 +237,11 @@ public class Level {
 			return null;
 		}
 		return tiles[x, y];
+	}
+
+	public void ActivateAbilityFromKeypress(int index) {
+		if (index < 0 || index >= availableAbilities.Count) return;
+		availableAbilities[availableAbilities.Count-1-index].Click();
 	}
 
 	internal void ActivateAbility(S_Ability ability, bool active) {

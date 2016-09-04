@@ -4,7 +4,7 @@ using System;
 
 public class Game {
     private static Game self;
-    int levelNumber = 8;
+    int levelNumber = 6;
 
 	private static GameObject misc;
 	public static GameObject GetMisc() {

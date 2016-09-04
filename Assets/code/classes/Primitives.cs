@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Primitives  {
 
@@ -40,5 +41,19 @@ public class Primitives  {
         result.transform.position = new Vector2(x, y);
         return result;
     }
+
+	private static Canvas canvas;
+
+	public static GameObject CreateText(string text, int x=0, int y = 0) {
+		if (canvas == null) canvas = Object.FindObjectOfType<Canvas>();
+		GameObject go = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/text")));
+		go.GetComponent<Text>().text = text;
+		go.GetComponent<Text>().fontSize= 16 * S_Camera.scale;
+		go.GetComponent<Text>().color = Colours.LIGHT;
+		go.transform.position = new Vector2(x, y);
+		go.transform.SetParent(canvas.transform);
+
+		return go;
+	}
   
 }

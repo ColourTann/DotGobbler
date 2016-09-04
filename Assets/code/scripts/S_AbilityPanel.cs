@@ -6,12 +6,15 @@ public class S_AbilityPanel : MonoBehaviour{
 
     public int width, height;
     List<S_Button> buttons = new List<S_Button>();
-    public void Setup(int headerData) {
-
+    public List<S_Ability> Setup(int headerData) {
+		List<S_Ability> output = new List<S_Ability>();		
         name = "Ability Panel";
         int[] abilityDatums = new int[] { headerData & 15, (headerData & 240) >> 4 };
-        List<S_Ability> abilities = new List<S_Ability>();
-        foreach (int datum in abilityDatums) {
+		int numAbilities = Util.ProperSign(abilityDatums[0]) + Util.ProperSign(abilityDatums[1]);
+
+		List<S_Ability> abilities = new List<S_Ability>();
+		for (int i= 0;i< abilityDatums.Length;i++) {
+			int datum = abilityDatums[i];
             if (datum == 0) continue;
             S_Button buttonScrip = S_Button.CreateButton(Sprites.ability_border);
             S_Ability ability = null;
@@ -19,6 +22,7 @@ public class S_AbilityPanel : MonoBehaviour{
                 case 1: ability = buttonScrip.gameObject.AddComponent<S_Ability_Move3>(); break;
                 case 2: ability = buttonScrip.gameObject.AddComponent<S_Ability_Eye>(); break;
             }
+			output.Add(ability);
             ability.init(2);
             buttonScrip.SetAction(() => {
                 ability.Click();
@@ -32,6 +36,10 @@ public class S_AbilityPanel : MonoBehaviour{
             image.name = "image";
             Util.SetLayer(image, Util.LayerName.UI, 10);
             image.transform.SetParent(buttonScrip.gameObject.transform, false);
+			GameObject text = Primitives.CreateText("["+(numAbilities-i)+"]", 0, 0);
+			S_Follower follower = text.AddComponent<S_Follower>();
+			follower.Follow(button, -20*S_Camera.scale, -2*S_Camera.scale);
+			ability.SetText(text);
         }
 
         int gap = 10 * S_Camera.scale;
@@ -48,6 +56,6 @@ public class S_AbilityPanel : MonoBehaviour{
             butt.transform.SetParent(transform, false);
         }
 
-        
+		return output;
     }
 }
