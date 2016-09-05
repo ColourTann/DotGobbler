@@ -6,15 +6,14 @@ public class S_AbilityPanel : MonoBehaviour{
 
     public int width, height;
     List<S_Button> buttons = new List<S_Button>();
-    public List<S_Ability> Setup(int headerData) {
+    public List<S_Ability> Setup(int[] headerData) {
 		List<S_Ability> output = new List<S_Ability>();		
         name = "Ability Panel";
-        int[] abilityDatums = new int[] { headerData & 15, (headerData & 240) >> 4 };
-		int numAbilities = Util.ProperSign(abilityDatums[0]) + Util.ProperSign(abilityDatums[1]);
+		int numAbilities = Util.ProperSign(headerData[0]) + Util.ProperSign(headerData[1]) + Util.ProperSign(headerData[2]);
 
 		List<S_Ability> abilities = new List<S_Ability>();
-		for (int i= 0;i< abilityDatums.Length;i++) {
-			int datum = abilityDatums[i];
+		for (int i= 0;i< headerData.Length;i++) {
+			int datum = headerData[i];
             if (datum == 0) continue;
             S_Button buttonScrip = S_Button.CreateButton(Sprites.ability_border);
             S_Ability ability = null;
@@ -23,7 +22,7 @@ public class S_AbilityPanel : MonoBehaviour{
                 case 2: ability = buttonScrip.gameObject.AddComponent<S_Ability_Eye>(); break;
             }
 			output.Add(ability);
-            ability.init(2);
+            ability.init((datum & 28)>>2);
             buttonScrip.SetAction(() => {
                 ability.Click();
             });

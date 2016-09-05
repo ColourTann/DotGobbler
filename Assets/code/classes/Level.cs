@@ -83,8 +83,8 @@ public class Level {
 
 		//header stuff for extra data
 		Color header = (levelData.GetPixel(0, levelData.height - 1));
-		int abilityHeaderData = (int)(header.r * 255);
-		bool hasAbility = (abilityHeaderData & 1) > 0;
+		int[] abilityHeaderData = new int[] { (int)(header.r * 255), (int)(header.g * 255), (int)(header.b * 255) } ;
+		bool hasAbility = (abilityHeaderData[0]) > 0;
 		int currentX = 0;
 		int gap = 0;
 		if (hasAbility) {

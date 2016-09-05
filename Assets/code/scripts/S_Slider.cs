@@ -8,13 +8,15 @@ public class S_Slider : MonoBehaviour {
     float counter;
     bool sliding;
     Action function;
-    public void SlideTo(int x, int y, float speed, Action function = null) {
+	Interpolation.InterpolationType type;
+    public void SlideTo(int x, int y, float speed, Action function = null, Interpolation.InterpolationType terpType = Interpolation.InterpolationType.Pow2Out) {
         this.function = function;
         counter = 0;
         time = speed;
         startPosition = transform.position;
         targetPosition = new Vector2(x, y);
         sliding = true;
+		this.type = terpType;
     }
 
 	void Update () {
@@ -27,6 +29,6 @@ public class S_Slider : MonoBehaviour {
                 function();
             }
         }
-        transform.position = Vector3.Lerp(startPosition, targetPosition, Interpolation.Pow2Out(0, 1, counter));
+        transform.position = Vector3.Lerp(startPosition, targetPosition, Interpolation.Terp(type, 0, 1, counter));
     }
 }
