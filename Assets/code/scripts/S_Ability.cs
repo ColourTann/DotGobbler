@@ -10,6 +10,9 @@ public abstract class S_Ability : MonoBehaviour {
     public abstract Sprite GetSprite();
 
     public void Toggle(bool sound) {
+
+		if(sound) Game.Get().level.ActionCompleted(active ? Level.ActionType.DeselectAbility : Level.ActionType.SelectAbility);
+
         if (!active && !IsAvailable()) {
             if(sound) Sounds.PlaySound(Sounds.deselect, .3f, Random.Range(.7f, .8f));
             return;
@@ -33,7 +36,8 @@ public abstract class S_Ability : MonoBehaviour {
         pips--;
         UpdatePips();
         Toggle(false);
-    }
+		Game.Get().level.ActionCompleted(Level.ActionType.UseAbility);
+	}
 
 	internal void Click() {
 		Game.Get().level.DeselectAbility(this);

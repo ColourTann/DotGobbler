@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System;
 
 public class Game {
+	public const bool KEYBOARD = true;
     private static Game self;
-    int levelNumber = 6;
-
+	int levelNumber = 0;
 	private static GameObject misc;
 	public static GameObject GetMisc() {
 		if (misc == null) misc = new GameObject("misc");

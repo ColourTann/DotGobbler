@@ -52,7 +52,6 @@ public class Primitives  {
 		go.GetComponent<Text>().color = Colours.LIGHT;
 		go.transform.position = new Vector2(x, y);
 		go.transform.SetParent(canvas.transform);
-
 		return go;
 	}
   

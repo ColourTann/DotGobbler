@@ -17,6 +17,7 @@ public class Level {
 	GameObject grid;
 	public List<S_Ability> availableAbilities = new List<S_Ability>();
 	public S_Ability activeAbility;
+	int gridWidth, gridHeight;
 	public static int[][] pitches =
 		{
 		new int[] {12},
@@ -39,7 +40,6 @@ public class Level {
 	}
 
 	public void Init() {
-		availableAbilities.Clear();
 		InitLayoutStuff();
 		InitTiles();
 		foreach (S_Entity entity in entities) {
@@ -70,25 +70,27 @@ public class Level {
 		grid.transform.SetParent(map.transform);
 	}
 
+	GameObject abilityPanelObject;
+
 	void InitTiles() {
 		//init tiles array
 		tilesAcross = levelData.width;
 		tilesDown = levelData.height - 1;
 		tiles = new S_Tile[tilesAcross, tilesDown];
 
-		int gridWidth = (int)(tiles.GetLength(0) * (S_Tile.BASE_TILE_SIZE + 1) * S_Camera.scale + S_Camera.scale);
-		int gridHeight = (int)(tiles.GetLength(1) * (S_Tile.BASE_TILE_SIZE + 1) * S_Camera.scale + S_Camera.scale);
+		gridWidth = (int)(tiles.GetLength(0) * (S_Tile.BASE_TILE_SIZE + 1) * S_Camera.scale + S_Camera.scale);
+		gridHeight = (int)(tiles.GetLength(1) * (S_Tile.BASE_TILE_SIZE + 1) * S_Camera.scale + S_Camera.scale);
 
 		//header stuff for extra data
 		Color header = (levelData.GetPixel(0, levelData.height - 1));
-		int headerData = (int)(header.r * 255);
-		bool hasAbility = (headerData & 1) > 0;
+		int abilityHeaderData = (int)(header.r * 255);
+		bool hasAbility = (abilityHeaderData & 1) > 0;
 		int currentX = 0;
 		int gap = 0;
 		if (hasAbility) {
-			GameObject abilityObject = new GameObject();
-			S_AbilityPanel abilityPanel = abilityObject.AddComponent<S_AbilityPanel>();
-			availableAbilities = abilityPanel.Setup(headerData);
+			abilityPanelObject = new GameObject();
+			S_AbilityPanel abilityPanel = abilityPanelObject.AddComponent<S_AbilityPanel>();
+			availableAbilities = abilityPanel.Setup(abilityHeaderData);
 			abilityPanel.transform.SetParent(slider.transform);
 			gap = (Screen.width - (gridWidth + abilityPanel.width)) / 3;
 			currentX += gap;
@@ -102,11 +104,7 @@ public class Level {
 		}
 
 		//put map in the center based on tiles
-
-
 		map.transform.position = new Vector2(currentX, (int)(Screen.height / 2 - gridHeight / 2));
-
-
 
 		//use colours in leveldata to setup entities
 		for (int x = 0; x < tilesAcross; x++) {
@@ -159,8 +157,66 @@ public class Level {
 		rect.GetComponent<SpriteRenderer>().sortingLayerName = "Tiles";
 		rect.GetComponent<SpriteRenderer>().sortingOrder = 0;
 		rect.name = "level_background";
+
+		//add tutorial stuff
+		header = (levelData.GetPixel(1, levelData.height - 1));
+		int tutorialHeaderData = (int)(header.r * 255);
+		if (tutorialHeaderData == 1) {
+			AddTutorial(TutorialType.Move, true);
+		}
+		if (tutorialHeaderData == 2) {
+			AddTutorial(TutorialType.Ability, true);
+		}
 	}
 
+	public enum TutorialType { NOT, Move, Ability }
+
+	public enum ActionType { SelectAbility, DeselectAbility, UseAbility }
+	TutorialType currentTutorial = TutorialType.NOT;
+
+	public void ActionCompleted(ActionType type) {
+		if (currentTutorial == TutorialType.NOT) return;
+		if (tutorialAnimation == null) return;
+		switch (currentTutorial) {
+			case TutorialType.Move: break;
+			case TutorialType.Ability:
+				switch (type) {
+					case ActionType.SelectAbility:
+						AddTutorial(TutorialType.Move, false);
+						break;
+					case ActionType.DeselectAbility:
+						AddTutorial(TutorialType.Ability, false);
+						break;
+					case ActionType.UseAbility:
+						currentTutorial = TutorialType.NOT;
+						GameObject.Destroy(tutorialAnimation);
+						tutorialAnimation = null;
+						break;
+				}
+				break;
+		}
+	}
+
+	GameObject tutorialAnimation;
+
+	public void AddTutorial(TutorialType type, bool initial) {
+		if(initial) this.currentTutorial = type;
+		if (tutorialAnimation != null) GameObject.Destroy(tutorialAnimation);
+		Sprite[] sprites = null;
+		switch (type) {
+			case TutorialType.Move: sprites = Game.KEYBOARD ? Sprites.tutorial_0_keyboard : Sprites.tutorial_0_touch; break;
+			case TutorialType.Ability: sprites = Game.KEYBOARD ? Sprites.tutorial_1_keyboard : Sprites.tutorial_1_touch; break;
+		}
+		int x = (int)(map.transform.position.x + gridWidth / 2 - Sprites.GetBounds(sprites[0]).x / 2 * S_Camera.scale);
+		if(type == TutorialType.Ability) {
+			x = (int)(abilityPanelObject.transform.position.x + Sprites.GetBounds(Sprites.ability_border).x * S_Camera.scale / 2 - Sprites.GetBounds(sprites[0]).x / 2 * S_Camera.scale);
+		}
+		int y = (int)(Screen.height / 2 + gridHeight / 2 + (Screen.height - gridHeight) / 4 - Sprites.GetBounds(sprites[0]).y / 2 * S_Camera.scale);
+		tutorialAnimation = S_Animation.CreateAnimation(sprites, .45f, x, y);
+		Util.SetLayer(tutorialAnimation, Util.LayerName.UI, 0);
+		S_Camera.SetupScale(tutorialAnimation.transform);
+		tutorialAnimation.transform.SetParent(slider.transform, false);
+	}
 
 	public S_Tile MakeTile(int x, int y) {
 		GameObject tile = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/tile")));
@@ -180,7 +236,7 @@ public class Level {
 	}
 
 	public void DeleteSelf() {
-		foreach(S_Ability ability in availableAbilities) {
+		foreach (S_Ability ability in availableAbilities) {
 			ability.ClearText();
 		}
 		GameObject.Destroy(slider.gameObject);
@@ -241,7 +297,7 @@ public class Level {
 
 	public void ActivateAbilityFromKeypress(int index) {
 		if (index < 0 || index >= availableAbilities.Count) return;
-		availableAbilities[availableAbilities.Count-1-index].Click();
+		availableAbilities[availableAbilities.Count - 1 - index].Click();
 	}
 
 	internal void ActivateAbility(S_Ability ability, bool active) {

@@ -12,7 +12,13 @@ public class Sprites {
     public static Sprite ability_eye = Resources.Load<Sprite>("images/abilities/eye");
     public static Sprite ability_pip = Resources.Load<Sprite>("images/abilities/pip");
 
-    public static Sprite eye = Resources.Load<Sprite>("images/enemy_eye");
+	public static Sprite[] tutorial_0_keyboard = new Sprite[] { Resources.Load<Sprite>("images/tutorial/push00"), Resources.Load<Sprite>("images/tutorial/push01") };
+	public static Sprite[] tutorial_0_touch = new Sprite[] { Resources.Load<Sprite>("images/tutorial/swipe00"), Resources.Load<Sprite>("images/tutorial/swipe01") };
+
+	public static Sprite[] tutorial_1_keyboard = new Sprite[] { Resources.Load<Sprite>("images/tutorial/push10"), Resources.Load<Sprite>("images/tutorial/push11") };
+	public static Sprite[] tutorial_1_touch = new Sprite[] { Resources.Load<Sprite>("images/tutorial/swipe10"), Resources.Load<Sprite>("images/tutorial/swipe11") };
+
+	public static Sprite eye = Resources.Load<Sprite>("images/enemy_eye");
 
     public static Vector2 GetBounds(Sprite s) {
         return new Vector2(s.bounds.size.x , s.bounds.size.y);
