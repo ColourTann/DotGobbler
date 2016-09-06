@@ -70,7 +70,7 @@ public class S_Tile : MonoBehaviour {
 				int dx = (int)(enterer.transform.position.x - content.transform.position.x);
 				int dy = (int)(enterer.transform.position.y - content.transform.position.y);
 				int dist = dx * dx + dy * dy;
-				slider.SlideTo((int)enterer.transform.position.x - S_Tile.width / 2, (int)enterer.transform.position.y - S_Tile.height / 2, .1f + dist / 200000f,  () => {Enter(enterer, true); Game.Unlock();}, Interpolation.InterpolationType.Pow2In);
+				slider.SlideTo((int)enterer.transform.position.x - S_Tile.width / 2, (int)enterer.transform.position.y - S_Tile.height / 2, .1f + dist / 200000f, Interpolation.InterpolationType.Pow2In, () => {Enter(enterer, true); Game.Unlock();});
 			}
 		}
 
@@ -90,6 +90,17 @@ public class S_Tile : MonoBehaviour {
 					result.Add(at);
 				}
 			}
+		}
+		return result;
+	}
+
+	public List<S_Tile> GetTilesInLine(int dx, int dy, bool includeSelf=false) {
+		List<S_Tile> result = new List<S_Tile>();
+		if (includeSelf) result.Add(this);
+		S_Tile tile = GetTile(dx, dy);
+		while (tile != null) {
+			result.Add(tile);
+			tile = tile.GetTile(dx, dy);
 		}
 		return result;
 	}
@@ -136,10 +147,12 @@ public class S_Tile : MonoBehaviour {
 	bool blocked;
 
 	public void Block() {
+		//GetComponent<SpriteRenderer>().color = Colours.GREEN;
 		blocked = true;
 	}
 
 	public void UnBlock() {
+		//GetComponent<SpriteRenderer>().color = Colours.zWHITE;
 		blocked = false;
 	}
 

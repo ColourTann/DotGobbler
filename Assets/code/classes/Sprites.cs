@@ -9,7 +9,8 @@ public class Sprites {
     public static Sprite ability_border = Resources.Load<Sprite>("images/abilities/border");
     public static Sprite ability_dash = Resources.Load<Sprite>("images/abilities/dash");
     public static Sprite ability_eye = Resources.Load<Sprite>("images/abilities/eye");
-    public static Sprite ability_pip = Resources.Load<Sprite>("images/abilities/pip");
+	public static Sprite ability_swap = Resources.Load<Sprite>("images/abilities/swap");
+	public static Sprite ability_pip = Resources.Load<Sprite>("images/abilities/pip");
 
 	public static Sprite charge_h = Resources.Load<Sprite>("images/charge_h");
 	public static Sprite charge_v = Resources.Load<Sprite>("images/charge_v");

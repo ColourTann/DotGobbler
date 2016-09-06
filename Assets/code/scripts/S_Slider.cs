@@ -9,7 +9,7 @@ public class S_Slider : MonoBehaviour {
     bool sliding;
     Action function;
 	Interpolation.InterpolationType type;
-    public void SlideTo(int x, int y, float speed, Action function = null, Interpolation.InterpolationType terpType = Interpolation.InterpolationType.Pow2Out) {
+    public void SlideTo(float x, float y, float speed, Interpolation.InterpolationType terpType = Interpolation.InterpolationType.Pow2Out, Action function = null) {
         this.function = function;
         counter = 0;
         time = speed;

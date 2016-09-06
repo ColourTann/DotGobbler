@@ -47,6 +47,7 @@ public class Primitives  {
 	public static GameObject CreateText(string text, int x=0, int y = 0) {
 		if (canvas == null) canvas = Object.FindObjectOfType<Canvas>();
 		GameObject go = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/text")));
+		go.name = "Text: " + text;
 		go.GetComponent<Text>().text = text;
 		go.GetComponent<Text>().fontSize= 16 * S_Camera.scale;
 		go.GetComponent<Text>().color = Colours.LIGHT;

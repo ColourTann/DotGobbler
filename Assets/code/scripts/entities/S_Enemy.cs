@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class S_Enemy : S_Entity {
 
@@ -53,7 +54,14 @@ public class S_Enemy : S_Entity {
 		}
 	}
 
-	
+	int stun;
+	internal void Stun(int i) {
+		stun += i;
+	}
+
+	internal void CancelMove() {
+		if (targetTile != null) targetTile.UnBlock();
+	}
 
 	protected override void Update() {
 		eyes.GetComponent<SpriteRenderer>().enabled = !moving;
@@ -69,6 +77,10 @@ public class S_Enemy : S_Entity {
 	}
 
 	override public void TakeTurn() {
+		if (stun > 0) {
+			stun--;
+			return;
+		}
 		startRotation = targetRotation;
 		if (targetTile != null) {
 			targetTile.UnBlock();

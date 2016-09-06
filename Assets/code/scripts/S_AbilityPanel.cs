@@ -11,7 +11,7 @@ public class S_AbilityPanel : MonoBehaviour{
         name = "Ability Panel";
 		int numAbilities = Util.ProperSign(headerData[0]) + Util.ProperSign(headerData[1]) + Util.ProperSign(headerData[2]);
 
-		List<S_Ability> abilities = new List<S_Ability>();
+		//List<S_Ability> abilities = new List<S_Ability>();
 		for (int i= 0;i< headerData.Length;i++) {
 			int datum = headerData[i];
             if (datum == 0) continue;
@@ -20,7 +20,8 @@ public class S_AbilityPanel : MonoBehaviour{
             switch (datum & 3) {
                 case 1: ability = buttonScrip.gameObject.AddComponent<S_Ability_Move3>(); break;
                 case 2: ability = buttonScrip.gameObject.AddComponent<S_Ability_Eye>(); break;
-            }
+				case 3: ability = buttonScrip.gameObject.AddComponent<S_Ability_Swap>(); break;
+			}
 			output.Add(ability);
             ability.init((datum & 28)>>2);
             buttonScrip.SetAction(() => {

@@ -175,7 +175,13 @@ public class Level {
 		if (tutorialHeaderData == 2) {
 			AddTutorial(TutorialType.Ability, true);
 		}
+
+		levelNumberObject=Primitives.CreateText(("level " + (Game.Get().levelNumber)));
+		S_Follower follow = levelNumberObject.AddComponent<S_Follower>();
+		follow.Follow(slider.gameObject, 2 * S_Camera.scale, Screen.height - 28 * S_Camera.scale);
 	}
+
+	GameObject levelNumberObject;
 
 	public enum TutorialType { NOT, Move, Ability }
 
@@ -248,13 +254,14 @@ public class Level {
 			ability.ClearText();
 		}
 		GameObject.Destroy(slider.gameObject);
+		GameObject.Destroy(levelNumberObject);
 	}
 
 	public void SlideAway() {
 		foreach (S_Entity e in entities) {
 			e.Deactivate();
 		}
-		slider.SlideTo(-Screen.width, (int)slider.transform.position.y, .3f, DeleteSelf);
+		slider.SlideTo(-Screen.width, (int)slider.transform.position.y, .3f, Interpolation.InterpolationType.Pow2Out, DeleteSelf);
 	}
 
 	public enum LevelContent {

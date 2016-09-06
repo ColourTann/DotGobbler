@@ -57,7 +57,7 @@ public class S_Entity : MonoBehaviour {
         previousTile = currentTile;
         SetTile(tile);
         if (instant) {
-            PositionSetter.transform.position = currentTile.transform.localPosition;
+            PositionSetter.transform.localPosition = currentTile.transform.localPosition;
             tile.Enter(this, true);
         }
         else {
