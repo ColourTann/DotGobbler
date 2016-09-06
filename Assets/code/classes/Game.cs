@@ -5,7 +5,7 @@ using System;
 public class Game {
 	public const bool KEYBOARD = true;
     private static Game self;
-	int levelNumber = 14;
+	int levelNumber = 17;
 	private static GameObject misc;
 	public static GameObject GetMisc() {
 		if (misc == null) misc = new GameObject("misc");
@@ -43,7 +43,6 @@ public class Game {
     }
 
     public void Lose() {
-        Sounds.PlaySound(Sounds.dead, 1, 1);
         Restart();
     }
 
@@ -112,6 +111,7 @@ public class Game {
 		locks--;
 		if (!isLocked()) {
 			Game.Get().level.Turn();
+			Game.Get().EndOfTurn();
 		}
 	}
 

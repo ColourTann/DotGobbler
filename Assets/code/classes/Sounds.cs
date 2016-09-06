@@ -7,7 +7,10 @@ public class Sounds  {
     public static AudioClip pip = Resources.Load<AudioClip>("sfx/pickup");
     public static AudioClip dead = Resources.Load<AudioClip>("sfx/dead");
     public static AudioClip select = Resources.Load<AudioClip>("sfx/select");
-    public static AudioClip deselect = Resources.Load<AudioClip>("sfx/deselect");
+	public static AudioClip deselect = Resources.Load<AudioClip>("sfx/deselect");
+
+	public static AudioClip charge = Resources.Load<AudioClip>("sfx/charge");
+	public static AudioClip shoot = Resources.Load<AudioClip>("sfx/shoot");
 
 	const int totalSources = 10;
 	static int sourceNumber = 0;
@@ -27,6 +30,7 @@ public class Sounds  {
 	}
 
     public static void PlaySound(AudioClip clip, float volume=1, float pitch=1) {
+		Debug.Log(volume + ":" + pitch);
 		AudioSource source = getSource();
 		source.pitch = pitch;
 		source.PlayOneShot(clip, volume);

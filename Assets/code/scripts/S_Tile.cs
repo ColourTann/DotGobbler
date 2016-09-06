@@ -56,7 +56,14 @@ public class S_Tile : MonoBehaviour {
 				content.Pickup();
 				Destroy(content.gameObject);
 				content = null;
-				Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, Level.pitches[Game.Get().level.totalPickups-1][Game.Get().level.totalPickups- Game.Get().level.pickups-1]));
+				int totalPickups = Game.Get().level.totalPickups;
+				int pickupsLeft = Game.Get().level.pickups;
+				if (Game.Get().level.totalPickups > Level.pitches.Length) {
+					Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, ((float)(totalPickups - pickupsLeft) / (totalPickups)) * 12));
+				}
+				else {
+					Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, Level.pitches[totalPickups - 1][totalPickups - pickupsLeft - 1]));
+				}
 			}
 			else {
 				S_Slider slider = content.gameObject.AddComponent<S_Slider>();

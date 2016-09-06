@@ -132,6 +132,14 @@ public class Level {
 						entities.Add(player);
 						player.MoveToTile(tile, true);
 						break;
+					case LevelContent.charger:
+						tile = MakeTile(x, y);
+						GameObject chargerObject = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/charger")));
+						S_Entity charger = chargerObject.GetComponent<S_Charger>();
+						charger.Init();
+						entities.Add(charger);
+						charger.MoveToTile(tile, true);
+						break;
 					case LevelContent.enemy:
 						tile = MakeTile(x, y);
 						GameObject pincerObject = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/pincer")));
@@ -250,7 +258,7 @@ public class Level {
 	}
 
 	public enum LevelContent {
-		blank, player, wall, enemy, food
+		blank, player, wall, enemy, food, charger
 	}
 
 	LevelContent FromColour(Color c) {
@@ -260,6 +268,7 @@ public class Level {
 		if (c == Colours.DARK) return LevelContent.wall;
 		if (c == Colours.GREEN) return LevelContent.enemy;
 		if (c == Colours.zWHITE) return LevelContent.food;
+		if (c.r == 1 / 255f * 177) return LevelContent.charger;
 		Debug.Log(c);
 		return LevelContent.blank;
 	}
