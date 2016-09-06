@@ -110,8 +110,12 @@ public class Game {
 	public static void Unlock() {
 		locks--;
 		if (!isLocked()) {
-			Game.Get().level.Turn();
-			Game.Get().EndOfTurn();
+			if(Game.Get().state == GameState.Normal) {
+				Game.Get().level.Turn();
+			}
+			else {
+				Game.Get().EndOfTurn();
+			}
 		}
 	}
 

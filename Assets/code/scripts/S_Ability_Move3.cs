@@ -5,7 +5,11 @@ using System.Collections.Generic;
 
 public class S_Ability_Move3 : S_Ability {
 
-    public override Sprite GetSprite() {
+	public override KeyCode GetKey() {
+		return KeyCode.Z;
+	}
+
+	public override Sprite GetSprite() {
         return Sprites.ability_dash;
     }
 

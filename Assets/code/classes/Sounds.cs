@@ -30,7 +30,6 @@ public class Sounds  {
 	}
 
     public static void PlaySound(AudioClip clip, float volume=1, float pitch=1) {
-		Debug.Log(volume + ":" + pitch);
 		AudioSource source = getSource();
 		source.pitch = pitch;
 		source.PlayOneShot(clip, volume);

@@ -304,9 +304,13 @@ public class Level {
 		return tiles[x, y];
 	}
 
-	public void ActivateAbilityFromKeypress(int index) {
-		if (index < 0 || index >= availableAbilities.Count) return;
-		availableAbilities[availableAbilities.Count - 1 - index].Click();
+	public void ActivateAbilityFromKeypress(KeyCode key) {
+		foreach (S_Ability a in availableAbilities){
+			if (a.GetKey() == key) {
+				a.Click();
+				return;
+			}
+		}
 	}
 
 	internal void ActivateAbility(S_Ability ability, bool active) {

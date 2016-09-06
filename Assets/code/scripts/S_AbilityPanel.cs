@@ -35,7 +35,7 @@ public class S_AbilityPanel : MonoBehaviour{
             image.name = "image";
             Util.SetLayer(image, Util.LayerName.UI, 10);
             image.transform.SetParent(buttonScrip.gameObject.transform, false);
-			GameObject text = Primitives.CreateText("["+(numAbilities-i)+"]", 0, 0);
+			GameObject text = Primitives.CreateText("["+ability.GetKey()+"]", 0, 0);
 			S_Follower follower = text.AddComponent<S_Follower>();
 			follower.Follow(button, -20*S_Camera.scale, -2*S_Camera.scale);
 			ability.SetText(text);

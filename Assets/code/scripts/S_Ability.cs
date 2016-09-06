@@ -9,6 +9,8 @@ public abstract class S_Ability : MonoBehaviour {
 
     public abstract Sprite GetSprite();
 
+	public abstract KeyCode GetKey();
+
     public void Toggle(bool sound) {
 
 		if(sound) Game.Get().level.ActionCompleted(active ? Level.ActionType.DeselectAbility : Level.ActionType.SelectAbility);

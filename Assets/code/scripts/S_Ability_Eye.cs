@@ -4,7 +4,12 @@ using System;
 using System.Collections.Generic;
 
 public class S_Ability_Eye : S_Ability {
-    public override Sprite GetSprite() {
+
+	public override KeyCode GetKey() {
+		return KeyCode.X;
+	}
+
+	public override Sprite GetSprite() {
         return Sprites.ability_eye;
     }
 

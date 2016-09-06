@@ -24,9 +24,9 @@ public class S_Player : S_Entity {
 		if (Game.isLocked()) return;
 
 		//abilities
-		if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) AbilityKeyboardPress(1);
-		if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) AbilityKeyboardPress(2);
-		if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) AbilityKeyboardPress(3);
+		if (Input.GetKeyDown(KeyCode.Z)) AbilityKeyboardPress(KeyCode.Z);
+		if (Input.GetKeyDown(KeyCode.X)) AbilityKeyboardPress(KeyCode.X);
+		if (Input.GetKeyDown(KeyCode.C)) AbilityKeyboardPress(KeyCode.C);
 
 		//directions
 		int dx = 0;
@@ -77,8 +77,8 @@ public class S_Player : S_Entity {
         }
     }
 
-	void AbilityKeyboardPress(int index) {
-		Game.Get().level.ActivateAbilityFromKeypress(index-1);
+	void AbilityKeyboardPress(KeyCode key) {
+		Game.Get().level.ActivateAbilityFromKeypress(key);
 	}
 
     void ActivateDirection(int dx, int dy) {
