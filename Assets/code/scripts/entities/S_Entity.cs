@@ -10,8 +10,7 @@ public class S_Entity : MonoBehaviour {
     public GameObject PositionSetter;
     bool active = true;
     protected S_Tile targetTile;
-    protected float targetRotation;
-    protected float startRotation;
+
     protected void Setup(string name) {
         PositionSetter = new GameObject(name);
         transform.parent = PositionSetter.transform;
@@ -43,12 +42,11 @@ public class S_Entity : MonoBehaviour {
             moveTicker += Time.deltaTime / MOVE_SPEED;
             if (moveTicker >= 1) {
                 moveTicker = 1;
-                currentTile.Enter(this, true);
+                currentTile.Enter(this);
                 moving = false;
                 FinishedMoving();
             }
             PositionSetter.transform.position = Vector3.Lerp(previousTile.transform.position, currentTile.transform.position, Interpolation.Pow2Out(0, 1, moveTicker));
-            transform.rotation = Quaternion.AngleAxis(startRotation + (targetRotation-startRotation)* Interpolation.Pow2Out(0,1,moveTicker), Vector3.forward);
         }
     }
 
@@ -58,7 +56,7 @@ public class S_Entity : MonoBehaviour {
         SetTile(tile);
         if (instant) {
             PositionSetter.transform.localPosition = currentTile.transform.localPosition;
-            tile.Enter(this, true);
+            tile.Enter(this);
         }
         else {
             StartMoving();
@@ -87,10 +85,6 @@ public class S_Entity : MonoBehaviour {
     }
 
     public virtual void ChooseMove() {
-
     }
 
-    public virtual void InstantFace() {
-        transform.rotation = Quaternion.AngleAxis(targetRotation, Vector3.forward);
-    }
 }

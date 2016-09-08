@@ -31,4 +31,8 @@ public class S_Slider : MonoBehaviour {
         }
         transform.position = Vector3.Lerp(startPosition, targetPosition, Interpolation.Terp(type, 0, 1, counter));
     }
+
+	internal void SetPosition(int x, int y) {
+		transform.position = new Vector2(x, y);
+	}
 }

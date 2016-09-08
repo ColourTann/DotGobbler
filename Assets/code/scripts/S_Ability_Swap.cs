@@ -39,7 +39,7 @@ public class S_Ability_Swap : S_Ability {
 		player.MoveToTile(tile, true);
 		swappee.Stun(1);
 		SuccessfulUse();
-		Game.Get().level.Turn();
+		Game.Get().level.EnemyTurn();
 	}
 
 	public override void Use(S_Player player, int dx, int dy) {

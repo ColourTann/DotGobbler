@@ -2,18 +2,15 @@
 using System.Collections;
 
 public class S_Player : S_Entity {
-
-
-
+    static readonly int minSwipe = Screen.width / 15;
 
     int nextDx = -5;
     int nextDy = -5;
-
-    static readonly int minSwipe = Screen.width / 15;
     bool touching;
     Vector2 touchStart;
+
     override protected void Update() {
-        base.Update();
+		base.Update();
     }
 
     public override bool Blocks() {
@@ -32,11 +29,13 @@ public class S_Player : S_Entity {
 		int dx = 0;
         int dy = 0;
 
+		//put key input into directions
         if (Input.GetKeyDown(KeyCode.LeftArrow)) dx = -1;
         else if (Input.GetKeyDown(KeyCode.RightArrow)) dx = 1;
         else if (Input.GetKeyDown(KeyCode.DownArrow)) dy = -1;
         else if (Input.GetKeyDown(KeyCode.UpArrow)) dy = 1;
 
+		//put swipe input into directions
         if (Input.touchCount == 1) {
             Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began) {
@@ -64,11 +63,13 @@ public class S_Player : S_Entity {
             }
         }
 
-        if (moving && dx != 0 || dy != 0) {
+		//buffer input for next turn if two directions are pressed
+        if (moving && (dx != 0 || dy != 0)) {
             nextDx = dx;
             nextDy = dy;
         }
-        if (!moving) {
+
+        if (!moving && !Game.isLocked()) {
             if (nextDx != -5) {
                 dx = nextDx;
                 dy = nextDy;
@@ -78,7 +79,7 @@ public class S_Player : S_Entity {
     }
 
 	void AbilityKeyboardPress(KeyCode key) {
-		Game.Get().level.ActivateAbilityFromKeypress(key);
+		Game.Get().level.abilityPanel.ActivateAbilityFromKeypress(key);
 	}
 
     void ActivateDirection(int dx, int dy) {
@@ -86,9 +87,10 @@ public class S_Player : S_Entity {
         nextDx = -5;
         nextDy = -5;
 
-        if (Game.Get().level.activeAbility != null) {
+
+		if (Game.Get().level.abilityPanel.activeAbility != null) {
             Sounds.PlaySound(Sounds.move, .75f, Random.Range(1.2f, 1.4f));
-            Game.Get().level.activeAbility.Use(this, dx, dy);
+            Game.Get().level.abilityPanel.activeAbility.Use(this, dx, dy);
         }
 
         else {
@@ -103,8 +105,8 @@ public class S_Player : S_Entity {
     public void ActivateTile(S_Tile tile) {
         //check for validity
         if (moving || tile==null) return;
-        if (Game.Get().level.activeAbility != null) {
-            Game.Get().level.activeAbility.Use(this, tile);
+        if (Game.Get().level.abilityPanel.activeAbility != null) {
+            Game.Get().level.abilityPanel.activeAbility.Use(this, tile);
         }
         else {
             if (tile.GetDistance(currentTile) != 1) return;
@@ -113,14 +115,10 @@ public class S_Player : S_Entity {
     }
 
     protected override void FinishedMoving() {
-
-        Game.Get().level.Turn();
+        Game.Get().level.EnemyTurn();
     }
 
     public override void MoveToTile(S_Tile tile, bool instant) {
-        if (!instant) {
-            
-        }
         bool lost = tile.occupier != null;
         if (lost) Game.Get().Lose();
         base.MoveToTile(tile, instant);

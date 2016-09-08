@@ -2,11 +2,7 @@
 using System.Collections;
 
 public class Util  {
-    public enum LayerName { UI,Tiles,
-        Entities
-    }
-
-
+    public enum LayerName {UI, Tiles, Entities}
 
     public static void SetLayer(GameObject go, LayerName layer, int position) {
         SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
@@ -29,8 +25,5 @@ public class Util  {
     public static int ProperSign(int num) {
         return num == 0 ? 0 : num > 0 ? 1 : -1;
     }
-
-	
-
 }
 

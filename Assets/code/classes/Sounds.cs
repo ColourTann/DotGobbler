@@ -19,7 +19,6 @@ public class Sounds  {
 		AudioSource[] sources = new AudioSource[totalSources];
 		for(int i = 0; i < totalSources; i++) {
 			sources[i] = Game.GetMisc("sound").AddComponent<AudioSource>();
-
 		}
 		return sources;
 	}
@@ -34,4 +33,21 @@ public class Sounds  {
 		source.pitch = pitch;
 		source.PlayOneShot(clip, volume);
     }
+
+	public static int[][] nicePitches =
+		{
+		new int[] {12},
+		new int[] {0,12},
+		new int[] {0,7,12},
+		new int[] {0,4,7,12},
+		new int[] {0,2,4,7,12},
+		new int[] {0,2,4,7,10,12},
+		new int[] {0,2,4,7,9,11,12},
+		new int[] {0,2,4,5,7,9,11,12},
+		new int[] {0,2,4,5,7,8,9,11,12},
+		new int[] {0,2,4,5,7,8,9,10,11,12},
+		new int[] {0,2,4,5,6,7,8,9,10,11,12},
+		new int[] {0,2,3,4,5,6,7,8,9,10,11,12},
+		new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12},
+		};
 }

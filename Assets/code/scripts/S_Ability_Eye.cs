@@ -23,16 +23,8 @@ public class S_Ability_Eye : S_Ability {
             for (int dy = -1; dy <= 1; dy++) {
                 if (dx != 0 && dy != 0) continue;
                 if (dx == 0 && dy == 0) continue;
-                S_Tile tile = origin;
-                while (true) {
-                    S_Tile newTile = Game.Get().level.GetTile(tile.x + dx, tile.y + dy);
-                    if (newTile == null) {
-                        if (tile != origin) {
-                            result.Add(tile);
-                        }
-                        break;
-                    }
-                    tile = newTile;
+				foreach(S_Tile tile in origin.GetTilesInLine(dx, dy)) {
+                     result.Add(tile);
                 }
             }
         }
@@ -54,15 +46,15 @@ public class S_Ability_Eye : S_Ability {
             UnsuccessfulUse();
             return;
         }
-        S_Tile currentTile = player.currentTile;
-        while (currentTile != null) {
-			S_Pickup pickup = currentTile.content;
+
+		int index = 0;
+		foreach(S_Tile tile in player.currentTile.GetTilesInLine(dx, dy)) {
+			S_Pickup pickup = tile.content;
 			if (pickup != null) {
-				Game.Lock();
-				currentTile.Enter(player, false);
+				index++;
+				pickup.Magnetise(index, (int)player.transform.position.x-S_Tile.width/2, (int)player.transform.position.y-S_Tile.height/2);
 			}
-            currentTile = currentTile.GetTile(dx, dy);
-        }
+		}
         SuccessfulUse();
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System;
 
-
 public class S_Tile : MonoBehaviour {
 	private S_Tile previous; //for pathfinding
 	public int x, y;
@@ -50,30 +49,10 @@ public class S_Tile : MonoBehaviour {
 		pickup.transform.parent = transform;
 	}
 
-	public void Enter(S_Entity enterer, bool instant) {
+	public void Enter(S_Entity enterer) {
 		if (enterer is S_Player && content != null) {
-			if (instant) {
-				content.Pickup();
-				Destroy(content.gameObject);
-				content = null;
-				int totalPickups = Game.Get().level.totalPickups;
-				int pickupsLeft = Game.Get().level.pickups;
-				if (Game.Get().level.totalPickups > Level.pitches.Length) {
-					Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, ((float)(totalPickups - pickupsLeft) / (totalPickups)) * 12));
-				}
-				else {
-					Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, Level.pitches[totalPickups - 1][totalPickups - pickupsLeft - 1]));
-				}
-			}
-			else {
-				S_Slider slider = content.gameObject.AddComponent<S_Slider>();
-				int dx = (int)(enterer.transform.position.x - content.transform.position.x);
-				int dy = (int)(enterer.transform.position.y - content.transform.position.y);
-				int dist = dx * dx + dy * dy;
-				slider.SlideTo((int)enterer.transform.position.x - S_Tile.width / 2, (int)enterer.transform.position.y - S_Tile.height / 2, .1f + dist / 200000f, Interpolation.InterpolationType.Pow2In, () => {Enter(enterer, true); Game.Unlock();});
-			}
+			content.Pickup();
 		}
-
 	}
 
 	public int TileDistance(S_Tile to) {
@@ -94,7 +73,7 @@ public class S_Tile : MonoBehaviour {
 		return result;
 	}
 
-	public List<S_Tile> GetTilesInLine(int dx, int dy, bool includeSelf=false) {
+	public List<S_Tile> GetTilesInLine(int dx, int dy, bool includeSelf = false) {
 		List<S_Tile> result = new List<S_Tile>();
 		if (includeSelf) result.Add(this);
 		S_Tile tile = GetTile(dx, dy);
@@ -147,12 +126,10 @@ public class S_Tile : MonoBehaviour {
 	bool blocked;
 
 	public void Block() {
-		//GetComponent<SpriteRenderer>().color = Colours.GREEN;
 		blocked = true;
 	}
 
 	public void UnBlock() {
-		//GetComponent<SpriteRenderer>().color = Colours.zWHITE;
 		blocked = false;
 	}
 

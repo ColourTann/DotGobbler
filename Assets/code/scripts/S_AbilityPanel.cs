@@ -5,13 +5,14 @@ using System.Collections.Generic;
 public class S_AbilityPanel : MonoBehaviour{
 
     public int width, height;
-    List<S_Button> buttons = new List<S_Button>();
-    public List<S_Ability> Setup(int[] headerData) {
-		List<S_Ability> output = new List<S_Ability>();		
+	public List<S_Ability> abilities = new List<S_Ability>();
+	public S_Ability activeAbility;
+	public void Setup(int[] headerData) {
+		List<S_Button> buttons = new List<S_Button>();
         name = "Ability Panel";
 		int numAbilities = Util.ProperSign(headerData[0]) + Util.ProperSign(headerData[1]) + Util.ProperSign(headerData[2]);
 
-		//List<S_Ability> abilities = new List<S_Ability>();
+		//
 		for (int i= 0;i< headerData.Length;i++) {
 			int datum = headerData[i];
             if (datum == 0) continue;
@@ -22,7 +23,7 @@ public class S_AbilityPanel : MonoBehaviour{
                 case 2: ability = buttonScrip.gameObject.AddComponent<S_Ability_Eye>(); break;
 				case 3: ability = buttonScrip.gameObject.AddComponent<S_Ability_Swap>(); break;
 			}
-			output.Add(ability);
+			abilities.Add(ability);
             ability.init((datum & 28)>>2);
             buttonScrip.SetAction(() => {
                 ability.Click();
@@ -55,7 +56,29 @@ public class S_AbilityPanel : MonoBehaviour{
         foreach (S_Button butt in buttons) {
             butt.transform.SetParent(transform, false);
         }
-
-		return output;
     }
+
+	public void ActivateAbilityFromKeypress(KeyCode key) {
+		foreach (S_Ability a in abilities) {
+			if (a.GetKey() == key) {
+				a.Click();
+				return;
+			}
+		}
+	}
+
+	internal void DeselectAbility(S_Ability s_Ability) {
+		if (activeAbility == null || activeAbility == s_Ability) return;
+		activeAbility.Toggle(false);
+	}
+
+	internal void ActivateAbility(S_Ability ability, bool active) {
+		if (active) {
+			activeAbility = ability;
+		}
+		else {
+			activeAbility = null;
+		}
+		Game.Get().level.UpdateGridHighlightedness();
+	}
 }

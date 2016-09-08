@@ -23,7 +23,7 @@ public abstract class S_Ability : MonoBehaviour {
         active = !active;
         if (sound) Sounds.PlaySound(active ?Sounds.select: Sounds.deselect, .3f, Random.Range(.7f, .8f));
         GetComponent<SpriteRenderer>().color = active ? Colours.LIGHT : Colours.RED;
-        Game.Get().level.ActivateAbility(this, active);
+        Game.Get().level.abilityPanel.ActivateAbility(this, active);
     }
 
     public enum TargetingType { SingleTile, Line}
@@ -42,7 +42,7 @@ public abstract class S_Ability : MonoBehaviour {
 	}
 
 	internal void Click() {
-		Game.Get().level.DeselectAbility(this);
+		Game.Get().level.abilityPanel.DeselectAbility(this);
 		Toggle(true);
 	}
 

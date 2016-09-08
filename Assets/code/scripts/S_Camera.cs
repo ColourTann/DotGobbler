@@ -3,8 +3,8 @@ using System.Collections;
 
 public class S_Camera : MonoBehaviour {
     Camera myCam;
-    public static int scale = Screen.height / 200   ;
-	// Use this for initialization
+    public static int scale = Screen.height / 200;
+
 	void Start () {
 		myCam = GetComponent<Camera>();
         myCam.orthographicSize = Screen.height / 2;
@@ -15,9 +15,4 @@ public class S_Camera : MonoBehaviour {
     public static void SetupScale(Transform obj) {
         obj.localScale = new Vector3(scale, scale, 1);
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

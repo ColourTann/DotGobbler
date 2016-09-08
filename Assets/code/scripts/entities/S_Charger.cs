@@ -25,7 +25,6 @@ public class S_Charger : S_Enemy {
 			else {
 				Sounds.PlaySound(Sounds.charge, 1, charging==1?1:1.8f);
 			}
-			
 		}
 		else {
 			chargeDX = 0;
@@ -52,14 +51,11 @@ public class S_Charger : S_Enemy {
 			S_Tile playerTile = Game.Get().level.player.currentTile;
 			int dx = Util.ProperSign(playerTile.x - currentTile.x);
 			int dy = Util.ProperSign(playerTile.y - currentTile.y);
-			S_Tile tile = currentTile.GetTile(dx, dy);
-
-			while(tile!=null ) {
+			foreach (S_Tile tile in currentTile.GetTilesInLine(dx, dy)) {
 				GameObject go = Primitives.CreateActor(dx == 0 ? Sprites.charge_v : Sprites.charge_h);
 				Util.SetLayer(go, Util.LayerName.Tiles, 20);
 				go.transform.SetParent(tile.transform, false);
 				go.GetComponent<SpriteRenderer>().color = charging == 1 ? Colours.GREEN : Colours.LIGHT;
-				tile = tile.GetTile(dx, dy);
 				targets.Add(go);
 			}
 		}
@@ -79,7 +75,6 @@ public class S_Charger : S_Enemy {
 		eyes.SetActive(true);
 		if (targetTile != null) {
 			targetTile.UnBlock();
-			
 			if (targetTile.occupier != null && targetTile.occupier != this && targetTile.occupier.Blocks()) {
 				//can't move there!
 			}
@@ -87,7 +82,6 @@ public class S_Charger : S_Enemy {
 				if (targetTile.occupier is S_Player) {
 					Game.Get().Lose();
 				}
-
 				MoveToTile(targetTile, false);
 			}
 		}

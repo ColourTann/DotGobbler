@@ -11,9 +11,6 @@ public class S_Enemy : S_Entity {
 		S_Tile playerTile = Game.Get().level.player.currentTile;
 		targetTile = currentTile.PathTo(playerTile);
 
-		Level level = Game.Get().level;
-
-
 		//if there's no path, pick a tile that's vaguely in the right direction
 		if (targetTile == null) {
 			List<S_Tile> potentials = currentTile.GetTilesWithin(1, false);
@@ -28,9 +25,8 @@ public class S_Enemy : S_Entity {
 					targetTile = t;
 				}
 			}
-
 		}
-		eyes.GetComponent<SpriteRenderer>().enabled = true;
+
 		if (targetTile != null) {
 			int dx = targetTile.x - currentTile.x;
 			int dy = targetTile.y - currentTile.y;
@@ -38,19 +34,8 @@ public class S_Enemy : S_Entity {
 			if (dx == -1) rotation = 180;
 			else if (dy == 1) rotation = 90;
 			else if (dy == -1) rotation = 270;
-			if (rotation - startRotation > 180) {
-				rotation -= 360;
-			}
-			if (rotation - startRotation < -180) {
-				rotation += 360;
-			}
-				eyes.transform.rotation = Quaternion.AngleAxis(rotation + 180, Vector3.forward);
-			
-			eyes.GetComponent<SpriteRenderer>().enabled = false;
+			eyes.transform.rotation = Quaternion.AngleAxis(rotation + 180, Vector3.forward);
 			targetTile.Block();
-		}
-		else {
-			Debug.Log("no path!!");
 		}
 	}
 
@@ -64,7 +49,7 @@ public class S_Enemy : S_Entity {
 	}
 
 	protected override void Update() {
-		eyes.GetComponent<SpriteRenderer>().enabled = !moving;
+		eyes.GetComponent<SpriteRenderer>().enabled = !moving && targetTile != null;
 		base.Update();
 	}
 
@@ -73,7 +58,6 @@ public class S_Enemy : S_Entity {
 		eyes = Primitives.CreateActor(Sprites.eye);
 		Util.SetLayer(eyes, Util.LayerName.Entities, 5);
 		eyes.transform.SetParent(transform, false);
-		if(this is S_Charger) eyes.transform.rotation = Quaternion.AngleAxis(180, Vector3.forward);
 	}
 
 	override public void TakeTurn() {
@@ -81,7 +65,6 @@ public class S_Enemy : S_Entity {
 			stun--;
 			return;
 		}
-		startRotation = targetRotation;
 		if (targetTile != null) {
 			targetTile.UnBlock();
 			if (targetTile.occupier != null && targetTile.occupier != this && targetTile.occupier.Blocks()) {
