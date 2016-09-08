@@ -10,6 +10,7 @@ public class S_Charger : S_Enemy {
 			S_Tile playerTile = Game.Get().level.player.currentTile;
 			int newCDX = Util.ProperSign(playerTile.x - currentTile.x);
 			int newCDY = Util.ProperSign(playerTile.y - currentTile.y);
+			if (playerTile == currentTile) return;
 			if (newCDX != chargeDX || newCDY != chargeDY) charging = 0;
 			chargeDX = newCDX;
 			chargeDY = newCDY;

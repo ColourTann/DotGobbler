@@ -5,7 +5,7 @@ using System;
 public class Game {
 	public const bool KEYBOARD = true;
     private static Game self;
-	public int levelNumber = 21;
+	public int levelNumber = 27;
 	private static GameObject misc;
 	public static GameObject GetMisc() {
 		if (misc == null) misc = new GameObject("misc");

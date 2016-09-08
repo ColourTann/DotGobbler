@@ -39,7 +39,6 @@ public class S_Ability_Swap : S_Ability {
 		player.MoveToTile(tile, true);
 		swappee.Stun(1);
 		SuccessfulUse();
-		Toggle(false);
 		Game.Get().level.Turn();
 	}
 
@@ -52,7 +51,7 @@ public class S_Ability_Swap : S_Ability {
 		foreach (S_Tile potential in line) {
 			if (potential.occupier != null && !(potential.occupier is S_Player)) {
 				Use(player, potential);
-				break;
+				return;
 			}
 		}
 		UnsuccessfulUse();
