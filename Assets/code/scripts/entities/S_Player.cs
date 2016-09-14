@@ -79,7 +79,7 @@ public class S_Player : S_Entity {
     }
 
 	void AbilityKeyboardPress(KeyCode key) {
-		Game.Get().level.abilityPanel.ActivateAbilityFromKeypress(key);
+        Level.Get(gameObject).abilityPanel.ActivateAbilityFromKeypress(key);
 	}
 
     void ActivateDirection(int dx, int dy) {
@@ -88,9 +88,9 @@ public class S_Player : S_Entity {
         nextDy = -5;
 
 
-		if (Game.Get().level.abilityPanel.activeAbility != null) {
+		if (Level.Get(gameObject).abilityPanel.activeAbility != null) {
             Sounds.PlaySound(Sounds.move, .75f, Random.Range(1.2f, 1.4f));
-            Game.Get().level.abilityPanel.activeAbility.Use(this, dx, dy);
+            Level.Get(gameObject).abilityPanel.activeAbility.Use(this, dx, dy);
         }
 
         else {
@@ -105,8 +105,8 @@ public class S_Player : S_Entity {
     public void ActivateTile(S_Tile tile) {
         //check for validity
         if (moving || tile==null) return;
-        if (Game.Get().level.abilityPanel.activeAbility != null) {
-            Game.Get().level.abilityPanel.activeAbility.Use(this, tile);
+        if (Level.Get(gameObject).abilityPanel.activeAbility != null) {
+            Level.Get(gameObject).abilityPanel.activeAbility.Use(this, tile);
         }
         else {
             if (tile.GetDistance(currentTile) != 1) return;
@@ -115,7 +115,7 @@ public class S_Player : S_Entity {
     }
 
     protected override void FinishedMoving() {
-        Game.Get().level.EnemyTurn();
+        Level.Get(gameObject).EnemyTurn();
     }
 
     public override void MoveToTile(S_Tile tile, bool instant) {
@@ -129,5 +129,12 @@ public class S_Player : S_Entity {
         base.Setup("player");
     }
 
-}
+    protected override void Move() {
+        base.Move();
+        float thing = Mathf.Sin(moveTicker * Mathf.PI) * .2f;
+        transform.localScale = new Vector2(S_Camera.scale * (1 + (currentDX == 0 ? -thing : thing)), S_Camera.scale * (1 + (currentDY == 0 ? -thing : thing)));
+    }
+    }
+
+
 

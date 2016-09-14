@@ -7,7 +7,7 @@ public class S_Charger : S_Enemy {
 	int chargeDX, chargeDY;
 	override public void ChooseMove() {
 		if (CanSeePlayer()) {
-			S_Tile playerTile = Game.Get().level.player.currentTile;
+			S_Tile playerTile = Level.Get(gameObject).player.currentTile;
 			int newCDX = Util.ProperSign(playerTile.x - currentTile.x);
 			int newCDY = Util.ProperSign(playerTile.y - currentTile.y);
 			if (playerTile == currentTile) return;
@@ -40,7 +40,7 @@ public class S_Charger : S_Enemy {
 		S_Slider slider = gameObject.AddComponent<S_Slider>();
 		Game.Lock();
 		ClearTargets();
-		slider.SlideTo((int)Game.Get().level.player.transform.position.x, (int)Game.Get().level.player.transform.position.y, .25f, Interpolation.InterpolationType.Pow2In, ()=> { Game.Get().Lose(); Game.Unlock(); });
+		slider.SlideTo((int)Level.Get(gameObject).player.transform.position.x, (int)Level.Get(gameObject).player.transform.position.y, .25f, Interpolation.InterpolationType.Pow2In, ()=> { Game.Get().Lose(); Game.Unlock(); });
 	}
 
 	List<GameObject> targets = new List<GameObject>();
@@ -48,7 +48,7 @@ public class S_Charger : S_Enemy {
 	void UpdateTargeting() {
 		ClearTargets();
 		if (charging > 0) {
-			S_Tile playerTile = Game.Get().level.player.currentTile;
+			S_Tile playerTile = Level.Get(gameObject).player.currentTile;
 			int dx = Util.ProperSign(playerTile.x - currentTile.x);
 			int dy = Util.ProperSign(playerTile.y - currentTile.y);
 			foreach (S_Tile tile in currentTile.GetTilesInLine(dx, dy)) {

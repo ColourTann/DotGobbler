@@ -23,6 +23,10 @@ public class Sprites {
 
 	public static Sprite eye = Resources.Load<Sprite>("images/enemy_eye");
 
+    //ui junk
+    public static Sprite options = Resources.Load<Sprite>("images/ui/options");
+    public static Sprite restart = Resources.Load<Sprite>("images/ui/restart");
+
     public static Vector2 GetBounds(Sprite s) {
         return new Vector2(s.bounds.size.x , s.bounds.size.y);
     }

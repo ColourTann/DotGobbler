@@ -79,6 +79,6 @@ public class S_AbilityPanel : MonoBehaviour{
 		else {
 			activeAbility = null;
 		}
-		Game.Get().level.UpdateGridHighlightedness();
+        Level.Get(gameObject).UpdateGridHighlightedness();
 	}
 }

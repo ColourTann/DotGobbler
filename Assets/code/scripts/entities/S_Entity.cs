@@ -46,14 +46,20 @@ public class S_Entity : MonoBehaviour {
                 moving = false;
                 FinishedMoving();
             }
-            PositionSetter.transform.position = Vector3.Lerp(previousTile.transform.position, currentTile.transform.position, Interpolation.Pow2Out(0, 1, moveTicker));
         }
+        if(previousTile!=null) PositionSetter.transform.position = Vector3.Lerp(previousTile.transform.position, currentTile.transform.position, Interpolation.Pow2Out(0, 1, moveTicker));
     }
+
+    protected int currentDX, currentDY;
 
     public virtual void MoveToTile(S_Tile tile, bool instant) {
         if (tile == null || tile==currentTile) return;
         previousTile = currentTile;
         SetTile(tile);
+        if (previousTile != null){
+            currentDX = currentTile.x - previousTile.x;
+            currentDY = currentTile.y - previousTile.y;
+        }
         if (instant) {
             PositionSetter.transform.localPosition = currentTile.transform.localPosition;
             tile.Enter(this);

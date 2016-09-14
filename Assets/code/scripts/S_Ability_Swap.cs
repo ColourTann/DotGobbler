@@ -34,12 +34,26 @@ public class S_Ability_Swap : S_Ability {
 
 	public override void Use(S_Player player, S_Tile tile) {
 		S_Enemy swappee = (S_Enemy)tile.occupier;
-		swappee.CancelMove();
+
+        float time = 0.2f;
+        Color col = Colours.GREEN;
+        int width = (S_Tile.width-S_Camera.scale)/2;
+        int height = S_Tile.height/2;
+
+        GameObject flasher = S_Flasher.CreateFlasher(width, height, col, time);
+        Util.SetLayer(flasher, Util.LayerName.UI, 0);
+        flasher.transform.SetParent(tile.transform, false);
+
+        flasher = S_Flasher.CreateFlasher(width, height, col, time);
+        Util.SetLayer(flasher, Util.LayerName.UI, 0);
+        flasher.transform.SetParent(player.currentTile.transform, false);
+
+        swappee.CancelMove();
 		swappee.MoveToTile(player.currentTile, true);
 		player.MoveToTile(tile, true);
 		swappee.Stun(1);
 		SuccessfulUse();
-		Game.Get().level.EnemyTurn();
+        Level.Get(gameObject).EnemyTurn();
 	}
 
 	public override void Use(S_Player player, int dx, int dy) {

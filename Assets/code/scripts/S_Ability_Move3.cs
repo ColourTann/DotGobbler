@@ -25,14 +25,14 @@ public class S_Ability_Move3 : S_Ability {
                 if (dx == 0 && dy == 0) continue;
                 bool good = true;
                 for (int dist = 1; dist <= 3; dist++) {
-                    S_Tile t = Game.Get().level.GetTile(origin.x + dx * dist, origin.y + dy * dist);
+                    S_Tile t = Level.Get(gameObject).GetTile(origin.x + dx * dist, origin.y + dy * dist);
                     if (t == null) {
                         good = false;
                         break;
                     }
                 }
                 if (good) {
-                    result.Add(Game.Get().level.GetTile(origin.x + 3 * dx, origin.y + 3 * dy));
+                    result.Add(Level.Get(gameObject).GetTile(origin.x + 3 * dx, origin.y + 3 * dy));
                 }
             }
         }
@@ -46,7 +46,7 @@ public class S_Ability_Move3 : S_Ability {
     }
 
     public override void Use(S_Player player, int dx, int dy) {
-        S_Tile target = Game.Get().level.GetTile(player.currentTile.x + dx * 3, player.currentTile.y + dy * 3);
+        S_Tile target = Level.Get(gameObject).GetTile(player.currentTile.x + dx * 3, player.currentTile.y + dy * 3);
         if (target == null) return;
         player.MoveToTile(target, false);
         SuccessfulUse();

@@ -4,15 +4,29 @@ using System;
 
 public class Game {
 
-	public int levelNumber = 28;
+	public int levelNumber = 13;
 	public const bool KEYBOARD = true;
 	public Level previousLevel;
-	public Level level;
+	private Level level;
 
 	public Game() {
 		GameObject background = Primitives.CreateRectangle(Screen.width, Screen.height, Colours.DARK);
 		background.name = "backdrop";
-	}
+
+        int gap = 5 * S_Camera.scale;
+
+        S_Button restartButton = S_Button.CreateButton(Sprites.restart);
+        S_Camera.SetupScale(restartButton.transform);
+        restartButton.transform.position = new Vector2(gap, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
+        restartButton.SetAction(Restart);
+
+        S_Button optionsButton = S_Button.CreateButton(Sprites.options);
+        S_Camera.SetupScale(optionsButton.transform);
+        optionsButton.transform.position = new Vector2(gap*2 + Sprites.GetBounds(Sprites.options).x * S_Camera.scale, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
+        optionsButton.SetAction(Restart);
+
+
+    }
 
 	public void Init() {
 		LoadLevel();
@@ -31,7 +45,11 @@ public class Game {
 		if (state == GameState.Normal) state = GameState.NextLevel;
 	}
 
-	public void Restart() {
+	public void Restart(bool instant = false) {
+        if (instant) {
+            LoadLevel();
+            return;
+        }
 		if (state == GameState.Normal) state = GameState.Restarting;
 	}
 
@@ -59,8 +77,10 @@ public class Game {
 			levelNumber--;
 			levelData = GetLevelData(levelNumber);
 		}
-		level = new Level(levelData);
-		level.Init();
+        GameObject go = new GameObject("level parent");
+
+        level = go.AddComponent<Level>();
+		level.Init(levelData);
 		level.SlideIn();
 	}
 
@@ -90,7 +110,7 @@ public class Game {
 	}
 
 	public static bool isLocked() {
-		return locks != 0;
+		return locks != 0 && Get().state == GameState.Normal;
 	}
 
 	private static Game self;

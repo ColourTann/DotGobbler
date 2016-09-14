@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System;
 
-public class Level {
-	S_Slider slider;
+public class Level : MonoBehaviour{
+	public S_Slider slider;
 	GameObject mapObject;
 	GameObject grid;
 	int gridWidth, gridHeight;
@@ -20,12 +20,10 @@ public class Level {
 	public S_AbilityPanel abilityPanel;
 	GameObject tutorialAnimation;
 
-	public Level(Texture2D levelData) {
-		this.levelData = levelData;
-	}
 
-	public void Init() {
-		InitLayoutStuff();
+	public void Init(Texture2D levelData) {
+        this.levelData = levelData;
+        InitLayoutStuff();
 		InitTilesAndEntities();
 		InitAbilities();
 		InitTutorial();
@@ -37,6 +35,7 @@ public class Level {
 		GameObject parent = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/slider")));
 		slider = parent.GetComponent<S_Slider>();
 		slider.name = "level";
+        slider.transform.SetParent(transform, false);
 
 		//initialise map and parent it to slider
 		mapObject = new GameObject();
@@ -264,13 +263,13 @@ public class Level {
 	internal void Pickup(S_Pickup pickup) {
 		pickupsRemaining--;
 		GameObject.Destroy(pickup.gameObject);
-		int totalPickups = Game.Get().level.totalPickups;
-		int pickupsLeft = Game.Get().level.pickupsRemaining;
-		if (Game.Get().level.totalPickups > Sounds.nicePitches.Length) {
-			Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, ((float)(totalPickups - pickupsLeft) / (totalPickups)) * 12));
+		
+		
+		if (totalPickups > Sounds.nicePitches.Length) {
+			Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, ((float)(totalPickups - pickupsRemaining) / (totalPickups)) * 12));
 		}
 		else {
-			Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, Sounds.nicePitches[totalPickups - 1][totalPickups - pickupsLeft - 1]));
+			Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, Sounds.nicePitches[totalPickups - 1][totalPickups - pickupsRemaining - 1]));
 		}
 		if (pickupsRemaining == 0) {
 			Game.Get().Victory();
@@ -286,7 +285,7 @@ public class Level {
 		foreach (S_Entity ent in entities) {
 			ent.ChooseMove();
 		}
-		Game.Get().CheckForEndOfLevel();
+		//Game.Get().CheckForEndOfLevel();
 	}
 
 	public S_Tile GetTile(int x, int y) {
@@ -344,4 +343,16 @@ public class Level {
 			}
 		}
 	}
+
+
+    private static Dictionary<GameObject, Level> dict = new Dictionary<GameObject, Level>();
+    public static Level Get(GameObject go) {
+        if (dict.ContainsKey(go)) return dict[go];
+        Level level = go.GetComponent<Level>();
+        if (level == null) {
+            level = Get(go.transform.parent.gameObject);
+        }
+        dict.Add(go, level);
+        return level;
+    }
 }

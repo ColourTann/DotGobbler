@@ -8,7 +8,7 @@ public class S_Enemy : S_Entity {
 	public GameObject eyes;
 
 	public void PathTowardsPlayer() {
-		S_Tile playerTile = Game.Get().level.player.currentTile;
+		S_Tile playerTile = Level.Get(gameObject).player.currentTile;
 		targetTile = currentTile.PathTo(playerTile);
 
 		//if there's no path, pick a tile that's vaguely in the right direction
@@ -80,7 +80,11 @@ public class S_Enemy : S_Entity {
 		}
 	}
 
-	public override bool Blocks() {
+    protected override void FinishedMoving() {
+        Game.Get().CheckForEndOfLevel();
+    }
+
+    public override bool Blocks() {
 		return true;
 	}
 

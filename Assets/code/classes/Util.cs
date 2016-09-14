@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Util  {
-    public enum LayerName {UI, Tiles, Entities}
+    public enum LayerName {UI, Tiles, Entities, Particles}
 
     public static void SetLayer(GameObject go, LayerName layer, int position) {
         SpriteRenderer sr = go.GetComponent<SpriteRenderer>();

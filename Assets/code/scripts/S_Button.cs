@@ -22,7 +22,7 @@ public class S_Button : MonoBehaviour {
 
 	void OnMouseDown() {
 		if (Game.isLocked()) return;
-		action.Invoke();
+        if(action!=null)	action.Invoke();
 	}
 
 	public Bounds GetBounds() {

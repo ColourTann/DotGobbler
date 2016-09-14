@@ -85,7 +85,7 @@ public class S_Tile : MonoBehaviour {
 	}
 
 	public S_Tile GetTile(int dx, int dy) {
-		return Game.Get().level.GetTile(x + dx, y + dy);
+		return Level.Get(gameObject).GetTile(x + dx, y + dy);
 	}
 
 
@@ -135,7 +135,7 @@ public class S_Tile : MonoBehaviour {
 
 	void OnMouseUpAsButton() {
 		if (Game.isLocked()) return;
-		Game.Get().level.player.ActivateTile(this);
+		Level.Get(gameObject).player.ActivateTile(this);
 	}
 
 	public int GetDistance(S_Tile other) {

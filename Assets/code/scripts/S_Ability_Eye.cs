@@ -52,9 +52,10 @@ public class S_Ability_Eye : S_Ability {
 			S_Pickup pickup = tile.content;
 			if (pickup != null) {
 				index++;
-				pickup.Magnetise(index, (int)player.transform.position.x-S_Tile.width/2, (int)player.transform.position.y-S_Tile.height/2);
+				pickup.Magnetise(tile.TileDistance(player.currentTile)+index, (int)player.transform.position.x-S_Tile.width/2, (int)player.transform.position.y-S_Tile.height/2);
 			}
 		}
-        SuccessfulUse();
+        if (index > 0) SuccessfulUse();
+        else UnsuccessfulUse();
     }
 }
