@@ -18,12 +18,12 @@ public class Game {
         S_Button restartButton = S_Button.CreateButton(Sprites.restart);
         S_Camera.SetupScale(restartButton.transform);
         restartButton.transform.position = new Vector2(gap, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
-        restartButton.SetAction(Restart);
+        restartButton.SetAction(InstantRestart);
 
         S_Button optionsButton = S_Button.CreateButton(Sprites.options);
         S_Camera.SetupScale(optionsButton.transform);
         optionsButton.transform.position = new Vector2(gap*2 + Sprites.GetBounds(Sprites.options).x * S_Camera.scale, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
-        optionsButton.SetAction(Restart);
+        optionsButton.SetAction(InstantRestart);
 
 
     }
@@ -45,11 +45,11 @@ public class Game {
 		if (state == GameState.Normal) state = GameState.NextLevel;
 	}
 
-	public void Restart(bool instant = false) {
-        if (instant) {
-            LoadLevel();
-            return;
-        }
+    public void InstantRestart() {
+        LoadLevel();    
+    }
+
+    public void Restart(bool instant = false) {
 		if (state == GameState.Normal) state = GameState.Restarting;
 	}
 
