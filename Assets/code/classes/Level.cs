@@ -104,7 +104,7 @@ public class Level : MonoBehaviour{
 		GameObject entityParent = new GameObject("entities");
 		entityParent.transform.SetParent(mapObject.transform, false);
 		foreach (S_Entity e in entities) {
-			e.PositionSetter.transform.SetParent(entityParent.transform, false);
+			e.positionSetter.transform.SetParent(entityParent.transform, false);
 		}
 
 		//setup map border

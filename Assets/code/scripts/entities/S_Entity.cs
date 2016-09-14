@@ -7,13 +7,13 @@ public class S_Entity : MonoBehaviour {
     public S_Tile currentTile;
     protected bool moving;
     protected float moveTicker = 0;
-    public GameObject PositionSetter;
+    public GameObject positionSetter;
     bool active = true;
     protected S_Tile targetTile;
 
     protected void Setup(string name) {
-        PositionSetter = new GameObject(name);
-        transform.parent = PositionSetter.transform;
+        positionSetter = new GameObject(name);
+        transform.parent = positionSetter.transform;
         S_Camera.SetupScale(transform);
         transform.position = new Vector3(7.5f * S_Camera.scale, 7.5f * S_Camera.scale, 0);
     }
@@ -47,7 +47,7 @@ public class S_Entity : MonoBehaviour {
                 FinishedMoving();
             }
         }
-        if(previousTile!=null) PositionSetter.transform.position = Vector3.Lerp(previousTile.transform.position, currentTile.transform.position, Interpolation.Pow2Out(0, 1, moveTicker));
+        if(previousTile!=null) positionSetter.transform.position = Vector3.Lerp(previousTile.transform.position, currentTile.transform.position, Interpolation.Pow2Out(0, 1, moveTicker));
     }
 
     protected int currentDX, currentDY;
@@ -61,7 +61,8 @@ public class S_Entity : MonoBehaviour {
             currentDY = currentTile.y - previousTile.y;
         }
         if (instant) {
-            PositionSetter.transform.localPosition = currentTile.transform.localPosition;
+			moveTicker = 1;
+            positionSetter.transform.localPosition = currentTile.transform.localPosition;
             tile.Enter(this);
         }
         else {
