@@ -129,9 +129,9 @@ public class Level : MonoBehaviour{
 		bool hasAbility = (abilityHeaderData[0]) > 0;
 		GameObject abilityPanelObject = new GameObject();
 		abilityPanel = abilityPanelObject.AddComponent<S_AbilityPanel>();
+		abilityPanel.transform.SetParent(slider.transform);
 		if (hasAbility) {
 			abilityPanel.Setup(abilityHeaderData);
-			abilityPanel.transform.SetParent(slider.transform);
 			gap = (Screen.width - (gridWidth + abilityPanel.width)) / 3;
 			currentX += gap;
 			abilityPanel.transform.position = new Vector2(currentX, (int)(Screen.height / 2 - abilityPanel.height / 2));
@@ -228,7 +228,7 @@ public class Level : MonoBehaviour{
 		foreach (S_Ability ability in abilityPanel.abilities) {
 			ability.ClearText();
 		}
-		GameObject.Destroy(slider.gameObject);
+		GameObject.Destroy(slider.gameObject.transform.parent.gameObject);
 		GameObject.Destroy(levelNumberObject);
 	}
 
@@ -285,6 +285,7 @@ public class Level : MonoBehaviour{
 		foreach (S_Entity ent in entities) {
 			ent.ChooseMove();
 		}
+		if (entities.Count == 1) Game.Get().CheckForEndOfLevel();
 		//Game.Get().CheckForEndOfLevel();
 	}
 

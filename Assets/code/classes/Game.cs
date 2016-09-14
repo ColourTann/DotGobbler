@@ -4,7 +4,7 @@ using System;
 
 public class Game {
 
-	public int levelNumber = 21;
+	public int levelNumber = 0;
 	public const bool KEYBOARD = true;
 	public Level previousLevel;
 	private Level level;
@@ -12,21 +12,26 @@ public class Game {
 	public Game() {
 		GameObject background = Primitives.CreateRectangle(Screen.width, Screen.height, Colours.DARK);
 		background.name = "backdrop";
+		background.transform.SetParent(GetMisc("UI").transform, false);
 
-        int gap = 5 * S_Camera.scale;
+		int gap = 5 * S_Camera.scale;
 
         S_Button restartButton = S_Button.CreateButton(Sprites.restart);
         S_Camera.SetupScale(restartButton.transform);
         restartButton.transform.position = new Vector2(gap, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
         restartButton.SetAction(InstantRestart);
+		restartButton.name = "restart_button";
+		restartButton.transform.SetParent(GetMisc("UI").transform, false);
 
         S_Button optionsButton = S_Button.CreateButton(Sprites.options);
         S_Camera.SetupScale(optionsButton.transform);
         optionsButton.transform.position = new Vector2(gap*2 + Sprites.GetBounds(Sprites.options).x * S_Camera.scale, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
         optionsButton.SetAction(InstantRestart);
+		optionsButton.name = "options_button";
+		optionsButton.transform.SetParent(GetMisc("UI").transform, false);
 
 
-    }
+	}
 
 	public void Init() {
 		LoadLevel();
