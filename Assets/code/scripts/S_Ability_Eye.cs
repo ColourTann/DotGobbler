@@ -23,8 +23,9 @@ public class S_Ability_Eye : S_Ability {
             for (int dy = -1; dy <= 1; dy++) {
                 if (dx != 0 && dy != 0) continue;
                 if (dx == 0 && dy == 0) continue;
-				foreach(S_Tile tile in origin.GetTilesInLine(dx, dy)) {
-                     result.Add(tile);
+				List<S_Tile> line = origin.GetTilesInLine(dx, dy);
+				if(line.Count>0){
+                     result.Add(line[line.Count-1]);
                 }
             }
         }
