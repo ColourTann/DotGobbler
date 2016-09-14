@@ -19,18 +19,19 @@ public class Game {
         S_Button restartButton = S_Button.CreateButton(Sprites.restart);
         S_Camera.SetupScale(restartButton.transform);
         restartButton.transform.position = new Vector2(gap, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
-        restartButton.SetAction(InstantRestart);
+        restartButton.SetDownAction(InstantRestart);
 		restartButton.name = "restart_button";
 		restartButton.transform.SetParent(GetMisc("UI").transform, false);
+		Util.SetZ(restartButton.gameObject, Util.ZLayer.Buttons );
 
-        S_Button optionsButton = S_Button.CreateButton(Sprites.options);
+
+		S_Button optionsButton = S_Button.CreateButton(Sprites.options);
         S_Camera.SetupScale(optionsButton.transform);
         optionsButton.transform.position = new Vector2(gap*2 + Sprites.GetBounds(Sprites.options).x * S_Camera.scale, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
-        optionsButton.SetAction(InstantRestart);
+        optionsButton.SetDownAction(()=> { level.Pause(); } );
 		optionsButton.name = "options_button";
 		optionsButton.transform.SetParent(GetMisc("UI").transform, false);
-
-
+		Util.SetZ(optionsButton.gameObject, Util.ZLayer.Buttons);
 	}
 
 	public void Init() {

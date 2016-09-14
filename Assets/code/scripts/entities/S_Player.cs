@@ -89,14 +89,12 @@ public class S_Player : S_Entity {
 
 
 		if (Level.Get(gameObject).abilityPanel.activeAbility != null) {
-            Sounds.PlaySound(Sounds.move, .75f, Random.Range(1.2f, 1.4f));
             Level.Get(gameObject).abilityPanel.activeAbility.Use(this, dx, dy);
         }
 
         else {
             S_Tile newTile = currentTile.GetTile(dx, dy);
             if (newTile != null) {
-                Sounds.PlaySound(Sounds.move, .75f, Random.Range(.7f, .9f));
                 ActivateTile(newTile);
             }
         }
@@ -105,7 +103,8 @@ public class S_Player : S_Entity {
     public void ActivateTile(S_Tile tile) {
         //check for validity
         if (moving || tile==null) return;
-        if (Level.Get(gameObject).abilityPanel.activeAbility != null) {
+		Sounds.PlaySound(Sounds.move, .75f, Random.Range(.7f, .9f));
+		if (Level.Get(gameObject).abilityPanel.activeAbility != null) {
             Level.Get(gameObject).abilityPanel.activeAbility.Use(this, tile);
         }
         else {

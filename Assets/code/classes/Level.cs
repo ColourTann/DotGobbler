@@ -48,6 +48,33 @@ public class Level : MonoBehaviour{
 		grid.transform.SetParent(mapObject.transform);
 	}
 
+	S_Button inputBlocker;
+
+	GameObject pauseScreen;
+	
+	internal void Pause() {
+
+		if (pauseScreen == null) {
+
+			inputBlocker = Primitives.CreateInputBlocker();
+			inputBlocker.SetDownAction(() => { Unpause(); });
+			Util.SetZ(inputBlocker.gameObject, Util.ZLayer.Blocker);
+			pauseScreen = PauseMaker.CreatePauseScreen();
+			
+			
+
+			Time.timeScale = 0;
+		}
+
+		
+	}
+
+	internal void Unpause() {
+		GameObject.Destroy(inputBlocker.gameObject);
+		GameObject.Destroy(pauseScreen);
+		Time.timeScale = 1;
+	}
+
 	void InitTilesAndEntities() {
 		//init tiles array
 		int tilesAcross = levelData.width;
@@ -164,6 +191,10 @@ public class Level : MonoBehaviour{
 		}
 	}
 
+	public void Pause(bool paused) {
+		gameObject.SetActive(!paused);
+	}
+
 	GameObject levelNumberObject;
 
 	public enum TutorialType { NOT, Move, Ability }
@@ -211,6 +242,7 @@ public class Level : MonoBehaviour{
 		Util.SetLayer(tutorialAnimation, Util.LayerName.UI, 0);
 		S_Camera.SetupScale(tutorialAnimation.transform);
 		tutorialAnimation.transform.SetParent(slider.transform, false);
+		Util.SetZ(tutorialAnimation.gameObject, Util.ZLayer.Gameplay);
 	}
 
 	public S_Tile MakeTile(int x, int y) {
@@ -297,6 +329,9 @@ public class Level : MonoBehaviour{
 	}
 
 	List<GameObject> highlightRectangles = new List<GameObject>();
+
+	public void Update() {
+	}
 
 	internal void UpdateGridHighlightedness() {
 		foreach (GameObject go in highlightRectangles) {

@@ -26,8 +26,9 @@ public class Sprites {
     //ui junk
     public static Sprite options = Resources.Load<Sprite>("images/ui/options");
     public static Sprite restart = Resources.Load<Sprite>("images/ui/restart");
+	public static Sprite pip = Resources.Load<Sprite>("images/ui/pip");
 
-    public static Vector2 GetBounds(Sprite s) {
+	public static Vector2 GetBounds(Sprite s) {
         return new Vector2(s.bounds.size.x , s.bounds.size.y);
     }
 

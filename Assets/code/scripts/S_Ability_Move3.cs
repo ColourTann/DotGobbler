@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System;
 using System.Collections.Generic;
 
 public class S_Ability_Move3 : S_Ability {
@@ -42,13 +41,13 @@ public class S_Ability_Move3 : S_Ability {
     public override void Use(S_Player player, S_Tile tile) {
         if (!GetValidTiles(player.currentTile).Contains(tile)) return;
         player.MoveToTile(tile, false);
-        SuccessfulUse();
+		Sounds.PlaySound(Sounds.move, .75f, Random.Range(1.2f, 1.4f));
+		SuccessfulUse();
     }
 
     public override void Use(S_Player player, int dx, int dy) {
         S_Tile target = Level.Get(gameObject).GetTile(player.currentTile.x + dx * 3, player.currentTile.y + dy * 3);
         if (target == null) return;
-        player.MoveToTile(target, false);
-        SuccessfulUse();
+		Use(player, target);
     }
 }

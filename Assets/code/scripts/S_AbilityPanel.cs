@@ -25,7 +25,7 @@ public class S_AbilityPanel : MonoBehaviour{
 			}
 			abilities.Add(ability);
             ability.init((datum & 28)>>2);
-            buttonScrip.SetAction(() => {
+            buttonScrip.SetDownAction(() => {
                 ability.Click();
             });
             GameObject button = buttonScrip.gameObject;

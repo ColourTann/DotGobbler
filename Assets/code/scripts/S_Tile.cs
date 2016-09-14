@@ -24,6 +24,7 @@ public class S_Tile : MonoBehaviour {
 		highlight_renderer.color = Colours.LIGHT;
 		highlight_renderer.enabled = false;
 		gameObject.AddComponent<BoxCollider2D>();
+		Util.SetZ(gameObject, Util.ZLayer.Gameplay);
 	}
 
 	public void SetHighlight(bool lit) {

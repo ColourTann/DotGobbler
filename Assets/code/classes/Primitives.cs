@@ -55,5 +55,17 @@ public class Primitives  {
 		go.transform.SetParent(canvas.transform);
 		return go;
 	}
+
+	public static S_Button CreateInputBlocker() {
+		GameObject go = new GameObject("blocker");
+		SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
+		BoxCollider2D collider = go.AddComponent<BoxCollider2D>();
+		collider.size = new Vector2(Screen.width, Screen.height);
+		collider.offset = new Vector2(Screen.width / 2, Screen.height / 2);
+		S_Button butt = go.AddComponent<S_Button>();
+		return butt;
+	}
   
+	
+
 }

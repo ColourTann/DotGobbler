@@ -14,15 +14,25 @@ public class S_Button : MonoBehaviour {
 		return buttonScript;
 	}
 
-	public void SetAction(Action onClick) {
-		action = onClick;
+	public void SetDownAction(Action down) {
+		this.down = down;
 	}
 
-	Action action;
+	public void SetUpAction(Action up) {
+		this.up = up;
+	}
+	Action up;
+	Action down;
 
 	void OnMouseDown() {
 		if (Game.isLocked()) return;
-        if(action!=null)	action.Invoke();
+        if(down!=null)	down.Invoke();
+	}
+
+
+	void OnMouseUp() {
+		if (Game.isLocked()) return;
+		if (up != null) up.Invoke();
 	}
 
 	public Bounds GetBounds() {
