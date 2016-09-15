@@ -298,7 +298,7 @@ public class Level : MonoBehaviour{
 		
 		
 		if (totalPickups > Sounds.nicePitches.Length) {
-			Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, ((float)(totalPickups - pickupsRemaining) / (totalPickups)) * 12));
+			Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, ((float)(totalPickups - pickupsRemaining-1) / (Mathf.Max(1,totalPickups - 1))) * 12));
 		}
 		else {
 			Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, Sounds.nicePitches[totalPickups - 1][totalPickups - pickupsRemaining - 1]));

@@ -7,4 +7,8 @@ public class S_Init : MonoBehaviour {
         PlayerPrefs.DeleteAll();
         Game.Get().Init();
     }
+
+	void Update() {
+		Music.Update();
+	}
 }

@@ -4,7 +4,7 @@ using System;
 
 public class Game {
 
-	public int levelNumber = 19;
+	public int levelNumber = 0;
 	public const bool KEYBOARD = true;
 	public Level previousLevel;
 	private Level level;
@@ -44,7 +44,7 @@ public class Game {
 	}
 
 	internal static bool IsPaused() {
-		return Get().level.IsPaused();
+		return paused;
 	}
 
 	public void Init() {

@@ -3,6 +3,7 @@
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
+/Assets/Resources/music/
 /Assets/AssetStoreTools*
 build_Data/
 *_Data/
