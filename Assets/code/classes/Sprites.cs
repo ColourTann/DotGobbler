@@ -27,6 +27,11 @@ public class Sprites {
     public static Sprite options = Resources.Load<Sprite>("images/ui/options");
     public static Sprite restart = Resources.Load<Sprite>("images/ui/restart");
 	public static Sprite pip = Resources.Load<Sprite>("images/ui/pip");
+	public static Sprite music = Resources.Load<Sprite>("images/ui/music");
+	public static Sprite sound = Resources.Load<Sprite>("images/ui/sound");
+	public static Sprite twitter = Resources.Load<Sprite>("images/ui/twitter");
+	public static Sprite code = Resources.Load<Sprite>("images/ui/code");
+	public static Sprite website = Resources.Load<Sprite>("images/ui/website");
 
 	public static Vector2 GetBounds(Sprite s) {
         return new Vector2(s.bounds.size.x , s.bounds.size.y);

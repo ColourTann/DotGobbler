@@ -4,14 +4,15 @@ using System.Collections;
 public class S_OptionSlider : MonoBehaviour {
 	bool down;
 	GameObject pipObject;
-	static int BAR_WIDTH = 100 * S_Camera.scale;
-	static int BAR_HEIGHT = 5 * S_Camera.scale;
-	public static GameObject CreateSlider() {
+	public static int BAR_HEIGHT = 5 * S_Camera.scale;
+	public static int TOTAL_HEIGHT = (int)(Sprites.GetBounds(Sprites.pip).y * S_Camera.scale);
+	int width;
+	public static GameObject CreateSlider(int width) {
 		GameObject go = new GameObject("Slider");
 		GameObject pip = Primitives.CreateActor(Sprites.pip);
 		S_Button bar = S_Button.CreateButton(Sprites.pixel);
-		bar.transform.localScale = new Vector2(BAR_WIDTH, BAR_HEIGHT);
-		bar.GetComponent<BoxCollider2D>().size = new Vector2(1f, 2.5f);
+		bar.transform.localScale = new Vector2(width, BAR_HEIGHT);
+		bar.GetComponent<BoxCollider2D>().size = new Vector2(1f, 3.5f);
 		bar.GetComponent<SpriteRenderer>().color = Colours.GREEN;
 
 
@@ -19,6 +20,7 @@ public class S_OptionSlider : MonoBehaviour {
 		pip.transform.SetParent(go.transform, false);
 		pip.transform.position = new Vector2(0, -Sprites.GetBounds(Sprites.pip).y  / 2f);
 		S_OptionSlider slider = go.AddComponent<S_OptionSlider>();
+		slider.width = width;
 		bar.transform.SetParent(go.transform, false);
 		Util.SetLayer(bar.gameObject, Util.LayerName.UI, 5);
 		slider.pipObject = pip.gameObject;
@@ -40,9 +42,9 @@ public class S_OptionSlider : MonoBehaviour {
 	void Update() {
 		if (down) {
 			int x = (int)(Input.mousePosition.x - Sprites.GetBounds(Sprites.pip).x * S_Camera.scale / 2f);
-			x = (int)Mathf.Min(transform.position.x + BAR_WIDTH- Sprites.GetBounds(Sprites.pip).x * S_Camera.scale, Mathf.Max(x, transform.position.x));
+			x = (int)Mathf.Min(transform.position.x + width- Sprites.GetBounds(Sprites.pip).x * S_Camera.scale, Mathf.Max(x, transform.position.x));
 			pipObject.transform.position = new Vector2(x, pipObject.transform.position.y);
-			float ratio = (x - transform.position.x - Sprites.GetBounds(Sprites.pip).x * S_Camera.scale) / BAR_WIDTH;
+			float ratio = (x - transform.position.x - Sprites.GetBounds(Sprites.pip).x * S_Camera.scale) / width;
 		}
 	}
 }

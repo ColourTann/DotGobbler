@@ -142,9 +142,9 @@ public class Level : MonoBehaviour{
 		rect.name = "level_background";
 
 		//add level number (rethink into something symbolic maybe?)
-		levelNumberObject = Primitives.CreateText(("level " + (Game.Get().levelNumber)));
+		/*levelNumberObject = Primitives.CreateText(("level " + (Game.Get().levelNumber)));
 		S_Follower follow = levelNumberObject.AddComponent<S_Follower>();
-		follow.Follow(slider.gameObject, 2 * S_Camera.scale, Screen.height - 28 * S_Camera.scale);
+		follow.Follow(slider.gameObject, 2 * S_Camera.scale, Screen.height - 28 * S_Camera.scale);*/
 	}
 
 	private void InitAbilities() {

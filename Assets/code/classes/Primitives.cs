@@ -35,7 +35,7 @@ public class Primitives  {
     }
 
     public static GameObject CreateActor(Sprite sprite, int x=0, int y=0) {
-        GameObject result = new GameObject();
+		GameObject result = new GameObject(sprite.name);
         SpriteRenderer sr = result.AddComponent<SpriteRenderer>();
         sr.sprite = sprite;
         result.transform.position = new Vector2(x, y);
