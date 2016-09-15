@@ -4,12 +4,14 @@ using System;
 
 public class Game {
 
-	public int levelNumber = 18;
+	public int levelNumber = 19;
 	public const bool KEYBOARD = true;
 	public Level previousLevel;
 	private Level level;
 	S_Button mysteryButton;
 	GameObject innerMystery;
+	int mysteryCol = 0;
+	public static bool paused;
 	public Game() {
 		GameObject background = Primitives.CreateRectangle(Screen.width, Screen.height, Colours.DARK);
 		background.name = "backdrop";
@@ -19,7 +21,7 @@ public class Game {
 		mysteryButton = S_Button.CreateButton(Sprites.outline);
 		S_Camera.SetupScale(mysteryButton.transform);
 		mysteryButton.transform.position = new Vector2(gap, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
-		mysteryButton.SetDownAction(() => { Debug.Log("HI"); });
+		mysteryButton.SetDownAction(() => { ToggleColour(); });
 		mysteryButton.name = "mystery";
 		mysteryButton.transform.SetParent(GetMisc("UI").transform, false);
 		Util.SetZ(mysteryButton.gameObject, Util.ZLayer.Buttons);
@@ -39,6 +41,10 @@ public class Game {
 		restartButton.name = "restart_button";
 		restartButton.transform.SetParent(GetMisc("UI").transform, false);
 		Util.SetZ(restartButton.gameObject, Util.ZLayer.Buttons);
+	}
+
+	internal static bool IsPaused() {
+		return Get().level.IsPaused();
 	}
 
 	public void Init() {
@@ -105,6 +111,12 @@ public class Game {
 		innerMystery.transform.localPosition = new Vector2(1, 1);
 		innerMystery.transform.localScale = new Vector2(2, 2);
 		Util.SetLayer(innerMystery, Util.LayerName.UI, 50);
+		innerMystery.GetComponent<SpriteRenderer>().color = Colours.ALL[mysteryCol];
+	}
+
+	private void ToggleColour() {
+		mysteryCol = (mysteryCol + 1) % 3;
+		innerMystery.GetComponent<SpriteRenderer>().color = Colours.ALL[mysteryCol];
 	}
 
 	private Texture2D GetLevelData(int level) {

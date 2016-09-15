@@ -26,6 +26,7 @@ public class S_AbilityPanel : MonoBehaviour{
 			abilities.Add(ability);
             ability.init((datum & 28)>>2);
             buttonScrip.SetDownAction(() => {
+				if (Game.IsPaused()) return;
                 ability.Click();
             });
             GameObject button = buttonScrip.gameObject;
@@ -35,13 +36,14 @@ public class S_AbilityPanel : MonoBehaviour{
             S_Camera.SetupScale(buttonScrip.transform);
             GameObject image = Primitives.CreateActor(ability.GetSprite(), 1, 9);
             image.name = "image";
-            Util.SetLayer(image, Util.LayerName.UI, 10);
+            Util.SetLayer(image, Util.LayerName.Tiles, 0);
             image.transform.SetParent(buttonScrip.gameObject.transform, false);
 			GameObject text = Primitives.CreateText("["+ability.GetKey()+"]", 0, 0);
 			S_Follower follower = text.AddComponent<S_Follower>();
 			follower.Follow(button, -20*S_Camera.scale, -2*S_Camera.scale);
 			ability.SetText(text);
-        }
+			Util.SetZ(button, Util.ZLayer.Gameplay);
+		}
 
         int gap = 10 * S_Camera.scale;
         int currentY = -gap;

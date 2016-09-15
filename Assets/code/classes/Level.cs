@@ -53,21 +53,21 @@ public class Level : MonoBehaviour{
 	GameObject pauseScreen;
 	
 	internal void Pause() {
-
+		Game.paused = !Game.paused;
 		if (pauseScreen == null) {
-
 			inputBlocker = Primitives.CreateInputBlocker();
 			inputBlocker.SetDownAction(() => { Unpause(); });
 			Util.SetZ(inputBlocker.gameObject, Util.ZLayer.Blocker);
 			pauseScreen = PauseMaker.CreatePauseScreen();
-			
-			
-
 			Time.timeScale = 0;
 		}
-
-		
 	}
+
+	bool paused;
+	internal bool IsPaused() {
+		return pauseScreen != null;
+	}
+
 
 	internal void Unpause() {
 		GameObject.Destroy(inputBlocker.gameObject);
@@ -147,6 +147,8 @@ public class Level : MonoBehaviour{
 		follow.Follow(slider.gameObject, 2 * S_Camera.scale, Screen.height - 28 * S_Camera.scale);*/
 	}
 
+
+
 	private void InitAbilities() {
 		//header stuff for extra data
 		Color header = (levelData.GetPixel(0, levelData.height - 1));
@@ -191,9 +193,7 @@ public class Level : MonoBehaviour{
 		}
 	}
 
-	public void Pause(bool paused) {
-		gameObject.SetActive(!paused);
-	}
+	
 
 	GameObject levelNumberObject;
 

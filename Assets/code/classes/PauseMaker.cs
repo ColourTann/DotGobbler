@@ -23,6 +23,7 @@ public class PauseMaker : MonoBehaviour {
 		pauseBGInner.transform.position = new Vector2(border, border);
 		pauseBGInner.transform.SetParent(pauseScreen.transform, false);
 		Util.SetLayer(pauseBGInner, Util.LayerName.UI, 1);
+		Util.SetLayer(pauseBG, Util.LayerName.UI, 1);
 		pauseScreen.transform.position = new Vector2((int)(Screen.width / 2 - pauseWidth / 2), (int)(Screen.height / 2 - pauseHeight / 2));
 
 		//sliders

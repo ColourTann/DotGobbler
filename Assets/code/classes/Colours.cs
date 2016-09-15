@@ -7,4 +7,7 @@ public class Colours {
     public static readonly Color GREEN = new Color(17 / 255f, 119 / 255f, 119 / 255f);
     public static readonly Color LIGHT = new Color(204 / 255f, 187 / 255f, 119 / 255f);
     public static readonly Color zWHITE = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+
+	public static Color[] ALL = new Color[] {RED, GREEN, LIGHT };
+
 }

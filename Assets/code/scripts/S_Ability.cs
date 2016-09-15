@@ -78,7 +78,7 @@ public abstract class S_Ability : MonoBehaviour {
         for (int i = 0; i < pips; i++) {
             GameObject pip = Primitives.CreateActor(Sprites.ability_pip, currentX, 2);
             pipObjects.Add(pip);
-            Util.SetLayer(pip, Util.LayerName.UI, 5);
+            Util.SetLayer(pip, Util.LayerName.UI, 0);
             currentX += (int)(Sprites.GetBounds(Sprites.ability_pip).x);
             currentX += pipGap;
             pip.transform.SetParent(transform, false);
