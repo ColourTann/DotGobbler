@@ -59,6 +59,7 @@ public class S_Charger : S_Enemy {
 				targets.Add(go);
 			}
 		}
+		FinishedMoving();
 	}
 
 	void ClearTargets() {

@@ -4,26 +4,25 @@ using System;
 
 public class Game {
 
-	public int levelNumber = 0;
+	public int levelNumber = 18;
 	public const bool KEYBOARD = true;
 	public Level previousLevel;
 	private Level level;
-
+	S_Button mysteryButton;
+	GameObject innerMystery;
 	public Game() {
 		GameObject background = Primitives.CreateRectangle(Screen.width, Screen.height, Colours.DARK);
 		background.name = "backdrop";
 		background.transform.SetParent(GetMisc("UI").transform, false);
 
 		int gap = 5 * S_Camera.scale;
-
-        S_Button restartButton = S_Button.CreateButton(Sprites.restart);
-        S_Camera.SetupScale(restartButton.transform);
-        restartButton.transform.position = new Vector2(gap, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
-        restartButton.SetDownAction(InstantRestart);
-		restartButton.name = "restart_button";
-		restartButton.transform.SetParent(GetMisc("UI").transform, false);
-		Util.SetZ(restartButton.gameObject, Util.ZLayer.Buttons );
-
+		mysteryButton = S_Button.CreateButton(Sprites.outline);
+		S_Camera.SetupScale(mysteryButton.transform);
+		mysteryButton.transform.position = new Vector2(gap, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
+		mysteryButton.SetDownAction(() => { Debug.Log("HI"); });
+		mysteryButton.name = "mystery";
+		mysteryButton.transform.SetParent(GetMisc("UI").transform, false);
+		Util.SetZ(mysteryButton.gameObject, Util.ZLayer.Buttons);
 
 		S_Button optionsButton = S_Button.CreateButton(Sprites.options);
         S_Camera.SetupScale(optionsButton.transform);
@@ -32,6 +31,14 @@ public class Game {
 		optionsButton.name = "options_button";
 		optionsButton.transform.SetParent(GetMisc("UI").transform, false);
 		Util.SetZ(optionsButton.gameObject, Util.ZLayer.Buttons);
+
+		S_Button restartButton = S_Button.CreateButton(Sprites.restart);
+		S_Camera.SetupScale(restartButton.transform);
+		restartButton.transform.position = new Vector2(gap*3 + Sprites.GetBounds(Sprites.options).x * S_Camera.scale * 2, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
+		restartButton.SetDownAction(InstantRestart);
+		restartButton.name = "restart_button";
+		restartButton.transform.SetParent(GetMisc("UI").transform, false);
+		Util.SetZ(restartButton.gameObject, Util.ZLayer.Buttons);
 	}
 
 	public void Init() {
@@ -74,6 +81,7 @@ public class Game {
 	}
 
 	private void LoadLevel() {
+		UpdateMystery();
 		previousLevel = level;
 		if (previousLevel != null) {
 			previousLevel.SlideAway();
@@ -88,6 +96,15 @@ public class Game {
         level = go.AddComponent<Level>();
 		level.Init(levelData);
 		level.SlideIn();
+	}
+
+	private void UpdateMystery() {
+		if (innerMystery != null) GameObject.Destroy(innerMystery);
+		innerMystery = Primitives.CreateActor(Sprites.mysteries[levelNumber]);
+		innerMystery.transform.SetParent(mysteryButton.transform, false);
+		innerMystery.transform.localPosition = new Vector2(1, 1);
+		innerMystery.transform.localScale = new Vector2(2, 2);
+		Util.SetLayer(innerMystery, Util.LayerName.UI, 50);
 	}
 
 	private Texture2D GetLevelData(int level) {

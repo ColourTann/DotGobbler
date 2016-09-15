@@ -32,6 +32,8 @@ public class Sprites {
 	public static Sprite twitter = Resources.Load<Sprite>("images/ui/twitter");
 	public static Sprite code = Resources.Load<Sprite>("images/ui/code");
 	public static Sprite website = Resources.Load<Sprite>("images/ui/website");
+	public static Sprite outline = Resources.Load<Sprite>("images/ui/outline");
+	public static Sprite[] mysteries = Resources.LoadAll<Sprite>("images/ui/puzzle");
 
 	public static Vector2 GetBounds(Sprite s) {
         return new Vector2(s.bounds.size.x , s.bounds.size.y);
