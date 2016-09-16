@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public class Game {
 
-	public int levelNumber = 28;
-	public const bool KEYBOARD = true;
+	public int levelNumber = 0;
+	public const bool KEYBOARD = false;
 	public Level previousLevel;
 	private Level level;
 	S_Button mysteryButton;
@@ -184,10 +184,11 @@ public class Game {
 		}
 		inputBlocker.gameObject.SetActive(true);
 		pauseScreen.SetActive(true);
-		Game.paused = !Game.paused;
+		Game.paused = true;
 	}
 
 	public void Unpause() {
+		Game.paused = false;
 		inputBlocker.gameObject.SetActive(false);
 		pauseScreen.SetActive(false);
 		Time.timeScale = 1;
