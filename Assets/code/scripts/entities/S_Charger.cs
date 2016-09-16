@@ -46,6 +46,7 @@ public class S_Charger : S_Enemy {
 	List<GameObject> targets = new List<GameObject>();
 
 	void UpdateTargeting() {
+		if (Game.Get().state != Game.GameState.Normal) return;
 		ClearTargets();
 		if (charging > 0) {
 			S_Tile playerTile = Level.Get(gameObject).player.currentTile;
@@ -59,7 +60,6 @@ public class S_Charger : S_Enemy {
 				targets.Add(go);
 			}
 		}
-		FinishedMoving();
 	}
 
 	void ClearTargets() {

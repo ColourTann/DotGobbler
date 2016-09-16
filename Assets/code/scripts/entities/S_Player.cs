@@ -103,7 +103,7 @@ public class S_Player : S_Entity {
     public void ActivateTile(S_Tile tile) {
         //check for validity
         if (moving || tile==null) return;
-		Sounds.PlaySound(Sounds.move, .75f, Random.Range(.9f, 1.1f));
+		Sounds.PlaySound(Sounds.move, 1, Random.Range(.9f, 1.1f));
 		if (Level.Get(gameObject).abilityPanel.activeAbility != null) {
             Level.Get(gameObject).abilityPanel.activeAbility.Use(this, tile);
         }
@@ -119,7 +119,10 @@ public class S_Player : S_Entity {
 
     public override void MoveToTile(S_Tile tile, bool instant) {
         bool lost = tile.occupier != null;
-        if (lost) Game.Get().Lose();
+		if (lost) {
+			Sounds.PlaySound(Sounds.spike);
+			Game.Get().Lose();
+		}
         base.MoveToTile(tile, instant);
     }
 

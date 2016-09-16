@@ -41,7 +41,7 @@ public class S_Ability_Move3 : S_Ability {
     public override void Use(S_Player player, S_Tile tile) {
         if (!GetValidTiles(player.currentTile).Contains(tile)) return;
         player.MoveToTile(tile, false);
-		Sounds.PlaySound(Sounds.move, .75f, Random.Range(1.2f, 1.4f));
+		Sounds.PlaySound(Sounds.move, 1, Random.Range(1.4f, 1.6f));
 		SuccessfulUse();
     }
 

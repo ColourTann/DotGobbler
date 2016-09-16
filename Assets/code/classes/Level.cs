@@ -48,35 +48,6 @@ public class Level : MonoBehaviour{
 		grid.transform.SetParent(mapObject.transform);
 	}
 
-	S_Button inputBlocker;
-
-	GameObject pauseScreen;
-	
-	public void Pause() {
-		if (pauseScreen == null) {
-			inputBlocker = Primitives.CreateInputBlocker();
-			inputBlocker.SetDownAction(() => { Unpause(); });
-			Util.SetZ(inputBlocker.gameObject, Util.ZLayer.Blocker);
-			pauseScreen = PauseMaker.CreatePauseScreen();
-			Time.timeScale = 0;
-		}
-		inputBlocker.gameObject.SetActive(true);
-		pauseScreen.SetActive(true);
-		Game.paused = !Game.paused;
-	}
-
-	bool paused;
-	internal bool IsPaused() {
-		return pauseScreen != null;
-	}
-
-
-	public void Unpause() {
-		inputBlocker.gameObject.SetActive(false);
-		pauseScreen.SetActive(false);
-		Time.timeScale = 1;
-	}
-
 	void InitTilesAndEntities() {
 		//init tiles array
 		int tilesAcross = levelData.width;
@@ -299,7 +270,7 @@ public class Level : MonoBehaviour{
 		GameObject.Destroy(pickup.gameObject);
 		int pickedUp = totalPickups - pickupsRemaining;
 		float pitch = Mathf.Pow(1.07946f, (pickedUp) / (float) totalPickups )  + Random.Range(0f, pickedUp/10f);
-		Sounds.PlaySound(Sounds.pip, .9f, pitch);
+		Sounds.PlaySound(Sounds.pip, 1, pitch);
 
 		/*if (totalPickups > Sounds.nicePitches.Length) {
 			Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, ((float)(totalPickups - pickupsRemaining-1) / (Mathf.Max(1,totalPickups - 1))) * 12));

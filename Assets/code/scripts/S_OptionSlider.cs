@@ -10,7 +10,6 @@ public class S_OptionSlider : MonoBehaviour {
 
 	public static S_OptionSlider sfx;
 	public static S_OptionSlider music;
-
 	public static S_OptionSlider CreateSlider(int width) {
 		GameObject go = new GameObject("Slider");
 		GameObject pip = Primitives.CreateActor(Sprites.pip);
@@ -53,7 +52,7 @@ public class S_OptionSlider : MonoBehaviour {
 			int x = (int)(Input.mousePosition.x - Sprites.GetBounds(Sprites.pip).x * S_Camera.scale / 2f);
 			x = (int)Mathf.Min(transform.position.x + width- Sprites.GetBounds(Sprites.pip).x * S_Camera.scale, Mathf.Max(x, transform.position.x));
 			pipObject.transform.position = new Vector2(x, pipObject.transform.position.y);
-			GetValue();
+			if (this == music) Music.UpdateVolume();
 		}
 	}
 }

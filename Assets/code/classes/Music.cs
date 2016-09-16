@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 
 public class Music{
-	
+
+	private static float GlobalVolumeMultiplier = .6f;
+
 	private static AudioClip[] allMusic = Resources.LoadAll<AudioClip>("music");
 	private static AudioSource source = Game.GetMisc("music").AddComponent<AudioSource>();
 	static List<AudioClip> m = new List<AudioClip>(allMusic);
 	static int index = m.Count;
 	public static void PlayNext() {
+		UpdateVolume();
 		if (index >= m.Count) {
 			var rnd = new Random();
 			for (int i = 0; i < m.Count; i++) {
@@ -27,7 +30,7 @@ public class Music{
 	}
 
 	public static void UpdateVolume() {
-		source.volume = 1;
+		source.volume = S_OptionSlider.music.GetValue() * GlobalVolumeMultiplier;
 	}
 
 }

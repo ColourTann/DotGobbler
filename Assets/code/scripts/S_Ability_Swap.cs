@@ -52,6 +52,7 @@ public class S_Ability_Swap : S_Ability {
 		swappee.MoveToTile(player.currentTile, true);
 		player.MoveToTile(tile, true);
 		swappee.Stun(1);
+		Sounds.PlaySound(Sounds.teleport);
 		SuccessfulUse();
         Level.Get(gameObject).EnemyTurn();
 	}

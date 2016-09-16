@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System;
 
 public class Game {
 
-	public int levelNumber = 7;
+	public int levelNumber = 28;
 	public const bool KEYBOARD = true;
 	public Level previousLevel;
 	private Level level;
@@ -21,7 +20,7 @@ public class Game {
 		mysteryButton = S_Button.CreateButton(Sprites.outline);
 		S_Camera.SetupScale(mysteryButton.transform);
 		mysteryButton.transform.position = new Vector2(gap, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
-		mysteryButton.SetDownAction(() => { ToggleColour(); });
+		mysteryButton.SetDownAction(() => { Sounds.PlaySound(Sounds.mystery, 1, Random.Range(.8f, 1.2f)); ToggleColour(); });
 		mysteryButton.name = "mystery";
 		mysteryButton.transform.SetParent(GetMisc("UI").transform, false);
 		Util.SetZ(mysteryButton.gameObject, Util.ZLayer.Buttons);
@@ -29,7 +28,7 @@ public class Game {
 		S_Button optionsButton = S_Button.CreateButton(Sprites.options);
         S_Camera.SetupScale(optionsButton.transform);
         optionsButton.transform.position = new Vector2(gap*2 + Sprites.GetBounds(Sprites.options).x * S_Camera.scale, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
-        optionsButton.SetDownAction(()=> { level.Pause(); } );
+        optionsButton.SetDownAction(()=> { Sounds.PlaySound(Sounds.select); Pause(); } );
 		optionsButton.name = "options_button";
 		optionsButton.transform.SetParent(GetMisc("UI").transform, false);
 		Util.SetZ(optionsButton.gameObject, Util.ZLayer.Buttons);
@@ -37,20 +36,18 @@ public class Game {
 		S_Button restartButton = S_Button.CreateButton(Sprites.restart);
 		S_Camera.SetupScale(restartButton.transform);
 		restartButton.transform.position = new Vector2(gap*3 + Sprites.GetBounds(Sprites.options).x * S_Camera.scale * 2, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
-		restartButton.SetDownAction(InstantRestart);
+		restartButton.SetDownAction(()=> { InstantRestart(); Sounds.PlaySound(Sounds.select); });
 		restartButton.name = "restart_button";
 		restartButton.transform.SetParent(GetMisc("UI").transform, false);
 		Util.SetZ(restartButton.gameObject, Util.ZLayer.Buttons);
 	}
 
-	internal static bool IsPaused() {
-		return paused;
-	}
+	
 
 	public void Init() {
 		LoadLevel();
-		level.Pause();
-		level.Unpause();
+		Pause();
+		Unpause();
 	}
 
 	public enum GameState {
@@ -171,5 +168,32 @@ public class Game {
 		go.transform.SetParent(GetMisc().transform);
 		objectTable.Add(name, go);
 		return go;
+	}
+
+	S_Button inputBlocker;
+
+	GameObject pauseScreen;
+
+	public void Pause() {
+		if (pauseScreen == null) {
+			inputBlocker = Primitives.CreateInputBlocker();
+			inputBlocker.SetDownAction(() => { Unpause(); Sounds.PlaySound(Sounds.deselect); });
+			Util.SetZ(inputBlocker.gameObject, Util.ZLayer.Blocker);
+			pauseScreen = PauseMaker.CreatePauseScreen();
+			Time.timeScale = 0;
+		}
+		inputBlocker.gameObject.SetActive(true);
+		pauseScreen.SetActive(true);
+		Game.paused = !Game.paused;
+	}
+
+	public void Unpause() {
+		inputBlocker.gameObject.SetActive(false);
+		pauseScreen.SetActive(false);
+		Time.timeScale = 1;
+	}
+
+	internal static bool IsPaused() {
+		return paused;
 	}
 }

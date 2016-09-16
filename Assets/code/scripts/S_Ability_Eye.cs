@@ -56,7 +56,10 @@ public class S_Ability_Eye : S_Ability {
 				pickup.Magnetise(tile.TileDistance(player.currentTile)+index, (int)player.transform.position.x-S_Tile.width/2, (int)player.transform.position.y-S_Tile.height/2);
 			}
 		}
-        if (index > 0) SuccessfulUse();
-        else UnsuccessfulUse();
+		if (index > 0) {
+			SuccessfulUse();
+			Sounds.PlaySound(Sounds.suck);
+		}
+		else UnsuccessfulUse();
     }
 }

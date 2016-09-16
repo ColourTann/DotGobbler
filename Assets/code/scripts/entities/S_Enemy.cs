@@ -10,7 +10,7 @@ public class S_Enemy : S_Entity {
 	public void PathTowardsPlayer() {
 		S_Tile playerTile = Level.Get(gameObject).player.currentTile;
 		targetTile = currentTile.PathTo(playerTile);
-
+		if (playerTile == currentTile) return;
 		//if there's no path, pick a tile that's vaguely in the right direction
 		if (targetTile == null) {
 			List<S_Tile> potentials = currentTile.GetTilesWithin(1, false);
@@ -61,6 +61,7 @@ public class S_Enemy : S_Entity {
 	}
 
 	override public void TakeTurn() {
+		if (Level.Get(gameObject).player.currentTile == currentTile) return;
 		if (stun > 0) {
 			stun--;
 			return;
@@ -72,6 +73,7 @@ public class S_Enemy : S_Entity {
 			}
 			else {
 				if (targetTile.occupier is S_Player) {
+					Sounds.PlaySound(Sounds.spike);
 					Game.Get().Lose();
 				}
 
@@ -92,10 +94,8 @@ public class S_Enemy : S_Entity {
 		for (int dx = -1; dx <= 1; dx++) {
 			for (int dy = -1; dy <= 1; dy++) {
 				if ((dx == 0) == (dy == 0)) continue;
-				S_Tile tile = currentTile;
-				while (tile != null) {
-					if (tile.occupier is S_Player) return true;
-					tile = tile.GetTile(dx, dy);
+				foreach (S_Tile t in currentTile.GetTilesInLine(dx, dy)) {
+					if (t.occupier is S_Player) return true;
 				}
 			}
 		}

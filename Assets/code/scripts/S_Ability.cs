@@ -16,13 +16,13 @@ public abstract class S_Ability : MonoBehaviour {
 		if(sound) Level.Get(gameObject).ActionCompleted(active ? Level.ActionType.DeselectAbility : Level.ActionType.SelectAbility);
 
         if (!active && !IsAvailable()) {
-            if(sound) Sounds.PlaySound(Sounds.deselect, .3f, Random.Range(.7f, .8f));
+            if(sound) Sounds.PlaySound(Sounds.deselect, 1, Random.Range(1, Random.Range(.8f, 1.2f)));
             return;
         }
         
         active = !active;
-        if (sound) Sounds.PlaySound(active ?Sounds.select: Sounds.deselect, .3f, Random.Range(.7f, .8f));
-        GetComponent<SpriteRenderer>().color = active ? Colours.LIGHT : Colours.RED;
+        if (sound) Sounds.PlaySound(active ?Sounds.select: Sounds.deselect, 1, Random.Range(1, Random.Range(.8f, 1.2f)));
+		GetComponent<SpriteRenderer>().color = active ? Colours.LIGHT : Colours.RED;
         Level.Get(gameObject).abilityPanel.ActivateAbility(this, active);
     }
 
