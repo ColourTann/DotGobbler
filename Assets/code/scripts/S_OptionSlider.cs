@@ -7,7 +7,11 @@ public class S_OptionSlider : MonoBehaviour {
 	public static int BAR_HEIGHT = 5 * S_Camera.scale;
 	public static int TOTAL_HEIGHT = (int)(Sprites.GetBounds(Sprites.pip).y * S_Camera.scale);
 	int width;
-	public static GameObject CreateSlider(int width) {
+
+	public static S_OptionSlider sfx;
+	public static S_OptionSlider music;
+
+	public static S_OptionSlider CreateSlider(int width) {
 		GameObject go = new GameObject("Slider");
 		GameObject pip = Primitives.CreateActor(Sprites.pip);
 		S_Button bar = S_Button.CreateButton(Sprites.pixel);
@@ -18,7 +22,7 @@ public class S_OptionSlider : MonoBehaviour {
 
 		Util.SetLayer(pip, Util.LayerName.UI, 5);
 		pip.transform.SetParent(go.transform, false);
-		pip.transform.position = new Vector2(0, -Sprites.GetBounds(Sprites.pip).y  / 2f);
+		pip.transform.position = new Vector2(width/5f*3, -Sprites.GetBounds(Sprites.pip).y  / 2f);
 		S_OptionSlider slider = go.AddComponent<S_OptionSlider>();
 		slider.width = width;
 		bar.transform.SetParent(go.transform, false);
@@ -30,7 +34,7 @@ public class S_OptionSlider : MonoBehaviour {
 		S_Camera.SetupScale(pip.transform);
 
 
-		return go;
+		return slider;
 	}
 
 
@@ -39,12 +43,17 @@ public class S_OptionSlider : MonoBehaviour {
 
 	}
 
+	public float GetValue() {
+		float ratio = (pipObject.transform.position.x - transform.position.x ) / (width - Sprites.GetBounds(Sprites.pip).x * S_Camera.scale);
+		return ratio;
+	}
+
 	void Update() {
 		if (down) {
 			int x = (int)(Input.mousePosition.x - Sprites.GetBounds(Sprites.pip).x * S_Camera.scale / 2f);
 			x = (int)Mathf.Min(transform.position.x + width- Sprites.GetBounds(Sprites.pip).x * S_Camera.scale, Mathf.Max(x, transform.position.x));
 			pipObject.transform.position = new Vector2(x, pipObject.transform.position.y);
-			float ratio = (x - transform.position.x - Sprites.GetBounds(Sprites.pip).x * S_Camera.scale) / width;
+			GetValue();
 		}
 	}
 }

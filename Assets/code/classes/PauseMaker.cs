@@ -31,20 +31,22 @@ public class PauseMaker : MonoBehaviour {
 		int barX = (int)(border + gap * 2 + Sprites.GetBounds(Sprites.sound).x * S_Camera.scale);
 		int currentY = pauseHeight-border;
 		currentY -= gap + S_OptionSlider.TOTAL_HEIGHT;
-		GameObject musicSlider = S_OptionSlider.CreateSlider(barWidth);
-		musicSlider.transform.position = new Vector2(barX, currentY);
-		musicSlider.transform.SetParent(pauseScreen.transform, false);
-		Util.SetZ(musicSlider, Util.ZLayer.Sliders);
+		S_OptionSlider.music= S_OptionSlider.CreateSlider(barWidth);
+		S_OptionSlider.music.transform.position = new Vector2(barX, currentY);
+		S_OptionSlider.music.transform.SetParent(pauseScreen.transform, false);
+		Util.SetZ(S_OptionSlider.music.gameObject, Util.ZLayer.Sliders);
 		GameObject music = Primitives.CreateActor(Sprites.music);
 		S_Camera.SetupScale(music.transform);
 		music.transform.position = new Vector2(border + gap, currentY + S_OptionSlider.BAR_HEIGHT/2 - Sprites.GetBounds(Sprites.music).y * S_Camera.scale/2);
 		music.transform.SetParent(pauseScreen.transform, false);
 		Util.SetLayer(music, Util.LayerName.UI, 50);
 		currentY -= gap + S_OptionSlider.TOTAL_HEIGHT;
-		GameObject soundSlider = S_OptionSlider.CreateSlider(barWidth);
-		soundSlider.transform.position = new Vector2(barX, currentY);
-		soundSlider.transform.SetParent(pauseScreen.transform, false);
-		Util.SetZ(soundSlider, Util.ZLayer.Sliders);
+
+
+		S_OptionSlider.sfx= S_OptionSlider.CreateSlider(barWidth);
+		S_OptionSlider.sfx.transform.position = new Vector2(barX, currentY);
+		S_OptionSlider.sfx.transform.SetParent(pauseScreen.transform, false);
+		Util.SetZ(S_OptionSlider.sfx.gameObject, Util.ZLayer.Sliders);
 		GameObject sound = Primitives.CreateActor(Sprites.sound);
 		S_Camera.SetupScale(sound.transform);
 		sound.transform.position = new Vector2(border + gap, currentY + S_OptionSlider.BAR_HEIGHT / 2 - Sprites.GetBounds(Sprites.music).y * S_Camera.scale / 2);

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
+
 using System.Collections.Generic;
-using System;
 
 public class Level : MonoBehaviour{
 	public S_Slider slider;
@@ -52,8 +52,7 @@ public class Level : MonoBehaviour{
 
 	GameObject pauseScreen;
 	
-	internal void Pause() {
-		Game.paused = !Game.paused;
+	public void Pause() {
 		if (pauseScreen == null) {
 			inputBlocker = Primitives.CreateInputBlocker();
 			inputBlocker.SetDownAction(() => { Unpause(); });
@@ -61,6 +60,9 @@ public class Level : MonoBehaviour{
 			pauseScreen = PauseMaker.CreatePauseScreen();
 			Time.timeScale = 0;
 		}
+		inputBlocker.gameObject.SetActive(true);
+		pauseScreen.SetActive(true);
+		Game.paused = !Game.paused;
 	}
 
 	bool paused;
@@ -69,9 +71,9 @@ public class Level : MonoBehaviour{
 	}
 
 
-	internal void Unpause() {
-		GameObject.Destroy(inputBlocker.gameObject);
-		GameObject.Destroy(pauseScreen);
+	public void Unpause() {
+		inputBlocker.gameObject.SetActive(false);
+		pauseScreen.SetActive(false);
 		Time.timeScale = 1;
 	}
 
@@ -295,14 +297,16 @@ public class Level : MonoBehaviour{
 	internal void Pickup(S_Pickup pickup) {
 		pickupsRemaining--;
 		GameObject.Destroy(pickup.gameObject);
-		
-		
-		if (totalPickups > Sounds.nicePitches.Length) {
+		int pickedUp = totalPickups - pickupsRemaining;
+		float pitch = Mathf.Pow(1.07946f, (pickedUp) / (float) totalPickups )  + Random.Range(0f, pickedUp/10f);
+		Sounds.PlaySound(Sounds.pip, .9f, pitch);
+
+		/*if (totalPickups > Sounds.nicePitches.Length) {
 			Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, ((float)(totalPickups - pickupsRemaining-1) / (Mathf.Max(1,totalPickups - 1))) * 12));
 		}
 		else {
 			Sounds.PlaySound(Sounds.pip, .9f, Mathf.Pow(1.05946f, Sounds.nicePitches[totalPickups - 1][totalPickups - pickupsRemaining - 1]));
-		}
+		}*/
 		if (pickupsRemaining == 0) {
 			Game.Get().Victory();
 		}

@@ -4,7 +4,7 @@ using System;
 
 public class Game {
 
-	public int levelNumber = 0;
+	public int levelNumber = 7;
 	public const bool KEYBOARD = true;
 	public Level previousLevel;
 	private Level level;
@@ -49,6 +49,8 @@ public class Game {
 
 	public void Init() {
 		LoadLevel();
+		level.Pause();
+		level.Unpause();
 	}
 
 	public enum GameState {

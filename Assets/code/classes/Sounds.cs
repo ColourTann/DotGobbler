@@ -31,7 +31,7 @@ public class Sounds  {
     public static void PlaySound(AudioClip clip, float volume=1, float pitch=1) {
 		AudioSource source = getSource();
 		source.pitch = pitch;
-		source.PlayOneShot(clip, volume);
+		source.PlayOneShot(clip, volume * S_OptionSlider.sfx.GetValue());
     }
 
 	public static int[][] nicePitches =

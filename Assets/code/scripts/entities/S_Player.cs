@@ -103,7 +103,7 @@ public class S_Player : S_Entity {
     public void ActivateTile(S_Tile tile) {
         //check for validity
         if (moving || tile==null) return;
-		Sounds.PlaySound(Sounds.move, .75f, Random.Range(.7f, .9f));
+		Sounds.PlaySound(Sounds.move, .75f, Random.Range(.9f, 1.1f));
 		if (Level.Get(gameObject).abilityPanel.activeAbility != null) {
             Level.Get(gameObject).abilityPanel.activeAbility.Use(this, tile);
         }
