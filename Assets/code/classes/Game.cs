@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class Game {
 
 	public int levelNumber = 0;
-	public const bool KEYBOARD = true;
+	public const bool KEYBOARD = false;
 	public Level previousLevel;
 	private Level level;
 	S_Button mysteryButton;

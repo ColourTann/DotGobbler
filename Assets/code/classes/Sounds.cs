@@ -2,10 +2,10 @@
 using System.Collections;
 
 public class Sounds  {
-	private static float GlobalVolumeMultiplier = 2.5f;
+	private static float GlobalVolumeMultiplier = 1f;
 	public static AudioClip move = Resources.Load<AudioClip>("sfx/move");
     public static AudioClip pip = Resources.Load<AudioClip>("sfx/pickup");
-    public static AudioClip spike = Resources.Load<AudioClip>("sfx/spike");
+    public static AudioClip spike = Resources.Load<AudioClip>("sfx/dead");
     public static AudioClip select = Resources.Load<AudioClip>("sfx/select");
 	public static AudioClip deselect = Resources.Load<AudioClip>("sfx/deselect");
 
