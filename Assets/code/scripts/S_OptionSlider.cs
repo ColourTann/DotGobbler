@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System;
 public class S_OptionSlider : MonoBehaviour {
 	bool down;
 	GameObject pipObject;
@@ -21,25 +21,36 @@ public class S_OptionSlider : MonoBehaviour {
 
 		Util.SetLayer(pip, Util.LayerName.UI, 5);
 		pip.transform.SetParent(go.transform, false);
-		pip.transform.position = new Vector2(width/5f*3, -Sprites.GetBounds(Sprites.pip).y  / 2f);
+		pip.transform.position = new Vector2((int)(width/5f*3), (int)(-Sprites.GetBounds(Sprites.pip).y * S_Camera.scale / 2f + BAR_HEIGHT/2));
 		S_OptionSlider slider = go.AddComponent<S_OptionSlider>();
 		slider.width = width;
 		bar.transform.SetParent(go.transform, false);
 		Util.SetLayer(bar.gameObject, Util.LayerName.UI, 5);
 		slider.pipObject = pip.gameObject;
 		bar.SetDownAction(() => slider.down = true);
-		bar.SetUpAction(() => slider.down = false);
+		bar.SetUpAction(() => slider.OnUp());
 
 		S_Camera.SetupScale(pip.transform);
-
-
 		return slider;
 	}
 
+	Action onUp;
+	public void SetUpAction(Action action) {
+		this.onUp= action;
+	}
 
+
+	public void OnUp() {
+		if (onUp != null) onUp.Invoke();
+		down = false;
+	}
 
 	void Start() {
 
+	}
+
+	public void SetRatio(float value) {
+		pipObject.transform.localPosition = new Vector2 (value * (width - Sprites.GetBounds(Sprites.pip).x * S_Camera.scale), pipObject.transform.localPosition.y);
 	}
 
 	public float GetValue() {

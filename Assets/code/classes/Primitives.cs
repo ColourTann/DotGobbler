@@ -45,8 +45,11 @@ public class Primitives  {
 	private static Canvas canvas;
 
 	public static GameObject CreateText(string text, int x=0, int y = 0) {
+
+		//14 * scale for the height
 		if (canvas == null) canvas = Object.FindObjectOfType<Canvas>();
 		GameObject go = (GameObject)(GameObject.Instantiate(Resources.Load("prefabs/text")));
+		go.GetComponent<RectTransform>().sizeDelta = new Vector2(100 * S_Camera.scale, 14 * S_Camera.scale);
 		go.name = "Text: " + text;
 		go.GetComponent<Text>().text = text;
 		go.GetComponent<Text>().fontSize= 16 * S_Camera.scale;

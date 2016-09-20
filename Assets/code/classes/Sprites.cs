@@ -23,8 +23,10 @@ public class Sprites {
 
 	public static Sprite eye = Resources.Load<Sprite>("images/enemy_eye");
 
-    //ui junk
-    public static Sprite options = Resources.Load<Sprite>("images/ui/options");
+	public static Sprite end = Resources.Load<Sprite>("images/end");
+
+	//ui junk
+	public static Sprite options = Resources.Load<Sprite>("images/ui/options");
     public static Sprite restart = Resources.Load<Sprite>("images/ui/restart");
 	public static Sprite pip = Resources.Load<Sprite>("images/ui/pip");
 	public static Sprite music = Resources.Load<Sprite>("images/ui/music");

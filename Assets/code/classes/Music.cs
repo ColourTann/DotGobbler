@@ -11,6 +11,7 @@ public class Music{
 	static int index = m.Count;
 	public static void PlayNext() {
 		UpdateVolume();
+		index++;
 		if (index >= m.Count) {
 			var rnd = new Random();
 			for (int i = 0; i < m.Count; i++) {

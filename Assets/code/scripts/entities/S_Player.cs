@@ -18,7 +18,7 @@ public class S_Player : S_Entity {
     }
 
     override protected void CheckInput() {
-		if (Game.isLocked()) return;
+		if (Game.isLocked() || Game.IsPaused()) return;
 
 		//abilities
 		if (Input.GetKeyDown(KeyCode.Z)) AbilityKeyboardPress(KeyCode.Z);
@@ -114,6 +114,7 @@ public class S_Player : S_Entity {
     }
 
     protected override void FinishedMoving() {
+		Game.Get().CheckForEndOfLevel();
         Level.Get(gameObject).EnemyTurn();
     }
 

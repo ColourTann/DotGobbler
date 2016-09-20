@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class S_AbilityPanel : MonoBehaviour{
-
     public int width, height;
 	public List<S_Ability> abilities = new List<S_Ability>();
 	public S_Ability activeAbility;
@@ -40,7 +39,7 @@ public class S_AbilityPanel : MonoBehaviour{
             image.transform.SetParent(buttonScrip.gameObject.transform, false);
 			GameObject text = Primitives.CreateText("["+ability.GetKey()+"]", 0, 0);
 			S_Follower follower = text.AddComponent<S_Follower>();
-			follower.Follow(button, -20*S_Camera.scale, -2*S_Camera.scale);
+			follower.Follow(button, -20*S_Camera.scale, (int)((Sprites.GetBounds(Sprites.ability_border).y * S_Camera.scale /2f - 7*S_Camera.scale)));
 			ability.SetText(text);
 			Util.SetZ(button, Util.ZLayer.Gameplay);
 		}
@@ -59,6 +58,12 @@ public class S_AbilityPanel : MonoBehaviour{
             butt.transform.SetParent(transform, false);
         }
     }
+
+	public void Cleanup() {
+		foreach (S_Ability ability in abilities) {
+			ability.ClearText();
+		}
+	}
 
 	public void ActivateAbilityFromKeypress(KeyCode key) {
 		foreach (S_Ability a in abilities) {

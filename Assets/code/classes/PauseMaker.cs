@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PauseMaker : MonoBehaviour {
-	static int border = 15 * S_Camera.scale;
+	static int border = 5 * S_Camera.scale;
 	static int pauseWidth = 180 * S_Camera.scale + border * 2;
 	static int pauseHeight = 120 * S_Camera.scale + border * 2;
 	static int gap = 10 * S_Camera.scale;
@@ -41,7 +41,8 @@ public class PauseMaker : MonoBehaviour {
 		music.transform.SetParent(pauseScreen.transform, false);
 		Util.SetLayer(music, Util.LayerName.UI, 50);
 		currentY -= gap + S_OptionSlider.TOTAL_HEIGHT;
-
+		S_OptionSlider.music.SetUpAction(() => { PlayerPrefs.SetFloat("music", S_OptionSlider.music.GetValue()); });
+		S_OptionSlider.music.SetRatio(PlayerPrefs.GetFloat("music", .7f));
 
 		S_OptionSlider.sfx= S_OptionSlider.CreateSlider(barWidth);
 		S_OptionSlider.sfx.transform.position = new Vector2(barX, currentY);
@@ -53,7 +54,8 @@ public class PauseMaker : MonoBehaviour {
 		sound.transform.SetParent(pauseScreen.transform, false);
 		Util.SetLayer(sound, Util.LayerName.UI, 50);
 		currentY -= gap + S_OptionSlider.TOTAL_HEIGHT;
-
+		S_OptionSlider.sfx.SetUpAction(() => { PlayerPrefs.SetFloat("sfx", S_OptionSlider.sfx.GetValue()); });
+		S_OptionSlider.sfx.SetRatio(PlayerPrefs.GetFloat("sfx", .7f));
 
 		//icons
 		int codeX = (pauseWidth - border * 2) / 3 + border ;
@@ -89,7 +91,7 @@ public class PauseMaker : MonoBehaviour {
 		website.transform.position = new Vector2(musicX - Sprites.GetBounds(Sprites.website).x * S_Camera.scale / 2f, twitterY - Sprites.GetBounds(Sprites.website).x * S_Camera.scale / 2f);
 		website.transform.SetParent(pauseScreen.transform, false);
 		Util.SetLayer(website.gameObject, Util.LayerName.UI, 50);
-		website.SetDownAction(() => Application.OpenURL("https://twitter.com/ColourTann"));
+		website.SetDownAction(() => Application.OpenURL("http://chriszabriskie.com/"));
 
 		return pauseScreen;
 	}

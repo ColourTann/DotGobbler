@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public class Game {
 
-	public int levelNumber = 0;
-	public const bool KEYBOARD = false;
+	public int levelNumber = 29;
+	public const bool KEYBOARD = true;
 	public Level previousLevel;
 	private Level level;
 	S_Button mysteryButton;
@@ -12,6 +12,7 @@ public class Game {
 	int mysteryCol = 0;
 	public static bool paused;
 	public Game() {
+		//levelNumber = PlayerPrefs.GetInt("level", 0);
 		GameObject background = Primitives.CreateRectangle(Screen.width, Screen.height, Colours.DARK);
 		background.name = "backdrop";
 		background.transform.SetParent(GetMisc("UI").transform, false);
@@ -20,7 +21,7 @@ public class Game {
 		mysteryButton = S_Button.CreateButton(Sprites.outline);
 		S_Camera.SetupScale(mysteryButton.transform);
 		mysteryButton.transform.position = new Vector2(gap, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
-		mysteryButton.SetDownAction(() => { Sounds.PlaySound(Sounds.mystery, 1, Random.Range(.8f, 1.2f)); ToggleColour(); });
+		mysteryButton.SetDownAction(() => { MysteryButton(); });
 		mysteryButton.name = "mystery";
 		mysteryButton.transform.SetParent(GetMisc("UI").transform, false);
 		Util.SetZ(mysteryButton.gameObject, Util.ZLayer.Buttons);
@@ -28,7 +29,7 @@ public class Game {
 		S_Button optionsButton = S_Button.CreateButton(Sprites.options);
         S_Camera.SetupScale(optionsButton.transform);
         optionsButton.transform.position = new Vector2(gap*2 + Sprites.GetBounds(Sprites.options).x * S_Camera.scale, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
-        optionsButton.SetDownAction(()=> { Sounds.PlaySound(Sounds.select); Pause(); } );
+        optionsButton.SetDownAction(()=> { PauseButton(); } );
 		optionsButton.name = "options_button";
 		optionsButton.transform.SetParent(GetMisc("UI").transform, false);
 		Util.SetZ(optionsButton.gameObject, Util.ZLayer.Buttons);
@@ -36,12 +37,29 @@ public class Game {
 		S_Button restartButton = S_Button.CreateButton(Sprites.restart);
 		S_Camera.SetupScale(restartButton.transform);
 		restartButton.transform.position = new Vector2(gap*3 + Sprites.GetBounds(Sprites.options).x * S_Camera.scale * 2, Screen.height - 5 * S_Camera.scale - Sprites.GetBounds(Sprites.restart).y * S_Camera.scale);
-		restartButton.SetDownAction(()=> { InstantRestart(); Sounds.PlaySound(Sounds.select); });
+		restartButton.SetDownAction(()=> { RestartButton(); });
 		restartButton.name = "restart_button";
 		restartButton.transform.SetParent(GetMisc("UI").transform, false);
 		Util.SetZ(restartButton.gameObject, Util.ZLayer.Buttons);
 	}
 
+	public void MysteryButton() {
+		if (IsPaused()) return;
+		Sounds.PlaySound(Sounds.mystery, 1, Random.Range(.8f, 1.2f));
+		ToggleColour();
+	}
+
+	public void PauseButton() {
+		if (IsPaused()) return;
+		Sounds.PlaySound(Sounds.select);
+		Pause();
+	}
+
+	public void RestartButton() {
+		if (IsPaused()) return;
+		InstantRestart();
+		Sounds.PlaySound(Sounds.select);
+	}
 	
 
 	public void Init() {
@@ -86,6 +104,7 @@ public class Game {
 	}
 
 	private void LoadLevel() {
+
 		UpdateMystery();
 		previousLevel = level;
 		if (previousLevel != null) {
@@ -93,17 +112,34 @@ public class Game {
 		}
 		Texture2D levelData = GetLevelData(levelNumber);
 		if (levelData == null) {
-			levelNumber--;
-			levelData = GetLevelData(levelNumber);
+			EndScreen();
+			return;
 		}
         GameObject go = new GameObject("level parent");
-
+		PlayerPrefs.SetInt("level", levelNumber);
         level = go.AddComponent<Level>();
 		level.Init(levelData);
 		level.SlideIn();
 	}
 
+	static bool end;
+
+	private void EndScreen() {
+		end = true;
+		GameObject rect = Primitives.CreateRectangle(Screen.width, Screen.height, Colours.DARK);
+		Util.SetLayer(rect, Util.LayerName.Particles, 400);
+		GameObject go = Primitives.CreateActor(Sprites.end);
+		int xScale = (int)(Screen.width / Sprites.GetBounds(Sprites.end).x);
+		int yScale = (int)(Screen.height/ Sprites.GetBounds(Sprites.end).y);
+		int scale = Mathf.Min(xScale, yScale);
+		go.transform.localScale = new Vector2(scale, scale);
+		go.transform.position = new Vector2((int)(Screen.width - Sprites.GetBounds(Sprites.end).x * scale)/2, (int)(Screen.height - Sprites.GetBounds(Sprites.end).y * scale)/2);
+		Util.SetLayer(go, Util.LayerName.Particles, 500);
+		PlayerPrefs.SetInt("level", 0);
+	}
+
 	private void UpdateMystery() {
+		if (levelNumber >= Sprites.mysteries.Length) return;
 		if (innerMystery != null) GameObject.Destroy(innerMystery);
 		innerMystery = Primitives.CreateActor(Sprites.mysteries[levelNumber]);
 		innerMystery.transform.SetParent(mysteryButton.transform, false);
@@ -195,6 +231,10 @@ public class Game {
 	}
 
 	internal static bool IsPaused() {
-		return paused;
+		return paused || end;
+	}
+
+	public static bool IsCurrent(GameObject go) {
+		return Level.Get(go) == Get().level;
 	}
 }

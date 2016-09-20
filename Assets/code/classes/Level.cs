@@ -211,6 +211,9 @@ public class Level : MonoBehaviour{
 			x = (int)(abilityPanel.gameObject.transform.position.x + Sprites.GetBounds(Sprites.ability_border).x * S_Camera.scale / 2 - Sprites.GetBounds(sprites[0]).x / 2 * S_Camera.scale);
 		}
 		int y = (int)(Screen.height / 2 + gridHeight / 2 + (Screen.height - gridHeight) / 4 - Sprites.GetBounds(sprites[0]).y / 2 * S_Camera.scale);
+		if(type == TutorialType.Ability) {
+			y = (int)(Screen.height / 2 - gridHeight / 2 - (Screen.height - gridHeight) / 4 - Sprites.GetBounds(sprites[0]).y / 2 * S_Camera.scale) + 20* S_Camera.scale;
+		}
 		tutorialAnimation = S_Animation.CreateAnimation(sprites, .45f, x, y);
 		Util.SetLayer(tutorialAnimation, Util.LayerName.UI, 0);
 		S_Camera.SetupScale(tutorialAnimation.transform);
@@ -230,9 +233,6 @@ public class Level : MonoBehaviour{
 	}
 
 	public void Cleanup() {
-		foreach (S_Ability ability in abilityPanel.abilities) {
-			ability.ClearText();
-		}
 		GameObject.Destroy(slider.gameObject.transform.parent.gameObject);
 		GameObject.Destroy(levelNumberObject);
 	}
@@ -243,6 +243,7 @@ public class Level : MonoBehaviour{
 	}
 
 	public void SlideAway() {
+		abilityPanel.Cleanup();
 		foreach (S_Entity e in entities) {
 			e.Deactivate();
 		}

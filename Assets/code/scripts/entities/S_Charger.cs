@@ -71,6 +71,7 @@ public class S_Charger : S_Enemy {
 
 	override public void TakeTurn() {
 		if (CanSeePlayer()) {
+			FinishedMoving();
 			return;
 		}
 		eyes.SetActive(true);
@@ -81,7 +82,7 @@ public class S_Charger : S_Enemy {
 			}
 			else {
 				if (targetTile.occupier is S_Player) {
-					Game.Get().Lose();
+					if(Game.IsCurrent(gameObject)) Game.Get().Lose();
 				}
 				MoveToTile(targetTile, false);
 			}

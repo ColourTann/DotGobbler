@@ -37,8 +37,8 @@ public class S_Ability_Swap : S_Ability {
 
         float time = 0.2f;
         Color col = Colours.GREEN;
-        int width = (S_Tile.width-S_Camera.scale)/2;
-        int height = S_Tile.height/2;
+        int width = (S_Tile.width-S_Camera.scale)/S_Camera.scale;
+        int height = S_Tile.height / S_Camera.scale;
 
         GameObject flasher = S_Flasher.CreateFlasher(width, height, col, time);
         Util.SetLayer(flasher, Util.LayerName.UI, 0);

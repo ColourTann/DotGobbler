@@ -46,6 +46,7 @@ public class S_Enemy : S_Entity {
 
 	internal void CancelMove() {
 		if (targetTile != null) targetTile.UnBlock();
+		targetTile = null;
 	}
 
 	protected override void Update() {
@@ -73,8 +74,10 @@ public class S_Enemy : S_Entity {
 			}
 			else {
 				if (targetTile.occupier is S_Player) {
-					Sounds.PlaySound(Sounds.spike);
-					Game.Get().Lose();
+					if (Game.IsCurrent(gameObject)) {
+						if (Game.Get().state == Game.GameState.Normal) Sounds.PlaySound(Sounds.spike);
+						Game.Get().Lose();
+					}
 				}
 
 				MoveToTile(targetTile, false);
