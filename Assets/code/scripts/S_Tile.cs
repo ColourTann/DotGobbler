@@ -134,11 +134,6 @@ public class S_Tile : MonoBehaviour {
 		blocked = false;
 	}
 
-	void OnMouseUpAsButton() {
-		if (Game.isLocked()) return;
-		Level.Get(gameObject).player.ActivateTile(this);
-	}
-
 	public int GetDistance(S_Tile other) {
 		return Math.Abs(other.x - x) + Mathf.Abs(other.y - y);
 	}
