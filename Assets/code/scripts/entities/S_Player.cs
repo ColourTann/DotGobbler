@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class S_Player : S_Entity {
-    static readonly int minSwipe = Screen.width / 15;
+    static readonly int minSwipe = Screen.width / 25;
 
     int nextDx = -5;
     int nextDy = -5;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Music{
 
-	private static float GlobalVolumeMultiplier = .6f;
+	private static float GlobalVolumeMultiplier = 1f;
 
 	private static AudioClip[] allMusic = Resources.LoadAll<AudioClip>("music");
 	private static AudioSource source = Game.GetMisc("music").AddComponent<AudioSource>();

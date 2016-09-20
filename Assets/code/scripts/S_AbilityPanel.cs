@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class S_AbilityPanel : MonoBehaviour{
     public int width, height;
@@ -37,10 +38,12 @@ public class S_AbilityPanel : MonoBehaviour{
             image.name = "image";
             Util.SetLayer(image, Util.LayerName.Tiles, 0);
             image.transform.SetParent(buttonScrip.gameObject.transform, false);
-			GameObject text = Primitives.CreateText("["+ability.GetKey()+"]", 0, 0);
-			S_Follower follower = text.AddComponent<S_Follower>();
-			follower.Follow(button, -20*S_Camera.scale, (int)((Sprites.GetBounds(Sprites.ability_border).y * S_Camera.scale /2f - 7*S_Camera.scale)));
-			ability.SetText(text);
+			if (Game.KEYBOARD) { 
+				GameObject text = Primitives.CreateText("["+ability.GetKey()+"]", 0, 0);
+				S_Follower follower = text.AddComponent<S_Follower>();
+				follower.Follow(button, -20*S_Camera.scale, (int)((Sprites.GetBounds(Sprites.ability_border).y * S_Camera.scale /2f - 7*S_Camera.scale)));
+				ability.SetText(text);
+			}
 			Util.SetZ(button, Util.ZLayer.Gameplay);
 		}
 
@@ -87,5 +90,9 @@ public class S_AbilityPanel : MonoBehaviour{
 			activeAbility = null;
 		}
         Level.Get(gameObject).UpdateGridHighlightedness();
+	}
+
+	internal void Flash(bool flash) {
+		if (abilities.Count == 1) abilities[0].GetComponent<S_Button>().SetFlashing(flash);
 	}
 }

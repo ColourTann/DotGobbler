@@ -177,7 +177,6 @@ public class Level : MonoBehaviour{
 
 	public void ActionCompleted(ActionType type) {
 		if (currentTutorial == TutorialType.NOT) return;
-		if (tutorialAnimation == null) return;
 		switch (currentTutorial) {
 			case TutorialType.Move: break;
 			case TutorialType.Ability:
@@ -199,8 +198,18 @@ public class Level : MonoBehaviour{
 	}
 
 	public void AddTutorial(TutorialType type, bool initial) {
+
+
 		if (initial) this.currentTutorial = type;
 		if (tutorialAnimation != null) GameObject.Destroy(tutorialAnimation);
+
+		if (!Game.KEYBOARD) {
+			abilityPanel.Flash(type == TutorialType.Ability);
+			if(type == TutorialType.Ability) {
+				return;
+			}
+		}
+
 		Sprite[] sprites = null;
 		switch (type) {
 			case TutorialType.Move: sprites = Game.KEYBOARD ? Sprites.tutorial_0_keyboard : Sprites.tutorial_0_touch; break;

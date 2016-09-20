@@ -11,7 +11,27 @@ public class S_Button : MonoBehaviour {
 		sr.sprite = sprite;
 		S_Button buttonScript = result.AddComponent<S_Button>();
 		result.AddComponent<BoxCollider2D>();
+		buttonScript.sr = buttonScript.GetComponent<SpriteRenderer>();
 		return buttonScript;
+	}
+	SpriteRenderer sr;
+	Color original;
+	bool flashing;
+	public void SetFlashing(bool flashing) {
+		this.flashing = flashing;
+		if (flashing) {
+			original = sr.color;
+		}
+		else {
+			sr.color = original;
+		}
+	}
+
+	public void Update() {
+		if (flashing) {
+			GetComponent<SpriteRenderer>().color = ((int)(Time.frameCount / 30) % 2 == 1) ? Colours.LIGHT : Colours.RED;
+		}
+		
 	}
 
 	public void SetDownAction(Action down) {

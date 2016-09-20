@@ -40,7 +40,12 @@ public class S_Charger : S_Enemy {
 		S_Slider slider = gameObject.AddComponent<S_Slider>();
 		Game.Lock();
 		ClearTargets();
-		slider.SlideTo((int)Level.Get(gameObject).player.transform.position.x, (int)Level.Get(gameObject).player.transform.position.y, .25f, Interpolation.InterpolationType.Pow2In, ()=> { Game.Get().Lose(); Game.Unlock(); });
+		slider.SlideTo((int)Level.Get(gameObject).player.transform.position.x, (int)Level.Get(gameObject).player.transform.position.y, .25f, Interpolation.InterpolationType.Pow2In, ()=> {
+			if (Game.IsCurrent(gameObject)) {
+				Game.Get().Lose();
+				Game.Unlock();
+			}
+		});
 	}
 
 	List<GameObject> targets = new List<GameObject>();
