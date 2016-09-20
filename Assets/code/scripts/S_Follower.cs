@@ -9,14 +9,16 @@ public class S_Follower : MonoBehaviour {
 		transformToFollow = obj.transform;
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
+		Update();
 	}
 	
 	void Update () {
+		if (transformToFollow == null) return;
 		Vector3 mine = transform.position;
 		Vector3 theirs = transformToFollow.position;
 		if (mine.x +xOffset== theirs.x && mine.y+yOffset == theirs.y) return;
 		if(xOffset==0 && yOffset == 0) {
-		transform.position = transformToFollow.position;
+			transform.position = transformToFollow.position;
 		}
 		else {
 			transform.position = new Vector2(transformToFollow.position.x + xOffset, transformToFollow.position.y + yOffset);

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public class Game {
 
-	public int levelNumber = 5;
-	public const bool KEYBOARD = false;
+	public int levelNumber = 0;
+	public const bool KEYBOARD = true;
 	public Level previousLevel;
 	private Level level;
 	S_Button mysteryButton;
@@ -12,7 +12,7 @@ public class Game {
 	int mysteryCol = 0;
 	public static bool paused;
 	public Game() {
-		//levelNumber = PlayerPrefs.GetInt("level", 0);
+		levelNumber = PlayerPrefs.GetInt("level", 0);
 		GameObject background = Primitives.CreateRectangle(Screen.width, Screen.height, Colours.DARK);
 		background.name = "backdrop";
 		background.transform.SetParent(GetMisc("UI").transform, false);

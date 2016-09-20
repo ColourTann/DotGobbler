@@ -93,6 +93,6 @@ public abstract class S_Ability : MonoBehaviour {
 	}
 
 	internal void ClearText() {
-		if(text!=null)	GameObject.Destroy(text);
+		if(text!=null)	GameObject.DestroyImmediate(text);
 	}
 }
