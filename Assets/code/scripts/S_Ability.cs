@@ -12,7 +12,6 @@ public abstract class S_Ability : MonoBehaviour {
 	public abstract KeyCode GetKey();
 
     public void Toggle(bool sound) {
-
 		if(sound) Level.Get(gameObject).ActionCompleted(active ? Level.ActionType.DeselectAbility : Level.ActionType.SelectAbility);
 
         if (!active && !IsAvailable()) {
@@ -23,7 +22,7 @@ public abstract class S_Ability : MonoBehaviour {
         active = !active;
         if (sound) Sounds.PlaySound(active ?Sounds.select: Sounds.deselect, 1, Random.Range(1, Random.Range(.8f, 1.2f)));
 		GetComponent<SpriteRenderer>().color = active ? Colours.LIGHT : Colours.RED;
-        Level.Get(gameObject).abilityPanel.ActivateAbility(this, active);
+		Level.Get(gameObject).abilityPanel.ActivateAbility(this, active);
     }
 
     public enum TargetingType { SingleTile, Line}
@@ -42,8 +41,9 @@ public abstract class S_Ability : MonoBehaviour {
 	}
 
 	internal void Click() {
-        Level.Get(gameObject).abilityPanel.DeselectAbility(this);
-		Toggle(true);
+		if (Level.Get(gameObject).abilityPanel.DeselectAbility(this)) {
+			Toggle(true);
+		}
 	}
 
 	internal void UnsuccessfulUse() {

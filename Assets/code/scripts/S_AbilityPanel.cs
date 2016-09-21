@@ -77,9 +77,11 @@ public class S_AbilityPanel : MonoBehaviour{
 		}
 	}
 
-	internal void DeselectAbility(S_Ability s_Ability) {
-		if (activeAbility == null || activeAbility == s_Ability) return;
-		activeAbility.Toggle(false);
+	internal bool DeselectAbility(S_Ability s_Ability, bool sound = true) {
+		if (activeAbility == null) return true;
+		bool same = s_Ability == activeAbility;
+		activeAbility.Toggle(s_Ability == activeAbility && sound);
+		return !same;
 	}
 
 	internal void ActivateAbility(S_Ability ability, bool active) {

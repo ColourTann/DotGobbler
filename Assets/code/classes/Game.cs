@@ -104,7 +104,7 @@ public class Game {
 	}
 
 	private void LoadLevel() {
-
+		if (level != null) level.abilityPanel.DeselectAbility(level.abilityPanel.activeAbility, false);
 		UpdateMystery();
 		previousLevel = level;
 		if (previousLevel != null) {
