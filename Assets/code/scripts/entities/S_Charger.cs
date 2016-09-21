@@ -36,6 +36,7 @@ public class S_Charger : S_Enemy {
 	}
 
 	void Fire() {
+		if (Game.Get().state != Game.GameState.NextLevel) return;
 		Sounds.PlaySound(Sounds.shoot);
 		S_Slider slider = gameObject.AddComponent<S_Slider>();
 		Game.Lock();
